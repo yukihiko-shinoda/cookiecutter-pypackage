@@ -1,0 +1,163 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Prompts &#8212; cookiecutter-pypackage 0.9.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Travis/PyPI Setup" href="travis_pypi_setup.html" />
+    <link rel="prev" title="PyPI Release Checklist" href="pypi_release_checklist.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="prompts">
+<h1>Prompts<a class="headerlink" href="#prompts" title="Permalink to this headline">¶</a></h1>
+<p>When you create a package, you are prompted to enter these values.</p>
+<div class="section" id="templated-values">
+<h2>Templated Values<a class="headerlink" href="#templated-values" title="Permalink to this headline">¶</a></h2>
+<p>The following appear in various parts of your generated project.</p>
+<dl class="docutils">
+<dt>full_name</dt>
+<dd>Your full name.</dd>
+<dt>email</dt>
+<dd>Your email address.</dd>
+<dt>github_username</dt>
+<dd>Your GitHub username.</dd>
+<dt>project_name</dt>
+<dd>The name of your new Python package project. This is used in documentation, so spaces and any characters are fine here.</dd>
+<dt>project_slug</dt>
+<dd>The namespace of your Python package. This should be Python import-friendly. Typically, it is the slugified version of project_name.</dd>
+<dt>project_short_description</dt>
+<dd>A 1-sentence description of what your Python package does.</dd>
+<dt>release_date</dt>
+<dd>The date of the first release.</dd>
+<dt>pypi_username</dt>
+<dd>Your Python Package Index account username.</dd>
+<dt>year</dt>
+<dd>The year of the initial package copyright in the license file.</dd>
+<dt>version</dt>
+<dd>The starting version number of the package.</dd>
+</dl>
+</div>
+<div class="section" id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<p>The following package configuration options set up different features for your project.</p>
+<dl class="docutils">
+<dt>use_pypi_deployment_with_travis</dt>
+<dd>Whether to use PyPI deployment with Travis.</dd>
+<dt>command_line_interface</dt>
+<dd>Whether to create a console script using Click. Console script entry point will match the project_slug. Options: [‘Click’, “No command-line interface”]</dd>
+<dt>use_google_docstrings</dt>
+<dd>Whether to support parsing docstrings in the <a class="reference external" href="https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings">Google Python Style Guide</a> format.</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">cookiecutter-pypackage</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Cookiecutter PyPackage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pypi_release_checklist.html">PyPI Release Checklist</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Prompts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#templated-values">Templated Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#options">Options</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="travis_pypi_setup.html">Travis/PyPI Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="console_script_setup.html">Console Script Setup</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="pypi_release_checklist.html" title="previous chapter">PyPI Release Checklist</a></li>
+      <li>Next: <a href="travis_pypi_setup.html" title="next chapter">Travis/PyPI Setup</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Sam Briggs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/prompts.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

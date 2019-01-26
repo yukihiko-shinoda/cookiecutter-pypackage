@@ -1,0 +1,177 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Cookiecutter PyPackage &#8212; cookiecutter-pypackage 0.9.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorial" href="tutorial.html" />
+    <link rel="prev" title="Welcome to cookiecutter-pypackage’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="cookiecutter-pypackage">
+<span id="readme"></span><h1>Cookiecutter PyPackage<a class="headerlink" href="#cookiecutter-pypackage" title="Permalink to this headline">¶</a></h1>
+<a class="reference external image-reference" href="https://pyup.io/repos/github/briggySmalls/cookiecutter-pypackage/"><img alt="Updates" src="https://pyup.io/repos/github/briggySmalls/cookiecutter-pypackage/shield.svg" /></a>
+<a class="reference external image-reference" href="https://travis-ci.org/briggySmalls/cookiecutter-pypackage"><img alt="https://travis-ci.org/briggySmalls/cookiecutter-pypackage.svg?branch=master" src="https://travis-ci.org/briggySmalls/cookiecutter-pypackage.svg?branch=master" /></a>
+<p><a class="reference external" href="https://github.com/audreyr/cookiecutter">Cookiecutter</a> template for a Python package, forked from <a class="reference external" href="https://github.com/audreyr/cookiecutter-pypackage">audreyr/cookiecutter-pypackage</a>.</p>
+<ul class="simple">
+<li>GitHub repo: <a class="reference external" href="https://github.com/briggySmalls/cookiecutter-pypackage/">https://github.com/briggySmalls/cookiecutter-pypackage/</a></li>
+<li>Documentation: <a class="reference external" href="https://cookiecutter-pypackage.readthedocs.io/">https://cookiecutter-pypackage.readthedocs.io/</a></li>
+<li>Free software: BSD license</li>
+</ul>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<p>This template has all of the features of the original <a class="reference external" href="https://github.com/audreyr/cookiecutter-pypackage">audreyr/cookiecutter-pypackage</a>, plus the following:</p>
+<ul class="simple">
+<li>Dependency tracking using <a class="reference external" href="https://pipenv.readthedocs.io/en/latest/">pipenv</a></li>
+<li>Linting provided by both <a class="reference external" href="https://www.pylint.org/">pylint</a> and <a class="reference external" href="https://pypi.org/project/flake8/">flake8</a> [executed by Tox]</li>
+<li>Formatting provided by <a class="reference external" href="https://github.com/google/yapf">yapf</a> and <a class="reference external" href="https://pypi.org/project/isort/">isort</a> [checked by Tox]</li>
+<li>Autodoc your code from Google docstring style (optional)</li>
+<li>All development tasks (lint, format, test, etc) wrapped up in a python CLI by <a class="reference external" href="http://www.pyinvoke.org/">invoke</a></li>
+</ul>
+</div>
+<div class="section" id="build-status">
+<h2>Build Status<a class="headerlink" href="#build-status" title="Permalink to this headline">¶</a></h2>
+<p>Linux:</p>
+<a class="reference external image-reference" href="https://travis-ci.org/briggySmalls/cookiecutter-pypackage"><img alt="Linux build status on Travis CI" src="https://img.shields.io/travis/briggySmalls/cookiecutter-pypackage.svg" /></a>
+<p>Windows:</p>
+<a class="reference external image-reference" href="https://ci.appveyor.com/project/briggySmalls/cookiecutter-pypackage/branch/master"><img alt="Windows build status on Appveyor" src="https://ci.appveyor.com/api/projects/status/github/briggySmalls/cookiecutter-pypackage?branch=master&amp;svg=true" /></a>
+</div>
+<div class="section" id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
+<p>Install the latest Cookiecutter if you haven’t installed it yet (this requires
+Cookiecutter 1.4.0 or higher):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="n">cookiecutter</span>
+</pre></div>
+</div>
+<p>Generate a Python package project:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cookiecutter</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">audreyr</span><span class="o">/</span><span class="n">cookiecutter</span><span class="o">-</span><span class="n">pypackage</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+<p>Then:</p>
+<ul class="simple">
+<li>Create a repo and put it there.</li>
+<li>Add the repo to your <a class="reference external" href="http://travis-ci.org/">Travis-CI</a> account.</li>
+<li>Install the dev requirements into a virtualenv. (<code class="docutils literal notranslate"><span class="pre">pipenv</span> <span class="pre">install</span> <span class="pre">--dev</span></code>)</li>
+<li><a class="reference external" href="https://packaging.python.org/distributing/#register-your-project">Register</a> your project with PyPI.</li>
+<li>Run the Travis CLI command <cite>travis encrypt –add deploy.password</cite> to encrypt your PyPI password in Travis config
+and activate automated deployment on PyPI when you push a new tag to master branch.</li>
+<li>Add the repo to your <a class="reference external" href="https://readthedocs.io/">ReadTheDocs</a> account + turn on the ReadTheDocs service hook.</li>
+<li>Release your package by pushing a new tag to master.</li>
+<li>Get your code on! 😎 Add your package dependencies to your setup.py as you go, and lock them into your virtual environment with <code class="docutils literal notranslate"><span class="pre">pipenv</span> <span class="pre">install</span></code>.</li>
+<li>Activate your project on <a class="reference external" href="https://pyup.io/">pyup.io</a>.</li>
+</ul>
+<p>For more details, see the <a class="reference external" href="https://cookiecutter-pypackage.readthedocs.io/en/latest/tutorial.html">cookiecutter-pypackage tutorial</a>.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">cookiecutter-pypackage</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Cookiecutter PyPackage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-status">Build Status</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quickstart">Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pypi_release_checklist.html">PyPI Release Checklist</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="prompts.html">Prompts</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="travis_pypi_setup.html">Travis/PyPI Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="console_script_setup.html">Console Script Setup</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to cookiecutter-pypackage’s documentation!</a></li>
+      <li>Next: <a href="tutorial.html" title="next chapter">Tutorial</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Sam Briggs.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/readme.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
