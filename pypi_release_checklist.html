@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>PyPI Release Checklist &#8212; cookiecutter-pypackage 0.9.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -39,23 +37,21 @@
 <div class="section" id="before-your-first-release">
 <h2>Before Your First Release<a class="headerlink" href="#before-your-first-release" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
-<li><p class="first">Register the package on PyPI:</p>
+<li><p>Register the package on PyPI:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py register
 </pre></div>
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Visit PyPI to make sure it registered.</p>
-</li>
+<li><p>Visit PyPI to make sure it registered.</p></li>
 </ol>
 </div>
 <div class="section" id="for-every-release">
 <h2>For Every Release<a class="headerlink" href="#for-every-release" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
-<li><p class="first">Update HISTORY.rst</p>
-</li>
-<li><p class="first">Commit the changes:</p>
+<li><p>Update HISTORY.rst</p></li>
+<li><p>Commit the changes:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git add HISTORY.rst
 git commit -m <span class="s2">&quot;Changelog for upcoming release 0.1.1.&quot;</span>
@@ -63,47 +59,46 @@ git commit -m <span class="s2">&quot;Changelog for upcoming release 0.1.1.&quot;
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Update version number (can also be patch or major)</p>
+<li><p>Update version number (can also be patch or major)</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bumpversion minor
 </pre></div>
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Install the package again for local development, but with the new version number:</p>
+<li><p>Install the package again for local development, but with the new version number:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py develop
 </pre></div>
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Run the tests:</p>
+<li><p>Run the tests:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tox
 </pre></div>
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Push the commit:</p>
+<li><p>Push the commit:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git push
 </pre></div>
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Push the tags, creating the new release on both GitHub and PyPI:</p>
+<li><p>Push the tags, creating the new release on both GitHub and PyPI:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git push --tags
 </pre></div>
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Check the PyPI listing page to make sure that the README, release notes, and roadmap display properly. If not, try one of these:</p>
+<li><p>Check the PyPI listing page to make sure that the README, release notes, and roadmap display properly. If not, try one of these:</p>
 <blockquote>
 <div><ol class="arabic">
-<li><p class="first">Copy and paste the RestructuredText into <a class="reference external" href="http://rst.ninjs.org/">http://rst.ninjs.org/</a> to find out what broke the formatting.</p>
-</li>
-<li><p class="first">Check your long_description locally:</p>
+<li><p>Copy and paste the RestructuredText into <a class="reference external" href="http://rst.ninjs.org/">http://rst.ninjs.org/</a> to find out what broke the formatting.</p></li>
+<li><p>Check your long_description locally:</p>
 <blockquote>
 <div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install readme_renderer
 python setup.py check -r -s
@@ -114,16 +109,15 @@ python setup.py check -r -s
 </ol>
 </div></blockquote>
 </li>
-<li><p class="first">Edit the release on GitHub (e.g. <a class="reference external" href="https://github.com/audreyr/cookiecutter/releases">https://github.com/audreyr/cookiecutter/releases</a>). Paste the release notes into the release’s release page, and come up with a title for the release.</p>
-</li>
+<li><p>Edit the release on GitHub (e.g. <a class="reference external" href="https://github.com/audreyr/cookiecutter/releases">https://github.com/audreyr/cookiecutter/releases</a>). Paste the release notes into the release’s release page, and come up with a title for the release.</p></li>
 </ol>
 </div>
 <div class="section" id="about-this-checklist">
 <h2>About This Checklist<a class="headerlink" href="#about-this-checklist" title="Permalink to this headline">¶</a></h2>
 <p>This checklist is adapted from:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://gist.github.com/audreyr/5990987">https://gist.github.com/audreyr/5990987</a></li>
-<li><a class="reference external" href="https://gist.github.com/audreyr/9f1564ea049c14f682f4">https://gist.github.com/audreyr/9f1564ea049c14f682f4</a></li>
+<li><p><a class="reference external" href="https://gist.github.com/audreyr/5990987">https://gist.github.com/audreyr/5990987</a></p></li>
+<li><p><a class="reference external" href="https://gist.github.com/audreyr/9f1564ea049c14f682f4">https://gist.github.com/audreyr/9f1564ea049c14f682f4</a></p></li>
 </ul>
 <p>It assumes that you are using all features of Cookiecutter PyPackage.</p>
 </div>
@@ -179,8 +173,6 @@ python setup.py check -r -s
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -201,7 +193,7 @@ python setup.py check -r -s
       &copy;2019, Sam Briggs.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
