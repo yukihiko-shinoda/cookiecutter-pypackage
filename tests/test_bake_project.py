@@ -84,6 +84,7 @@ def test_bake_with_defaults(cookies):
         assert 'python_boilerplate' in found_toplevel_files
         assert 'tox.ini' in found_toplevel_files
         assert 'tests' in found_toplevel_files
+        assert 'mypy.ini' in found_toplevel_files
 
 
 def test_bake_and_run_tests(cookies):
