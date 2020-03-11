@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 """Tests for `{{ cookiecutter.project_slug }}` package."""
+# Pylint relies on fixtures to be linked to arguments by redefining outer name
 # pylint: disable=redefined-outer-name
 
 {% if cookiecutter.use_pytest == 'y' -%}
@@ -29,7 +30,7 @@ def response() -> str:
     # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
 
 
-def test_content(response) -> None:
+def test_content(response: str) -> None:
     """Sample pytest test function with the pytest fixture as an argument."""
     # from bs4 import BeautifulSoup
     # assert 'GitHub' in BeautifulSoup(response.content).title.string
