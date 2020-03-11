@@ -64,7 +64,7 @@ class Test{{ cookiecutter.project_slug|title }}(unittest.TestCase):
         """Test something."""
 {%- if cookiecutter.command_line_interface|lower == 'click' %}
 
-    def test_command_line_interface(self):
+    def test_command_line_interface(self) -> None:
         """Test the CLI."""
         runner = CliRunner()
         result = runner.invoke(cli.main)
