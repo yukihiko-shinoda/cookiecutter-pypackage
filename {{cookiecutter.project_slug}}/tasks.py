@@ -73,7 +73,7 @@ def lint_mypy(c):
     """
     Lint code with mypy
     """
-    c.run("mypy --config mypy.ini")
+    c.run("mypy --config mypy.ini --allow-untyped-decorators")
 
 
 {% endif -%}
