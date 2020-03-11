@@ -18,7 +18,7 @@ def main():
     return 0
 {%- endif %}
 {%- if cookiecutter.command_line_interface|lower == 'argparse' %}
-def main():
+def main() -> int:
     """Console script for {{cookiecutter.project_slug}}."""
     parser = argparse.ArgumentParser()
     parser.add_argument('_', nargs='*')
