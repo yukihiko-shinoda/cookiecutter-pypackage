@@ -50,7 +50,7 @@ setup(
     },
     {%- endif %}
     install_requires=requirements,
-{%- if cookiecutter.open_source_license in license_classifiers %}
+{%- if cookiecutter.open_source_license not in license_classifiers %}
     license="{{ cookiecutter.open_source_license }}",
 {%- endif %}
     long_description=readme + '\n\n' + history,

@@ -184,7 +184,6 @@ def test_bake_selecting_license(cookies, license_info):
     ) as result:
         assert target_string in result.project.join('LICENSE').read()
         assert license_trove_classifier in result.project.join('setup.py').read()
-        assert license in result.project.join('setup.py').read()
 
 
 def test_bake_not_open_source(cookies):
