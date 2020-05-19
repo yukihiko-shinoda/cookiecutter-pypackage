@@ -168,23 +168,23 @@ def test_bake_without_author_file(cookies):
             assert 'AUTHORS.rst' not in manifest_file.read()
 
 
-def test_bake_selecting_license(cookies):
-    license_strings = {
-        'MIT license': 'MIT ',
-        'BSD license': 'Redistributions of source code must retain the ' +
-                       'above copyright notice, this',
-        'ISC license': 'ISC License',
-        'Apache Software License 2.0':
-            'Licensed under the Apache License, Version 2.0',
-        'GNU General Public License v3': 'GNU GENERAL PUBLIC LICENSE',
-    }
-    for license, target_string in license_strings.items():
-        with bake_in_temp_dir(
-            cookies,
-            extra_context={'open_source_license': license}
-        ) as result:
-            assert target_string in result.project.join('LICENSE').read()
-            assert license in result.project.join('setup.py').read()
+@pytest.mark.parametrize("license_info", [
+    ('MIT', 'MIT ', 'License :: OSI Approved :: MIT License'),
+    ('BSD-3-Clause', 'Redistributions of source code must retain the ' +
+     'above copyright notice, this', 'License :: OSI Approved :: BSD License'),
+    ('ISC', 'ISC License', 'License :: OSI Approved :: ISC License (ISCL)'),
+    ('Apache-2.0', 'Licensed under the Apache License, Version 2.0', 'License :: OSI Approved :: Apache Software License'),
+    ('GPL-3.0-only', 'GNU GENERAL PUBLIC LICENSE', 'License :: OSI Approved :: GNU General Public License v3 (GPLv3)'),
+])
+def test_bake_selecting_license(cookies, license_info):
+    license, target_string, license_trove_classifier = license_info
+    with bake_in_temp_dir(
+        cookies,
+        extra_context={'open_source_license': license}
+    ) as result:
+        assert target_string in result.project.join('LICENSE').read()
+        assert license_trove_classifier in result.project.join('setup.py').read()
+        assert license in result.project.join('setup.py').read()
 
 
 def test_bake_not_open_source(cookies):
