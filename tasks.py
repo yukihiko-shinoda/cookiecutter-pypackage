@@ -13,8 +13,8 @@ DOCS_BUILD_DIR = DOCS_DIR.joinpath("_build")
 DOCS_INDEX = DOCS_BUILD_DIR.joinpath("index.html")
 TEST_DIR = ROOT_DIR.joinpath("tests")
 SETUP_PY = ROOT_DIR.joinpath("setup.py")
-TASK_PY = ROOT_DIR.joinpath("tasks.py")
-PYTHON_DIRS = [str(d) for d in [SETUP_PY, TASK_PY, TEST_DIR]]
+TASKS_PY = ROOT_DIR.joinpath("tasks.py")
+PYTHON_DIRS = [str(d) for d in [SETUP_PY, TASKS_PY, TEST_DIR]]
 
 
 def _run(c, command, **kwargs):
