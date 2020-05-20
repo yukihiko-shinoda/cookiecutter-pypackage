@@ -3,6 +3,7 @@ import importlib
 import os
 import shlex
 import subprocess
+from subprocess import PIPE
 import sys
 from contextlib import contextmanager
 
@@ -42,7 +43,7 @@ def bake_in_temp_dir(cookies, *args, **kwargs):
 
 def run_subrocess(command):
     try:
-        subprocess.run(shlex.split(command), check=True, capture_output=True)
+        subprocess.run(shlex.split(command), check=True, stdout=PIPE, stderr=PIPE)
     except subprocess.CalledProcessError as e:
         print(e.output)
         raise e
