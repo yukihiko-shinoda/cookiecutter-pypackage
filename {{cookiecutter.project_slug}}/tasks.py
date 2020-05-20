@@ -7,6 +7,7 @@ import shutil
 import platform
 
 from invoke import task
+from invoke.runners import Failure
 from pathlib import Path
 import webbrowser
 
@@ -15,6 +16,8 @@ ROOT_DIR = Path(__file__).parent
 SETUP_FILE = ROOT_DIR.joinpath("setup.py")
 TEST_DIR = ROOT_DIR.joinpath("tests")
 SOURCE_DIR = ROOT_DIR.joinpath("{{ cookiecutter.project_slug }}")
+SETUP_PY = ROOT_DIR.joinpath("setup.py")
+TASKS_PY = ROOT_DIR.joinpath("tasks.py")
 TOX_DIR = ROOT_DIR.joinpath(".tox")
 COVERAGE_FILE = ROOT_DIR.joinpath(".coverage")
 COVERAGE_DIR = ROOT_DIR.joinpath("htmlcov")
@@ -22,7 +25,7 @@ COVERAGE_REPORT = COVERAGE_DIR.joinpath("index.html")
 DOCS_DIR = ROOT_DIR.joinpath("docs")
 DOCS_BUILD_DIR = DOCS_DIR.joinpath("_build")
 DOCS_INDEX = DOCS_BUILD_DIR.joinpath("index.html")
-PYTHON_DIRS = [str(d) for d in [SOURCE_DIR, TEST_DIR]]
+PYTHON_DIRS = [str(d) for d in [SETUP_PY, TASKS_PY, SOURCE_DIR, TEST_DIR]]
 
 
 def _delete_file(file):
@@ -42,13 +45,23 @@ def format(c, check=False):
     Format code
     """
     python_dirs_string = " ".join(PYTHON_DIRS)
-    # Run yapf
-    yapf_options = '--recursive {}'.format('--diff' if check else '--in-place')
-    c.run("yapf {} {}".format(yapf_options, python_dirs_string))
+    list_result = []
     # Run isort
-    isort_options = '--recursive {}'.format(
-        '--check-only --diff' if check else '')
-    c.run("isort {} {}".format(isort_options, python_dirs_string))
+    isort_options = "--recursive {}".format("--check-only --diff" if check else "")
+    list_result.append(
+        c.run("isort {} {}".format(isort_options, python_dirs_string), warn=True)
+    )
+    # Run pipenv-setup
+    isort_options = "{}".format("check --strict" if check else "sync --pipfile")
+    list_result.append(c.run("pipenv-setup {}".format(isort_options), warn=True))
+    # Run black
+    black_options = "{}".format("--check --diff" if check else "")
+    list_result.append(
+        c.run("black {} {}".format(black_options, python_dirs_string), warn=True)
+    )
+    for result in list_result:
+        if result.failed:
+            raise Failure(result)
 
 
 @task
@@ -67,7 +80,15 @@ def lint_pylint(c):
     c.run("pylint {}".format(" ".join(PYTHON_DIRS)))
 
 
-@task(lint_flake8, lint_pylint)
+@task
+def lint_mypy(c):
+    """
+    Lint code with pylint
+    """
+    c.run("mypy {}".format(" ".join(PYTHON_DIRS)))
+
+
+@task(lint_flake8, lint_pylint, lint_mypy)
 def lint(c):
     """
     Run all linting
