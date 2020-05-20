@@ -10,7 +10,7 @@ on:
       - master-yukihiko-shinoda
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: {{ "${{ matrix.os }}" }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: {{ "${{ matrix.python-version }}" }}
       - run: python -m pip install pipenv
       - run: python -m pipenv update --dev
       - run: python -m pipenv run invoke test
