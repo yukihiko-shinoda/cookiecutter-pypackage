@@ -35,7 +35,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
-    description="{{ cookiecutter.project_short_description }}",  # noqa
+    description="{{ cookiecutter.project_short_description }}",  # noqa: E501 pylint: disable=line-too-long
     {%- if 'no' not in cookiecutter.command_line_interface|lower %}
     entry_points={
         "console_scripts": [
