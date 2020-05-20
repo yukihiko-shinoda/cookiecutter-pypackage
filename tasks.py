@@ -17,20 +17,20 @@ TASKS_PY = ROOT_DIR.joinpath("tasks.py")
 PYTHON_DIRS = [str(d) for d in [SETUP_PY, TASKS_PY, TEST_DIR]]
 
 
-def _run(c, command, **kwargs):
-    return c.run(command, pty=platform.system() != "Windows", **kwargs)
+def _run(context, command, **kwargs):
+    return context.run(command, pty=platform.system() != "Windows", **kwargs)
 
 
 @task
-def test(c):
+def test(context):
     """
     Run tests
     """
-    _run(c, "pytest")
+    _run(context, "pytest")
 
 
 @task(help={"check": "Checks if source is formatted without applying changes"})
-def format(c, check=False):
+def style(context, check=False):
     """
     Format code
     """
@@ -39,15 +39,15 @@ def format(c, check=False):
     # Run isort
     isort_options = "--recursive {}".format("--check-only --diff" if check else "")
     list_result.append(
-        _run(c, "isort {} {}".format(isort_options, python_dirs_string), warn=True)
+        _run(context, "isort {} {}".format(isort_options, python_dirs_string), warn=True)
     )
     # Run pipenv-setup
     isort_options = "{}".format("check --strict" if check else "sync --pipfile")
-    list_result.append(_run(c, "pipenv-setup {}".format(isort_options), warn=True))
+    list_result.append(_run(context, "pipenv-setup {}".format(isort_options), warn=True))
     # Run black
     black_options = "{}".format("--check --diff" if check else "")
     list_result.append(
-        _run(c, "black {} {}".format(black_options, python_dirs_string), warn=True)
+        _run(context, "black {} {}".format(black_options, python_dirs_string), warn=True)
     )
     for result in list_result:
         if result.failed:
@@ -55,17 +55,17 @@ def format(c, check=False):
 
 
 @task
-def docs(c):
+def docs(context):
     """
     Generate documentation
     """
-    _run(c, "sphinx-build -b html {} {}".format(DOCS_DIR, DOCS_BUILD_DIR))
+    _run(context, "sphinx-build -b html {} {}".format(DOCS_DIR, DOCS_BUILD_DIR))
     webbrowser.open(DOCS_INDEX.absolute().as_uri())
 
 
 @task
-def clean_docs(c):
+def clean_docs(context):
     """
     Clean up files from documentation builds
     """
-    _run(c, "rm -fr {}".format(DOCS_BUILD_DIR))
+    _run(context, "rm -fr {}".format(DOCS_BUILD_DIR))

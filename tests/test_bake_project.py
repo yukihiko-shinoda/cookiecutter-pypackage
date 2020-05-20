@@ -6,7 +6,7 @@ import subprocess
 import sys
 from contextlib import contextmanager
 
-import pytest
+import pytest  # type: ignore
 import yaml
 from click.testing import CliRunner
 from cookiecutter.utils import rmtree
@@ -40,6 +40,13 @@ def bake_in_temp_dir(cookies, *args, **kwargs):
         rmtree(str(result.project))
 
 
+def run_subrocess(command):
+    try:
+        subprocess.run(shlex.split(command), check=True, capture_output=True)
+    except subprocess.CalledProcessError as e:
+        print(e.output)
+        raise e
+
 def run_inside_dir(commands, dirpath):
     """
     Run a command from inside a given directory, returning the exit status
@@ -48,13 +55,7 @@ def run_inside_dir(commands, dirpath):
     """
     with inside_dir(dirpath):
         for command in commands:
-            subprocess.check_call(shlex.split(command))
-
-
-def check_output_inside_dir(command, dirpath):
-    """Run a command from inside a given directory, returning the command output"""
-    with inside_dir(dirpath):
-        return subprocess.check_output(shlex.split(command))
+            run_subrocess(command)
 
 
 def test_year_compute_in_license_file(cookies):
@@ -360,12 +361,12 @@ def test_bake_and_run_invoke_tests(cookies):
         ) == 0
 
 
-def test_bake_and_run_invoke_format(cookies):
+def test_bake_and_run_invoke_style(cookies):
     """Run the formatter on a newly-generated project"""
     with bake_in_temp_dir(cookies) as result:
         assert result.project.isdir()
         run_inside_dir(
-            ["pip install pipenv", "pipenv install --dev", "pipenv run invoke format"],
+            ["pip install pipenv", "pipenv install --dev", "pipenv run invoke style"],
             str(result.project),
         ) == 0
 
