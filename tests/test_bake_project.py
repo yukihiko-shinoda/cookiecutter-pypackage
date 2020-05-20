@@ -53,7 +53,7 @@ def run_inside_dir(commands, dirpath):
 
 
 def check_output_inside_dir(command, dirpath):
-    "Run a command from inside a given directory, returning the command output"
+    """Run a command from inside a given directory, returning the command output"""
     with inside_dir(dirpath):
         return subprocess.check_output(shlex.split(command))
 
@@ -168,23 +168,22 @@ def test_bake_without_author_file(cookies):
             assert 'AUTHORS.rst' not in manifest_file.read()
 
 
-def test_bake_selecting_license(cookies):
-    license_strings = {
-        'MIT license': 'MIT ',
-        'BSD license': 'Redistributions of source code must retain the ' +
-                       'above copyright notice, this',
-        'ISC license': 'ISC License',
-        'Apache Software License 2.0':
-            'Licensed under the Apache License, Version 2.0',
-        'GNU General Public License v3': 'GNU GENERAL PUBLIC LICENSE',
-    }
-    for license, target_string in license_strings.items():
-        with bake_in_temp_dir(
-            cookies,
-            extra_context={'open_source_license': license}
-        ) as result:
-            assert target_string in result.project.join('LICENSE').read()
-            assert license in result.project.join('setup.py').read()
+@pytest.mark.parametrize("license_info", [
+    ('MIT', 'MIT ', 'License :: OSI Approved :: MIT License'),
+    ('BSD-3-Clause', 'Redistributions of source code must retain the ' +
+     'above copyright notice, this', 'License :: OSI Approved :: BSD License'),
+    ('ISC', 'ISC License', 'License :: OSI Approved :: ISC License (ISCL)'),
+    ('Apache-2.0', 'Licensed under the Apache License, Version 2.0', 'License :: OSI Approved :: Apache Software License'),
+    ('GPL-3.0-only', 'GNU GENERAL PUBLIC LICENSE', 'License :: OSI Approved :: GNU General Public License v3 (GPLv3)'),
+])
+def test_bake_selecting_license(cookies, license_info):
+    license, target_string, license_trove_classifier = license_info
+    with bake_in_temp_dir(
+        cookies,
+        extra_context={'open_source_license': license}
+    ) as result:
+        assert target_string in result.project.join('LICENSE').read()
+        assert license_trove_classifier in result.project.join('setup.py').read()
 
 
 def test_bake_not_open_source(cookies):
@@ -235,7 +234,7 @@ def test_using_google_docstrings(cookies):
         # Test docs include sphinx extension
         docs_conf_file_path = result.project.join('docs/conf.py')
         lines = docs_conf_file_path.readlines()
-        assert "sphinxcontrib.napoleon" in ''.join(lines)
+        assert "sphinx.ext.napoleon" in ''.join(lines)
 
 
 def test_not_using_google_docstrings(cookies):
@@ -244,7 +243,7 @@ def test_not_using_google_docstrings(cookies):
         # Test docs do not include sphinx extension
         docs_conf_file_path = result.project.join('docs/conf.py')
         lines = docs_conf_file_path.readlines()
-        assert "sphinxcontrib.napoleon" not in ''.join(lines)
+        assert "sphinx.ext.napoleon" not in ''.join(lines)
 
 
 # def test_project_with_hyphen_in_module_name(cookies):
@@ -347,6 +346,7 @@ def test_bake_with_argparse_console_script_cli(cookies):
 
 
 def test_bake_and_run_invoke_tests(cookies):
+    """Run the unit tests of a newly-generated project"""
     with bake_in_temp_dir(cookies) as result:
         assert result.project.isdir()
         run_inside_dir([
@@ -357,6 +357,7 @@ def test_bake_and_run_invoke_tests(cookies):
 
 
 def test_bake_and_run_invoke_format(cookies):
+    """Run the formatter on a newly-generated project"""
     with bake_in_temp_dir(cookies) as result:
         assert result.project.isdir()
         run_inside_dir([
@@ -367,6 +368,7 @@ def test_bake_and_run_invoke_format(cookies):
 
 
 def test_bake_and_run_invoke_lint(cookies):
+    """Run the linter on a newly-generated project"""
     with bake_in_temp_dir(cookies) as result:
         assert result.project.isdir()
         run_inside_dir([
