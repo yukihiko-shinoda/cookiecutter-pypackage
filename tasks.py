@@ -39,15 +39,21 @@ def style(context, check=False):
     # Run isort
     isort_options = "--recursive {}".format("--check-only --diff" if check else "")
     list_result.append(
-        _run(context, "isort {} {}".format(isort_options, python_dirs_string), warn=True)
+        _run(
+            context, "isort {} {}".format(isort_options, python_dirs_string), warn=True
+        )
     )
     # Run pipenv-setup
     isort_options = "{}".format("check --strict" if check else "sync --pipfile")
-    list_result.append(_run(context, "pipenv-setup {}".format(isort_options), warn=True))
+    list_result.append(
+        _run(context, "pipenv-setup {}".format(isort_options), warn=True)
+    )
     # Run black
     black_options = "{}".format("--check --diff" if check else "")
     list_result.append(
-        _run(context, "black {} {}".format(black_options, python_dirs_string), warn=True)
+        _run(
+            context, "black {} {}".format(black_options, python_dirs_string), warn=True
+        )
     )
     for result in list_result:
         if result.failed:

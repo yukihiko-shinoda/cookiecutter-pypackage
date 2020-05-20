@@ -24,7 +24,7 @@ jobs:
       - run: python -m pip install pipenv
       - run: python -m pipenv update --dev
       - run: python -m pipenv run invoke test
-  check_setup:
+  check_style:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -33,4 +33,4 @@ jobs:
           python-version: '3.8'
       - run: python -m pip install pipenv
       - run: python -m pipenv sync --dev
-      - run: python -m pipenv run invoke format
+      - run: python -m pipenv run invoke style --check

@@ -47,6 +47,7 @@ def run_subrocess(command):
         print(e.output)
         raise e
 
+
 def run_inside_dir(commands, dirpath):
     """
     Run a command from inside a given directory, returning the exit status
