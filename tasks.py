@@ -1,16 +1,16 @@
 """Development tasks for the cookiecutter template project"""
 
+import platform
 import webbrowser
 from pathlib import Path
-import platform
 
 from invoke import task
 from invoke.runners import Failure
 
 ROOT_DIR = Path(__file__).parent
-DOCS_DIR = ROOT_DIR.joinpath('docs')
-DOCS_BUILD_DIR = DOCS_DIR.joinpath('_build')
-DOCS_INDEX = DOCS_BUILD_DIR.joinpath('index.html')
+DOCS_DIR = ROOT_DIR.joinpath("docs")
+DOCS_BUILD_DIR = DOCS_DIR.joinpath("_build")
+DOCS_INDEX = DOCS_BUILD_DIR.joinpath("index.html")
 TEST_DIR = ROOT_DIR.joinpath("tests")
 SETUP_PY = ROOT_DIR.joinpath("setup.py")
 TASK_PY = ROOT_DIR.joinpath("tasks.py")
@@ -18,7 +18,7 @@ PYTHON_DIRS = [str(d) for d in [SETUP_PY, TASK_PY, TEST_DIR]]
 
 
 def _run(c, command, **kwargs):
-    return c.run(command, pty=platform.system() != 'Windows', **kwargs)
+    return c.run(command, pty=platform.system() != "Windows", **kwargs)
 
 
 @task
