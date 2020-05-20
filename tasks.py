@@ -37,7 +37,7 @@ def format(c, check=False):
     python_dirs_string = " ".join(PYTHON_DIRS)
     list_result = []
     # Run isort
-    isort_options = "--recursive {}".format("--check-only" if check else "")
+    isort_options = "--recursive {}".format("--check-only --diff" if check else "")
     list_result.append(
         _run(c, "isort {} {}".format(isort_options, python_dirs_string), warn=True)
     )
