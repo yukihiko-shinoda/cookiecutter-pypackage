@@ -26,6 +26,11 @@ install:
   - "%PYTHON%/Scripts/pip install -U tox virtualenv"
   - "%PYTHON%/Scripts/pip install wheel"
 
+branches:
+  only:
+    - master
+    - master-yukihiko-shinoda
+
 build: false  # Not a C# project, build stuff at the test step instead.
 
 test_script:
