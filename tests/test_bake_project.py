@@ -349,12 +349,20 @@ def test_bake_and_run_invoke_tests(cookies):
 
 def test_bake_and_run_invoke_style(cookies):
     """Run the formatter on a newly-generated project"""
-    if sys.version_info.major <= 2 or sys.version_info.major == 3 and sys.version_info.major <= 5:
+    if (
+        sys.version_info.major <= 2
+        or sys.version_info.major == 3
+        and sys.version_info.major <= 5
+    ):
         return
     with bake_in_temp_dir(cookies) as result:
         assert result.project.isdir()
         run_inside_dir(
-            ["pip install pipenv", "pipenv install --dev", "pipenv run invoke style --check"],
+            [
+                "pip install pipenv",
+                "pipenv install --dev",
+                "pipenv run invoke style --check",
+            ],
             str(result.project),
         )
 
