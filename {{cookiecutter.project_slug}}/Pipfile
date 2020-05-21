@@ -16,7 +16,10 @@ pylint = "*"
 {% if cookiecutter.use_pytest == 'y' -%}
 pytest = "*"{% endif %}
 isort = "*"
-yapf = "*"
+mypy = "*"
+pipenv-setup = "*"
+# Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/4101
+colorama = "*"
+{{cookiecutter.project_slug}} = {path = ".", editable = true}
 
 [packages]
-{{cookiecutter.project_slug}} = {path = ".", editable = true}
