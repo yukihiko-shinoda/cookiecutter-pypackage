@@ -104,8 +104,11 @@ def test(context):
     context.run("python {} test".format(SETUP_FILE), pty=pty)
 
 
-@task(help={"publish": "Publish the result via coveralls"})
-def coverage(context, publish=False):
+@task(help={
+    'publish': "Publish the result via coveralls",
+    'xml': "Export report as xml format",
+})
+def coverage(context, publish=False, xml=False):
     """
     Create coverage report
     """
@@ -114,8 +117,11 @@ def coverage(context, publish=False):
     if publish:
         # Publish the results via coveralls
         context.run("coveralls")
+        return
+    # Build a local report
+    if xml:
+        context.run("coverage xml")
     else:
-        # Build a local report
         context.run("coverage html")
         webbrowser.open(COVERAGE_REPORT.as_uri())
 
