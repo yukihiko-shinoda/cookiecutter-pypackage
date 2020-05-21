@@ -375,3 +375,17 @@ def test_bake_and_run_invoke_lint(cookies):
             ["pip install pipenv", "pipenv install --dev", "pipenv run invoke lint"],
             str(result.project),
         )
+
+
+def test_bake_and_run_invoke_coverage(cookies):
+    """Run the linter on a newly-generated project"""
+    with bake_in_temp_dir(cookies) as result:
+        assert result.project.isdir()
+        run_inside_dir(
+            [
+                "pip install pipenv",
+                "pipenv install --dev",
+                "pipenv run invoke coverage --xml",
+            ],
+            str(result.project),
+        )
