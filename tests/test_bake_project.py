@@ -3,14 +3,14 @@ import importlib
 import os
 import shlex
 import subprocess
-from subprocess import PIPE
 import sys
 from contextlib import contextmanager
+from subprocess import PIPE
 
 import pytest  # type: ignore
 import yaml
 from click.testing import CliRunner
-from cookiecutter.utils import rmtree
+from cookiecutter.utils import rmtree  # type: ignore
 
 
 @contextmanager
@@ -91,7 +91,7 @@ def test_bake_with_defaults(cookies):
 def test_bake_and_run_tests(cookies):
     with bake_in_temp_dir(cookies) as result:
         assert result.project.isdir()
-        run_inside_dir(["python setup.py test"], str(result.project)) == 0
+        run_inside_dir(["python setup.py test"], str(result.project))
         print("test_bake_and_run_tests path", str(result.project))
 
 
@@ -101,14 +101,14 @@ def test_bake_withspecialchars_and_run_tests(cookies):
         cookies, extra_context={"full_name": 'name "quote" name'}
     ) as result:
         assert result.project.isdir()
-        run_inside_dir(["python setup.py test"], str(result.project)) == 0
+        run_inside_dir(["python setup.py test"], str(result.project))
 
 
 def test_bake_with_apostrophe_and_run_tests(cookies):
     """Ensure that a `full_name` with apostrophes does not break setup.py"""
     with bake_in_temp_dir(cookies, extra_context={"full_name": "O'connor"}) as result:
         assert result.project.isdir()
-        run_inside_dir(["python setup.py test"], str(result.project)) == 0
+        run_inside_dir(["python setup.py test"], str(result.project))
 
 
 # def test_bake_and_run_travis_pypi_setup(cookies):
@@ -185,9 +185,9 @@ def test_bake_without_author_file(cookies):
     ],
 )
 def test_bake_selecting_license(cookies, license_info):
-    license, target_string, license_trove_classifier = license_info
+    key_license, target_string, license_trove_classifier = license_info
     with bake_in_temp_dir(
-        cookies, extra_context={"open_source_license": license}
+        cookies, extra_context={"open_source_license": key_license}
     ) as result:
         assert target_string in result.project.join("LICENSE").read()
         assert license_trove_classifier in result.project.join("setup.py").read()
@@ -215,9 +215,9 @@ def test_using_pytest(cookies):
         lines = test_file_path.readlines()
         assert "import pytest" in "".join(lines)
         # Test the new pytest target
-        run_inside_dir(["python setup.py pytest"], str(result.project)) == 0
+        run_inside_dir(["python setup.py pytest"], str(result.project))
         # Test the test alias (which invokes pytest)
-        run_inside_dir(["python setup.py test"], str(result.project)) == 0
+        run_inside_dir(["python setup.py test"], str(result.project))
 
 
 def test_not_using_pytest(cookies):
@@ -288,57 +288,41 @@ def test_bake_with_no_console_script(cookies):
 
 
 def test_bake_with_console_script_files(cookies):
-    context = {"command_line_interface": "click"}
-    result = cookies.bake(extra_context=context)
-    project_path, project_slug, project_dir = project_info(result)
-    found_project_files = os.listdir(project_dir)
-    assert "cli.py" in found_project_files
-
-    setup_path = os.path.join(project_path, "setup.py")
-    with open(setup_path, "r") as setup_file:
-        assert "entry_points" in setup_file.read()
+    check_bake_with_console_script_files("click", cookies)
 
 
 def test_bake_with_argparse_console_script_files(cookies):
-    context = {"command_line_interface": "argparse"}
+    check_bake_with_console_script_files("argparse", cookies)
+
+
+def check_bake_with_console_script_files(cli, cookies):
+    context = {"command_line_interface": cli}
     result = cookies.bake(extra_context=context)
     project_path, project_slug, project_dir = project_info(result)
     found_project_files = os.listdir(project_dir)
     assert "cli.py" in found_project_files
-
     setup_path = os.path.join(project_path, "setup.py")
     with open(setup_path, "r") as setup_file:
         assert "entry_points" in setup_file.read()
 
 
 def test_bake_with_console_script_cli(cookies):
-    context = {"command_line_interfactest_bake_and_run_invoke_style e": "click"}
-    result = cookies.bake(extra_context=context)
-    project_path, project_slug, project_dir = project_info(result)
-    module_path = os.path.join(project_dir, "cli.py")
-    module_name = ".".join([project_slug, "cli"])
-    spec = importlib.util.spec_from_file_location(module_name, module_path)
-    cli = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(cli)
-    runner = CliRunner()
-    noarg_result = runner.invoke(cli.main)
-    assert noarg_result.exit_code == 0
-    noarg_output = " ".join(
-        ["Replace this message by putting your code into", project_slug]
-    )
-    assert noarg_output in noarg_result.output
-    help_result = runner.invoke(cli.main, ["--help"])
-    assert help_result.exit_code == 0
-    assert "Show this message" in help_result.output
+    check_bake_with_console_script_cli("click", cookies)
 
 
 def test_bake_with_argparse_console_script_cli(cookies):
-    context = {"command_line_interface": "argparse"}
+    check_bake_with_console_script_cli("argparse", cookies)
+
+
+def check_bake_with_console_script_cli(command_line_interface, cookies):
+    context = {"command_line_interface": command_line_interface}
     result = cookies.bake(extra_context=context)
     project_path, project_slug, project_dir = project_info(result)
     module_path = os.path.join(project_dir, "cli.py")
     module_name = ".".join([project_slug, "cli"])
+    # noinspection PyUnresolvedReferences
     spec = importlib.util.spec_from_file_location(module_name, module_path)
+    # noinspection PyUnresolvedReferences
     cli = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(cli)
     runner = CliRunner()
@@ -360,7 +344,7 @@ def test_bake_and_run_invoke_tests(cookies):
         run_inside_dir(
             ["pip install pipenv", "pipenv install --dev", "pipenv run invoke test"],
             str(result.project),
-        ) == 0
+        )
 
 
 def test_bake_and_run_invoke_style(cookies):
@@ -372,7 +356,7 @@ def test_bake_and_run_invoke_style(cookies):
         run_inside_dir(
             ["pip install pipenv", "pipenv install --dev", "pipenv run invoke style"],
             str(result.project),
-        ) == 0
+        )
 
 
 def test_bake_and_run_invoke_lint(cookies):
@@ -382,4 +366,4 @@ def test_bake_and_run_invoke_lint(cookies):
         run_inside_dir(
             ["pip install pipenv", "pipenv install --dev", "pipenv run invoke lint"],
             str(result.project),
-        ) == 0
+        )
