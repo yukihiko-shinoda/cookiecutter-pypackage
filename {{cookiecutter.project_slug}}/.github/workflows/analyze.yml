@@ -15,6 +15,6 @@ jobs:
       - run: python -m pipenv run inv coverage --xml
       - uses: paambaati/codeclimate-action@v2
         env:
-          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
+          CC_TEST_REPORTER_ID: {{ "${{secrets.CC_TEST_REPORTER_ID}}" }}
         with:
           coverageCommand: python -m pipenv run inv coverage --xml
