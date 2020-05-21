@@ -5,6 +5,7 @@ include CONTRIBUTING.rst
 include HISTORY.rst
 include LICENSE
 include README.rst
+include {{ cookiecutter.project_slug }}/py.typed
 
 recursive-include tests *
 recursive-exclude * __pycache__
