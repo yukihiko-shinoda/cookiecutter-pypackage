@@ -312,7 +312,7 @@ def test_bake_with_argparse_console_script_files(cookies):
 
 
 def test_bake_with_console_script_cli(cookies):
-    context = {"command_line_interface": "click"}
+    context = {"command_line_interfactest_bake_and_run_invoke_style e": "click"}
     result = cookies.bake(extra_context=context)
     project_path, project_slug, project_dir = project_info(result)
     module_path = os.path.join(project_dir, "cli.py")
@@ -365,6 +365,8 @@ def test_bake_and_run_invoke_tests(cookies):
 
 def test_bake_and_run_invoke_style(cookies):
     """Run the formatter on a newly-generated project"""
+    if sys.version_info.major <= 2 or sys.version_info.major == 3 and sys.version_info.major <= 5:
+        return
     with bake_in_temp_dir(cookies) as result:
         assert result.project.isdir()
         run_inside_dir(
