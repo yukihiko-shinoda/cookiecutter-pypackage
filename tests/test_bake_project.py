@@ -5,10 +5,10 @@ import shlex
 import subprocess
 import sys
 from contextlib import contextmanager
+from pathlib import Path
 from subprocess import PIPE
 
 import pytest  # type: ignore
-import yaml
 from click.testing import CliRunner
 from cookiecutter.utils import rmtree  # type: ignore
 
@@ -133,14 +133,9 @@ def test_bake_with_apostrophe_and_run_tests(cookies):
 
 def test_bake_without_travis_pypi_setup(cookies):
     with bake_in_temp_dir(
-        cookies, extra_context={"use_pypi_deployment_with_travis": "n"}
+        cookies, extra_context={"use_pypi_deployment_with_github_actions": "n"}
     ) as result:
-        result_travis_config = yaml.load(
-            result.project.join(".travis.yml").open(), Loader=yaml.FullLoader
-        )
-        assert "deploy" not in result_travis_config
-        assert "python" == result_travis_config["language"]
-        # found_toplevel_files = [f.basename for f in result.project.listdir()]
+        assert not (result.project / Path(".github/workflows/deploy.yml")).exists()
 
 
 def test_bake_without_author_file(cookies):
