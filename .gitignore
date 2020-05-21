@@ -80,9 +80,6 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
-# IntelliJ Idea family of suites
-.idea
-*.iml
 ## File-based project format:
 *.ipr
 *.iws
@@ -99,3 +96,7 @@ cookiecutter-pypackage-env/
 
 # IDE settings
 .vscode/
+
+# IntelliJ Idea family of suites
+.idea
+*.iml

@@ -103,3 +103,7 @@ ENV/
 
 # IDE settings
 .vscode/
+
+# IntelliJ Idea family of suites
+.idea
+*.iml
