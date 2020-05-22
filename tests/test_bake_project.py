@@ -157,25 +157,31 @@ def test_bake_without_author_file(cookies):
 
 
 @pytest.mark.parametrize(
-    "key_license, target_string, license_trove_classifier, file_name_expected",
+    "key_license, license_trove_classifier, file_name_expected",
     [
-        ("MIT", "MIT ", "License :: OSI Approved :: MIT License", "mit"),
+        ("MIT", "License :: OSI Approved :: MIT License", "mit"),
+        (
+            "GPL-3.0-or-later",
+            "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+            "gpl3.0_github",
+        ),
+        (
+            "Apache-2.0",
+            "License :: OSI Approved :: Apache Software License",
+            "apache2.0_github",
+        ),
         (
             "BSD-3-Clause",
-            "Redistributions of source code must retain the "
-            + "above copyright notice, this",
             "License :: OSI Approved :: BSD License",
             "bsd3clause",
         ),
         (
             "GPL-3.0-or-later-short",
-            "either version 3 of the License",
             "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
             "gpl3.0_gnu",
         ),
         (
             "Apache-2.0-short",
-            "Licensed under the Apache License, Version 2.0",
             "License :: OSI Approved :: Apache Software License",
             "apache2.0_apache",
         ),
@@ -185,7 +191,6 @@ def test_bake_selecting_license(
     cookies,
     resource_path_root,
     key_license,
-    target_string,
     license_trove_classifier,
     file_name_expected,
 ):
@@ -204,7 +209,6 @@ def test_bake_selecting_license(
     with bake_in_temp_dir(
         cookies, extra_context={"open_source_license": key_license}
     ) as result:
-        assert target_string in result.project.join("LICENSE").read()
         assert license_trove_classifier in result.project.join("setup.py").read()
         actual_license_file = result.project.join("LICENSE")
         expect_license_file = resource_path_root / f"license/{file_name_expected}.txt"

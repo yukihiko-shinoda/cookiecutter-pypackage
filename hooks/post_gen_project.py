@@ -13,6 +13,8 @@ def remove_file(filepath):
 def prepare_license(key_license):
     license_file = {
         "MIT": "mit.txt",
+        "GPL-3.0-or-later": "gpl3.0_github.txt",
+        "Apache-2.0": "apache2.0_github.txt",
         "BSD-3-Clause": "bsd3clause.txt",
         "GPL-3.0-or-later-short": "gpl3.0_gnu.txt",
         "Apache-2.0-short": "apache2.0_apache.txt",
