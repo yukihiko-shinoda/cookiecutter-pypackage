@@ -190,11 +190,3 @@ def dist(context):
     """
     context.run("python setup.py sdist")
     context.run("python setup.py bdist_wheel")
-
-
-@task(pre=[clean, dist])
-def release(context):
-    """
-    Make a release of the python package to pypi
-    """
-    context.run("twine upload dist/*")
