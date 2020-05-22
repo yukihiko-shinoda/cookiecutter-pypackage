@@ -170,11 +170,7 @@ def test_bake_without_author_file(cookies):
             "License :: OSI Approved :: Apache Software License",
             "apache2.0_github",
         ),
-        (
-            "BSD-3-Clause",
-            "License :: OSI Approved :: BSD License",
-            "bsd3clause",
-        ),
+        ("BSD-3-Clause", "License :: OSI Approved :: BSD License", "bsd3clause",),
         (
             "GPL-3.0-or-later-short",
             "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
@@ -214,7 +210,9 @@ def test_bake_selecting_license(
         expect_license_file = resource_path_root / f"license/{file_name_expected}.txt"
         current_year = str(datetime.datetime.now().year)
         actual_license_text = actual_license_file.read().replace("\r\n", "\n")
-        expect_license_text = expect_license_file.read_text().replace("2020", current_year)
+        expect_license_text = expect_license_file.read_text().replace(
+            "2020", current_year
+        )
         assert actual_license_text == expect_license_text
         assert not Path(result.project.join("licenses")).exists()
 
