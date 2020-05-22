@@ -166,7 +166,6 @@ def test_bake_without_author_file(cookies):
             + "above copyright notice, this",
             "License :: OSI Approved :: BSD License",
         ),
-        ("ISC", "ISC License", "License :: OSI Approved :: ISC License (ISCL)"),
         (
             "Apache-2.0",
             "Licensed under the Apache License, Version 2.0",
