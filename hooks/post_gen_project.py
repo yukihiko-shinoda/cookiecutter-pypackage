@@ -14,8 +14,8 @@ def prepare_license(key_license):
     license_file = {
         "MIT": "mit.txt",
         "BSD-3-Clause": "bsd3clause.txt",
-        "Apache-2.0": "apache2.0_apache.txt",
-        "GPL-3.0-only": "gpl3.0_gnu.txt",
+        "GPL-3.0-or-later-short": "gpl3.0_gnu.txt",
+        "Apache-2.0-short": "apache2.0_apache.txt",
     }.get(key_license)
     shutil.copy(
         os.path.join(LICENSE_DIRECTORY, license_file),

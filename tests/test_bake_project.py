@@ -168,16 +168,16 @@ def test_bake_without_author_file(cookies):
             "bsd3clause",
         ),
         (
-            "Apache-2.0",
-            "Licensed under the Apache License, Version 2.0",
-            "License :: OSI Approved :: Apache Software License",
-            "apache2.0_apache",
-        ),
-        (
-            "GPL-3.0-only",
+            "GPL-3.0-or-later-short",
             "either version 3 of the License",
             "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
             "gpl3.0_gnu",
+        ),
+        (
+            "Apache-2.0-short",
+            "Licensed under the Apache License, Version 2.0",
+            "License :: OSI Approved :: Apache Software License",
+            "apache2.0_apache",
         ),
     ],
 )
