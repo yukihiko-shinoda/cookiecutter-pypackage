@@ -1,7 +1,7 @@
 {
-  "full_name": "Sam Briggs",
-  "email": "briggySmalls@example.com",
-  "github_username": "briggySmalls",
+  "full_name": "Yukihiko Shinoda",
+  "email": "yukihiko.shinoda@example.com",
+  "github_username": "yukihiko-shinoda",
   "project_name": "Python Boilerplate",
   "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
   "project_short_description": "Python Boilerplate contains all the boilerplate you need to create a Python package.",
