@@ -4,4 +4,10 @@ multi_line_output = 3
 include_trailing_comma = true
 force_grid_wrap = 0
 use_parentheses = true
-line_length = 88
+line_length = {{ cookiecutter.python_code_max_length_per_line }}
+{%- if cookiecutter.python_code_max_length_per_line != '88' %}
+
+# @see https://black.readthedocs.io/en/stable/pyproject_toml.html#configuration-format
+[tool.black]
+line-length = {{ cookiecutter.python_code_max_length_per_line }}
+{%- endif %}
