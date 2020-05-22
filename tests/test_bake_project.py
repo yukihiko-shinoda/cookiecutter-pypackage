@@ -212,6 +212,7 @@ def test_bake_selecting_license(
         actual_license_text = actual_license_file.read().replace("\r\n", "\n")
         expect_license_text = expect_license_file.read_text().replace("2020", current_year)
         assert actual_license_text == expect_license_text
+        assert not Path(result.project.join("licenses")).exists()
 
 
 def test_bake_not_open_source(cookies):
