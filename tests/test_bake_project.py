@@ -157,34 +157,61 @@ def test_bake_without_author_file(cookies):
 
 
 @pytest.mark.parametrize(
-    "license_info",
+    "key_license, target_string, license_trove_classifier, file_name_expected",
     [
-        ("MIT", "MIT ", "License :: OSI Approved :: MIT License"),
+        ("MIT", "MIT ", "License :: OSI Approved :: MIT License", "mit"),
         (
             "BSD-3-Clause",
             "Redistributions of source code must retain the "
             + "above copyright notice, this",
             "License :: OSI Approved :: BSD License",
+            "bsd3clause",
         ),
         (
             "Apache-2.0",
             "Licensed under the Apache License, Version 2.0",
             "License :: OSI Approved :: Apache Software License",
+            "apache2.0_apache",
         ),
         (
             "GPL-3.0-only",
-            "GNU GENERAL PUBLIC LICENSE",
+            "either version 3 of the License",
             "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+            "gpl3.0_gnu",
         ),
     ],
 )
-def test_bake_selecting_license(cookies, license_info):
-    key_license, target_string, license_trove_classifier = license_info
+def test_bake_selecting_license(
+    cookies,
+    resource_path_root,
+    key_license,
+    target_string,
+    license_trove_classifier,
+    file_name_expected,
+):
+    """
+    Source of expected text file:
+    - mit.txt: Exported from GitHub
+    - gpl3.0_gnu.txt:
+      @see https://www.gnu.org/licenses/gpl-3.0.en.html
+      "How to Apply These Terms to Your New Programs"
+      GitHub doesn't recognize.
+    - apache2.0_apache.txt:
+      @see https://www.apache.org/licenses/LICENSE-2.0#apply
+      GitHub doesn't recognize.
+    - bsd3clause.txt: Exported from GitHub
+    """
     with bake_in_temp_dir(
         cookies, extra_context={"open_source_license": key_license}
     ) as result:
         assert target_string in result.project.join("LICENSE").read()
         assert license_trove_classifier in result.project.join("setup.py").read()
+        actual_license_file = result.project.join("LICENSE")
+        expect_license_file = resource_path_root / f"license/{file_name_expected}.txt"
+        current_year = str(datetime.datetime.now().year)
+        actual_license_text = actual_license_file.read().replace("\r\n", "\n")
+        expect_license_text = expect_license_file.read_text().replace("2020", current_year)
+        assert actual_license_text == expect_license_text
 
 
 def test_bake_not_open_source(cookies):
