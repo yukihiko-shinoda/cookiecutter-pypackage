@@ -237,12 +237,15 @@ def test_bake_not_open_source(cookies):
         ("y", "Not open source", ["[![Updates]("], ["[![Documentation Status](http"]),
     ],
 )
-def test_bake_readme(cookies, use_pyup, open_source_license, list_expected, list_not_expected):
+def test_bake_readme(
+    cookies, use_pyup, open_source_license, list_expected, list_not_expected
+):
     with bake_in_temp_dir(
-        cookies, extra_context={
+        cookies,
+        extra_context={
             "use_pyup": use_pyup,
             "open_source_license": open_source_license,
-        }
+        },
     ) as result:
         string_readme = result.project.join("README.md").read()
         print(string_readme)
