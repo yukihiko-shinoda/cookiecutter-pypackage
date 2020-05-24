@@ -4,22 +4,22 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
-invoke = "*"
 bump2version = "*"
+# Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/4101
+colorama = "*"
 coverage = "*"
-wheel = "*"
-sphinx = "*"
-twine = "*"
-tox = "*"
-"flake8" = "*"
-pylint = "*"
-{% if cookiecutter.use_pytest == 'y' -%}
-pytest = "*"{% endif %}
+flake8 = "*"
+invoke = "*"
 isort = "*"
 mypy = "*"
 pipenv-setup = "*"
-# Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/4101
-colorama = "*"
+pylint = "*"
+{% if cookiecutter.use_pytest == 'y' -%}
+pytest = "*"{% endif %}
+sphinx = "*"
+tox = "*"
+twine = "*"
+wheel = "*"
 {{cookiecutter.project_slug}} = {path = ".", editable = true}
 
 [packages]
