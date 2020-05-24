@@ -226,7 +226,29 @@ def test_bake_not_open_source(cookies):
         found_toplevel_files = [f.basename for f in result.project.listdir()]
         assert "setup.py" in found_toplevel_files
         assert "LICENSE" not in found_toplevel_files
-        assert "License" not in result.project.join("README.md").read()
+
+
+@pytest.mark.parametrize(
+    "use_pyup, open_source_license, list_expected, list_not_expected",
+    [
+        ("n", "MIT", ["[![Documentation Status](http"], ["[![Updates]("]),
+        ("n", "Not open source", [], ["[![Documentation Status](http", "[![Updates]("]),
+        ("y", "MIT", ["[![Documentation Status](http", "[![Updates]("], []),
+        ("y", "Not open source", ["[![Updates]("], ["[![Documentation Status](http"]),
+    ],
+)
+def test_bake_readme(cookies, use_pyup, open_source_license, list_expected, list_not_expected):
+    with bake_in_temp_dir(
+        cookies, extra_context={
+            "use_pyup": use_pyup,
+            "open_source_license": open_source_license,
+        }
+    ) as result:
+        string_readme = result.project.join("README.md").read()
+        for expected in list_expected:
+            assert expected in string_readme
+        for not_expected in list_not_expected:
+            assert not_expected not in string_readme
 
 
 def test_using_pytest(cookies):
