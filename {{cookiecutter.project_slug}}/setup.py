@@ -7,9 +7,6 @@ from setuptools import setup, find_packages  # type: ignore
 with open("README.rst") as readme_file:
     readme = readme_file.read()
 
-with open("HISTORY.rst") as history_file:
-    history = history_file.read()
-
 {%- set license_classifiers = {
     'MIT': 'License :: OSI Approved :: MIT License',
     'GPL-3.0-or-later': 'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
@@ -49,7 +46,7 @@ setup(
 {%- if cookiecutter.open_source_license not in license_classifiers %}
     license="{{ cookiecutter.open_source_license }}",
 {%- endif %}
-    long_description=readme + "\n\n" + history,
+    long_description=readme,
     include_package_data=True,
     keywords="{{ cookiecutter.project_slug }}",
     name="{{ cookiecutter.project_slug }}",
