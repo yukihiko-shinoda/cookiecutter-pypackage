@@ -4,21 +4,21 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
-invoke = "*"
-pytest = "*"
-tox = "*"
-cookiecutter = "*"
-pytest-cookies = "*"
-sphinx = "*"
-pyyaml = "*"
-invocations = "*"
-sphinx-rtd-theme = "*"
 bump2version = "*"
-pipenv-setup = "*"
-isort = "*"
 # Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/4101
 colorama = "*"
+cookiecutter = "*"
+invocations = "*"
+invoke = "*"
+isort = "*"
+pipenv-setup = "*"
+pytest = "*"
+pytest-cookies = "*"
 pytest-resource-path = "*"
+pyyaml = "*"
+sphinx = "*"
+sphinx-rtd-theme = "*"
+tox = "*"
 
 [packages]
 
