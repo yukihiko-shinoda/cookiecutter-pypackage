@@ -386,11 +386,11 @@
         },
         "pytest-resource-path": {
             "hashes": [
-                "sha256:202f3a17684ac8aee9f229900b9c6891eeb3e4d8b5d4f86ed132841070f6ec8e",
-                "sha256:d7a9c3dac589fddeed883a1d1dcfd2c649290cc84546e4e9c53f5ba712c78f0f"
+                "sha256:2fbc919533f4ec065772153159aead9a570d22e762cac21f1facaea1528d6e53",
+                "sha256:36a82cd59bb3735ea11de68f9daf8157354ba53e5751163d7f65dcdeb417201d"
             ],
             "index": "pypi",
-            "version": "==1.0.0"
+            "version": "==1.1.0"
         },
         "python-dateutil": {
             "hashes": [
