@@ -245,6 +245,7 @@ def test_bake_readme(cookies, use_pyup, open_source_license, list_expected, list
         }
     ) as result:
         string_readme = result.project.join("README.md").read()
+        print(string_readme)
         for expected in list_expected:
             assert expected in string_readme
         for not_expected in list_not_expected:
