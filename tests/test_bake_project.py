@@ -207,7 +207,9 @@ def test_bake_selecting_license(
     ) as result:
         assert license_trove_classifier in result.project.join("setup.py").read()
         actual_license_file = result.project.join("LICENSE")
-        expect_license_file = resource_path_root / "license" / (file_name_expected + ".txt")
+        expect_license_file = (
+            resource_path_root / "license" / (file_name_expected + ".txt")
+        )
         current_year = str(datetime.datetime.now().year)
         actual_license_text = actual_license_file.read().replace("\r\n", "\n")
         expect_license_text = expect_license_file.read_text().replace(
