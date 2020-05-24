@@ -216,7 +216,7 @@ def test_bake_selecting_license(
             "2020", current_year
         )
         assert actual_license_text == expect_license_text
-        assert not Path(result.project.join("licenses")).exists()
+        assert not Path(str(result.project.join("licenses"))).exists()
 
 
 def test_bake_not_open_source(cookies):
