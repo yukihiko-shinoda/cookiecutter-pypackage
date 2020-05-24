@@ -4,8 +4,8 @@ import platform
 import webbrowser
 from pathlib import Path
 
-from invoke import task
-from invoke.runners import Failure
+from invoke import task  # type: ignore
+from invoke.runners import Failure  # type: ignore
 
 ROOT_DIR = Path(__file__).parent
 DOCS_DIR = ROOT_DIR.joinpath("docs")
@@ -58,6 +58,37 @@ def style(context, check=False):
     for result in list_result:
         if result.failed:
             raise Failure(result)
+
+
+@task
+def lint_flake8(context):
+    """
+    Lint code with flake8
+    """
+    _run(context, "flake8 {}".format(" ".join(PYTHON_DIRS)))
+
+
+@task
+def lint_pylint(context):
+    """
+    Lint code with pylint
+    """
+    _run(context, "pylint {}".format(" ".join(PYTHON_DIRS)))
+
+
+@task
+def lint_mypy(context):
+    """
+    Lint code with pylint
+    """
+    _run(context, "mypy {}".format(" ".join(PYTHON_DIRS)))
+
+
+@task(lint_flake8, lint_pylint, lint_mypy)
+def lint(_context):
+    """
+    Run all linting
+    """
 
 
 @task

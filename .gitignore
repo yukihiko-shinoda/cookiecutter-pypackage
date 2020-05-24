@@ -94,6 +94,9 @@ output/
 python_boilerplate/
 cookiecutter-pypackage-env/
 
+# mypy
+.mypy_cache/
+
 # IDE settings
 .vscode/
 

@@ -5,3 +5,15 @@ include_trailing_comma = true
 force_grid_wrap = 0
 use_parentheses = true
 line_length = 88
+
+[tool.pylint.basic]
+# I tried values in order started from 2,
+# I felt that docstring is unuseful until 6 while code keeps readable.
+# 2020-05-25 Yukihiko Shinoda
+docstring-min-length = "7"
+
+[tool.pylint.messages_control]
+# bad-continuation: @see https://github.com/PyCQA/pylint/pull/3571
+disable = ''',
+    bad-continuation,
+    '''

@@ -1,4 +1,5 @@
 # !/usr/bin/env python
+"""The setup script."""
 
 from distutils.core import setup
 
@@ -11,7 +12,7 @@ setup(
     license="BSD",
     author_email="briggySmalls90@gmail.com",
     url="https://github.com/briggySmalls/cookiecutter-pypackage",
-    keywords=["cookiecutter", "template", "package",],
+    keywords=["cookiecutter", "template", "package"],
     python_requires=">=3.5",
     install_requires=[],
     dependency_links=[],

@@ -1,3 +1,4 @@
+"""Implements tests."""
 import datetime
 import importlib
 import os
@@ -44,9 +45,9 @@ def bake_in_temp_dir(cookies, *args, **kwargs):
 def run_subrocess(command):
     try:
         subprocess.run(shlex.split(command), check=True, stdout=PIPE, stderr=PIPE)
-    except subprocess.CalledProcessError as e:
-        print(e.output)
-        raise e
+    except subprocess.CalledProcessError as error:
+        print(error.output)
+        raise error
 
 
 def run_inside_dir(commands, dirpath):
@@ -61,6 +62,7 @@ def run_inside_dir(commands, dirpath):
 
 
 def test_year_compute_in_license_file(cookies):
+    """License file should contains year string."""
     with bake_in_temp_dir(cookies) as result:
         license_file_path = result.project.join("LICENSE")
         now = datetime.datetime.now()
@@ -76,6 +78,7 @@ def project_info(result):
 
 
 def test_bake_with_defaults(cookies):
+    """Baked project should have specific files and directories."""
     with bake_in_temp_dir(cookies) as result:
         assert result.project.isdir()
         assert result.exit_code == 0
@@ -139,18 +142,20 @@ def test_bake_without_travis_pypi_setup(cookies):
 
 
 def test_bake_without_author_file(cookies):
+    """
+    Author file should not be created.
+    There should be no spaces in the toc tree.
+    """
     with bake_in_temp_dir(cookies, extra_context={"create_author_file": "n"}) as result:
         found_toplevel_files = [f.basename for f in result.project.listdir()]
         assert "AUTHORS.rst" not in found_toplevel_files
         doc_files = [f.basename for f in result.project.join("docs").listdir()]
         assert "authors.rst" not in doc_files
 
-        # Assert there are no spaces in the toc tree
         docs_index_path = result.project.join("docs/index.rst")
         with open(str(docs_index_path)) as index_file:
             assert "contributing\n   history" in index_file.read()
 
-        # Check that
         manifest_path = result.project.join("MANIFEST.in")
         with open(str(manifest_path)) as manifest_file:
             assert "AUTHORS.rst" not in manifest_file.read()
@@ -240,6 +245,7 @@ def test_bake_not_open_source(cookies):
 def test_bake_readme(
     cookies, use_pyup, open_source_license, list_expected, list_not_expected
 ):
+    """README.md should have appropriate badges."""
     with bake_in_temp_dir(
         cookies,
         extra_context={
@@ -256,6 +262,12 @@ def test_bake_readme(
 
 
 def test_using_pytest(cookies):
+    """
+    Pipfile should contain pytest.
+    First test python file should import pytest.
+    Command "python setup.py pytest" should work.
+    Command "python setup.py test" should work.
+    """
     with bake_in_temp_dir(cookies) as result:
         assert result.project.isdir()
         # Test Pipfile installs pytest
@@ -273,6 +285,11 @@ def test_using_pytest(cookies):
 
 
 def test_not_using_pytest(cookies):
+    """
+    Pipfile should not contain pytest.
+    First test python file should import unittest.
+    First test python file should not import pytest.
+    """
     with bake_in_temp_dir(cookies, extra_context={"use_pytest": "n"}) as result:
         assert result.project.isdir()
         # Test Pipfile doesn install pytest
@@ -296,6 +313,7 @@ def test_using_google_docstrings(cookies):
 
 
 def test_not_using_google_docstrings(cookies):
+    """conf.py should have string "sphinx.ext.napoleon"."""
     with bake_in_temp_dir(
         cookies, extra_context={"use_google_docstrings": "n"}
     ) as result:
@@ -328,9 +346,13 @@ def test_not_using_google_docstrings(cookies):
 
 
 def test_bake_with_no_console_script(cookies):
+    """
+    There should be no cli.py file.
+    setup.py should not have entry_points.
+    """
     context = {"command_line_interface": "No command-line interface"}
     result = cookies.bake(extra_context=context)
-    project_path, project_slug, project_dir = project_info(result)
+    project_path, _project_slug, project_dir = project_info(result)
     found_project_files = os.listdir(project_dir)
     assert "cli.py" not in found_project_files
 
@@ -348,9 +370,13 @@ def test_bake_with_argparse_console_script_files(cookies):
 
 
 def check_bake_with_console_script_files(cli, cookies):
+    """
+    There should be cli.py file.
+    setup.py should have entry_points.
+    """
     context = {"command_line_interface": cli}
     result = cookies.bake(extra_context=context)
-    project_path, project_slug, project_dir = project_info(result)
+    project_path, _project_slug, project_dir = project_info(result)
     found_project_files = os.listdir(project_dir)
     assert "cli.py" in found_project_files
     setup_path = os.path.join(project_path, "setup.py")
@@ -367,9 +393,10 @@ def test_bake_with_argparse_console_script_cli(cookies):
 
 
 def check_bake_with_console_script_cli(command_line_interface, cookies):
+    """Command line output should includes appropriate string."""
     context = {"command_line_interface": command_line_interface}
     result = cookies.bake(extra_context=context)
-    project_path, project_slug, project_dir = project_info(result)
+    _project_path, project_slug, project_dir = project_info(result)
     module_path = os.path.join(project_dir, "cli.py")
     module_name = ".".join([project_slug, "cli"])
     # noinspection PyUnresolvedReferences
