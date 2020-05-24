@@ -5,7 +5,7 @@ name = "pypi"
 
 [dev-packages]
 invoke = "*"
-bumpversion = "*"
+bump2version = "*"
 coverage = "*"
 wheel = "*"
 sphinx = "*"
