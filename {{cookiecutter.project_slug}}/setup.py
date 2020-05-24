@@ -12,10 +12,11 @@ with open("HISTORY.rst") as history_file:
 
 {%- set license_classifiers = {
     'MIT': 'License :: OSI Approved :: MIT License',
-    'BSD-3-Clause': 'License :: OSI Approved :: BSD License',
-    'ISC': 'License :: OSI Approved :: ISC License (ISCL)',
+    'GPL-3.0-or-later': 'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
     'Apache-2.0': 'License :: OSI Approved :: Apache Software License',
-    'GPL-3.0-only': 'License :: OSI Approved :: GNU General Public License v3 (GPLv3)'
+    'BSD-3-Clause': 'License :: OSI Approved :: BSD License',
+    'GPL-3.0-or-later-short': 'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+    'Apache-2.0-short': 'License :: OSI Approved :: Apache Software License',
 } %}
 
 setup(

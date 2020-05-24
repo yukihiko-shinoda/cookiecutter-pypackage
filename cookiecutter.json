@@ -1,7 +1,7 @@
 {
-  "full_name": "Sam Briggs",
-  "email": "briggySmalls@example.com",
-  "github_username": "briggySmalls",
+  "full_name": "Yukihiko Shinoda",
+  "email": "yukihiko.shinoda@example.com",
+  "github_username": "yukihiko-shinoda",
   "project_name": "Python Boilerplate",
   "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
   "project_short_description": "Python Boilerplate contains all the boilerplate you need to create a Python package.",
@@ -12,7 +12,15 @@
   "use_pyup": "n",
   "command_line_interface": ["Click", "Argparse", "No command-line interface"],
   "create_author_file": "y",
-  "open_source_license": ["MIT", "BSD-3-Clause", "ISC", "Apache-2.0", "GPL-3.0-only", "Not open source"],
+  "open_source_license": [
+      "MIT",
+      "GPL-3.0-or-later",
+      "Apache-2.0",
+      "BSD-3-Clause",
+      "GPL-3.0-or-later-short",
+      "Apache-2.0-short",
+      "Not open source"
+  ],
   "use_google_docstrings": "y",
   "python_code_max_length_per_line": "88"
 }

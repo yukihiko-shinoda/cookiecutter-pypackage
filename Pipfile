@@ -18,6 +18,7 @@ pipenv-setup = "*"
 isort = "*"
 # Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/4101
 colorama = "*"
+pytest-resource-path = "*"
 
 [packages]
 

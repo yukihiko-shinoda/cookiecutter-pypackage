@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "33890888ff3e78843a846704e95667444dac5f173ca0c0615d8a6a5696d19a3d"
+            "sha256": "cabe7b7df69da4826b5b63cf5d8d6275b78de82db4ac738f18991a68ee2f639b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -384,6 +384,14 @@
             "index": "pypi",
             "version": "==0.5.1"
         },
+        "pytest-resource-path": {
+            "hashes": [
+                "sha256:2fbc919533f4ec065772153159aead9a570d22e762cac21f1facaea1528d6e53",
+                "sha256:36a82cd59bb3735ea11de68f9daf8157354ba53e5751163d7f65dcdeb417201d"
+            ],
+            "index": "pypi",
+            "version": "==1.1.0"
+        },
         "python-dateutil": {
             "hashes": [
                 "sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c",
@@ -477,10 +485,10 @@
         },
         "six": {
             "hashes": [
-                "sha256:236bdbdce46e6e6a3d61a337c0f8b763ca1e8717c03b369e87a7ec7ce1319c0a",
-                "sha256:8f3cd2e254d8f793e7f3d6d9df77b92252b52637291d0f0da013c76ea2724b6c"
+                "sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259",
+                "sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced"
             ],
-            "version": "==1.14.0"
+            "version": "==1.15.0"
         },
         "snowballstemmer": {
             "hashes": [
@@ -576,11 +584,11 @@
         },
         "tox": {
             "hashes": [
-                "sha256:8d97bfaf70053ed3db56f57377288621f1bcc7621446d301927d18df93b1c4c3",
-                "sha256:af09c19478e8fc7ce7555b3d802ddf601b82684b874812c5857f774b8aee1b67"
+                "sha256:322dfdf007d7d53323f767badcb068a5cfa7c44d8aabb698d131b28cf44e62c4",
+                "sha256:8c9ad9b48659d291c5bc78bcabaa4d680d627687154b812fa52baedaa94f9f83"
             ],
             "index": "pypi",
-            "version": "==3.15.0"
+            "version": "==3.15.1"
         },
         "tqdm": {
             "hashes": [
@@ -632,10 +640,10 @@
         },
         "virtualenv": {
             "hashes": [
-                "sha256:b4c14d4d73a0c23db267095383c4276ef60e161f94fde0427f2f21a0132dde74",
-                "sha256:fd0e54dec8ac96c1c7c87daba85f0a59a7c37fe38748e154306ca21c73244637"
+                "sha256:a116629d4e7f4d03433b8afa27f43deba09d48bc48f5ecefa4f015a178efb6cf",
+                "sha256:a730548b27366c5e6cbdf6f97406d861cccece2e22275e8e1a757aeff5e00c70"
             ],
-            "version": "==20.0.20"
+            "version": "==20.0.21"
         },
         "vistir": {
             "hashes": [
