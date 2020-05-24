@@ -69,7 +69,12 @@ def lint_flake8(context):
     """
     Lint code with flake8
     """
-    context.run("flake8 {}".format(" ".join(PYTHON_DIRS)))
+    context.run(
+        "flake8 {} {}".format(
+            "--statistics --show-source --radon-show-closures",
+            " ".join(PYTHON_DIRS),
+        )
+    )
 
 
 @task
