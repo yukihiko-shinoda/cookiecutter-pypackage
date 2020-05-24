@@ -2,6 +2,7 @@
 {% set is_open_source = cookiecutter.open_source_license != 'Not open source' -%}
 {% if is_open_source %}
 [![Documentation Status](https://readthedocs.org/projects/{{ cookiecutter.project_slug | replace("_", "-") }}/badge/?version=latest)](https://{{ cookiecutter.project_slug | replace("_", "-") }}.readthedocs.io/en/latest/?badge=latest)
+{% endif %}
 {% if cookiecutter.use_pyup != 'n' %}
 [![Updates](https://pyup.io/repos/github/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/shield.svg)](https://pyup.io/repos/github/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/)
 {% endif %}
