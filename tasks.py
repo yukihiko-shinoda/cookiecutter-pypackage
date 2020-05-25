@@ -5,7 +5,7 @@ import webbrowser
 from pathlib import Path
 
 from invoke import task  # type: ignore
-from invoke.runners import Failure  # type: ignore
+from invoke.runners import Failure, Result  # type: ignore
 
 ROOT_DIR = Path(__file__).parent
 DOCS_DIR = ROOT_DIR.joinpath("docs")
@@ -34,30 +34,35 @@ def style(context, check=False):
     """
     Format code
     """
-    python_dirs_string = " ".join(PYTHON_DIRS)
-    list_result = []
-    # Run isort
-    isort_options = "--recursive {}".format("--check-only --diff" if check else "")
-    list_result.append(
-        _run(
-            context, "isort {} {}".format(isort_options, python_dirs_string), warn=True
-        )
-    )
-    # Run pipenv-setup
-    isort_options = "{}".format("check --strict" if check else "sync --pipfile")
-    list_result.append(
-        _run(context, "pipenv-setup {}".format(isort_options), warn=True)
-    )
-    # Run black
-    black_options = "{}".format("--check --diff" if check else "")
-    list_result.append(
-        _run(
-            context, "black {} {}".format(black_options, python_dirs_string), warn=True
-        )
-    )
-    for result in list_result:
+    for result in [
+        isort(context, check),
+        pipenv_setup(context, check),
+        black(context, check),
+    ]:
         if result.failed:
             raise Failure(result)
+
+
+def isort(context, check=False) -> Result:
+    """Runs isort."""
+    isort_options = "--recursive {}".format("--check-only --diff" if check else "")
+    return _run(
+        context, "isort {} {}".format(isort_options, " ".join(PYTHON_DIRS)), warn=True
+    )
+
+
+def pipenv_setup(context, check=False) -> Result:
+    """Runs pipenv-setup."""
+    isort_options = "{}".format("check --strict" if check else "sync --pipfile")
+    return _run(context, "pipenv-setup {}".format(isort_options), warn=True)
+
+
+def black(context, check=False) -> Result:
+    """Runs black."""
+    black_options = "{}".format("--check --diff" if check else "")
+    return _run(
+        context, "black {} {}".format(black_options, " ".join(PYTHON_DIRS)), warn=True
+    )
 
 
 @task
