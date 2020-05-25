@@ -55,7 +55,7 @@ setup(
     setup_requires=[{%- if cookiecutter.use_pytest == 'y' %}'pytest-runner',{%- endif %} ],
     test_suite="tests",
     tests_require=[{%- if cookiecutter.use_pytest == 'y' %}'pytest>=3',{%- endif %} ],
-    url="https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}",
+    url="https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.github_repository_name }}",
     version="{{ cookiecutter.version }}",
     zip_safe=False,
 )
