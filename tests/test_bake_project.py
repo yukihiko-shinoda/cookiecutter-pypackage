@@ -85,9 +85,7 @@ def test_bake_with_defaults(cookies):
         assert result.project.isdir()
         assert result.exit_code == 0
         assert result.exception is None
-        check_toplevel_path_exist(
-            result, ["setup.py", "pythonboilerplate", "tests"]
-        )
+        check_toplevel_path_exist(result, ["setup.py", "pythonboilerplate", "tests"])
 
 
 def check_toplevel_path_exist(result: Result, list_path: List[str]):
