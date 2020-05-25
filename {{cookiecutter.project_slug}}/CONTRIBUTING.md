@@ -73,12 +73,13 @@ Ready to contribute? Here's how to set up `{{ cookiecutter.project_name }}` for 
 
 5. When you're done making changes,
    check that your changes pass isort, flake8, black,
-   and the tests, including testing other Python versions with tox:
+   and the tests, including testing oldest Python version:
 
    ```console
    pipenv run inv style --check
    pipenv run pytest
-   pipenv run tox
+   pipenv install --python 3.5
+   pipenv run pytest
    ```
 
 6. Commit your changes and push your branch to GitHub:
