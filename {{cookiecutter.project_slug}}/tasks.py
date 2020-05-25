@@ -119,6 +119,19 @@ def radon(_context):
 
 
 @task
+def xenon(context):
+    """
+    Check code complexibility.
+    """
+    context.run((
+        "xenon"
+        " --max-absolute A"
+        "--max-modules A"
+        "--max-average A"
+        "{}").format(" ".join(PYTHON_DIRS)))
+
+
+@task
 def test(context):
     """
     Run tests

@@ -21,6 +21,7 @@ sphinx = "*"
 tox = "*"
 twine = "*"
 wheel = "*"
+xenon = "*"
 {{cookiecutter.project_slug}} = {path = ".", editable = true}
 
 [packages]

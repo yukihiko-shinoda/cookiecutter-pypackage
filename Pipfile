@@ -19,10 +19,11 @@ pytest = "*"
 pytest-cookies = "*"
 pytest-resource-path = "*"
 pyyaml = "*"
+radon = "*"
 sphinx = "*"
 sphinx-rtd-theme = "*"
 tox = "*"
-radon = "*"
+xenon = "*"
 
 [packages]
 

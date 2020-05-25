@@ -65,12 +65,7 @@ def lint_flake8(context):
     """
     Lint code with flake8
     """
-    _run(
-        context,
-        "flake8 {} {}".format(
-            "--radon-show-closures", " ".join(PYTHON_DIRS)
-        ),
-    )
+    _run(context, "flake8 {} {}".format("--radon-show-closures", " ".join(PYTHON_DIRS)))
 
 
 @task
@@ -117,6 +112,19 @@ def radon(_context):
     """
     Reports radon.
     """
+
+
+@task
+def xenon(context):
+    """
+    Check code complexibility.
+    """
+    _run(
+        context,
+        "xenon --max-absolute A --max-modules A --max-average A {}".format(
+            " ".join(PYTHON_DIRS)
+        ),
+    )
 
 
 @task
