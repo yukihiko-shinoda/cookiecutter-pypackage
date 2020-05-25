@@ -44,7 +44,7 @@ jobs:
       - run: python -m pip install pipenv
       - run: python -m pipenv sync --dev
       - run: python -m pipenv run invoke lint
-  check_complexibility:
+  check_complexity:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

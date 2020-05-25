@@ -98,7 +98,7 @@ def lint(_context):
 @task
 def radon_cc(context):
     """
-    Reports code complexibility.
+    Reports code complexity.
     """
     context.run("radon cc {}".format(" ".join(PYTHON_DIRS)))
 
@@ -121,7 +121,7 @@ def radon(_context):
 @task
 def xenon(context):
     """
-    Check code complexibility.
+    Check code complexity.
     """
     context.run((
         "xenon"
