@@ -68,7 +68,7 @@ def lint_flake8(context):
     _run(
         context,
         "flake8 {} {}".format(
-            "--statistics --show-source --radon-show-closures", " ".join(PYTHON_DIRS)
+            "--radon-show-closures", " ".join(PYTHON_DIRS)
         ),
     )
 
@@ -93,6 +93,29 @@ def lint_mypy(context):
 def lint(_context):
     """
     Run all linting
+    """
+
+
+@task
+def radon_cc(context):
+    """
+    Reports code complexibility.
+    """
+    _run(context, "radon cc {}".format(" ".join(PYTHON_DIRS)))
+
+
+@task
+def radon_mi(context):
+    """
+    Reports maintainability index.
+    """
+    _run(context, "radon mi {}".format(" ".join(PYTHON_DIRS)))
+
+
+@task(radon_cc, radon_mi)
+def radon(_context):
+    """
+    Reports radon.
     """
 
 

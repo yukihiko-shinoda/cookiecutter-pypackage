@@ -69,12 +69,7 @@ def lint_flake8(context):
     """
     Lint code with flake8
     """
-    context.run(
-        "flake8 {} {}".format(
-            "--statistics --show-source --radon-show-closures",
-            " ".join(PYTHON_DIRS),
-        )
-    )
+    context.run("flake8 {} {}".format("--radon-show-closures", " ".join(PYTHON_DIRS)))
 
 
 @task
@@ -97,6 +92,29 @@ def lint_mypy(context):
 def lint(_context):
     """
     Run all linting
+    """
+
+
+@task
+def radon_cc(context):
+    """
+    Reports code complexibility.
+    """
+    context.run("radon cc {}".format(" ".join(PYTHON_DIRS)))
+
+
+@task
+def radon_mi(context):
+    """
+    Reports maintainability index.
+    """
+    context.run("radon mi {}".format(" ".join(PYTHON_DIRS)))
+
+
+@task(radon_cc, radon_mi)
+def radon(_context):
+    """
+    Reports radon.
     """
 
 

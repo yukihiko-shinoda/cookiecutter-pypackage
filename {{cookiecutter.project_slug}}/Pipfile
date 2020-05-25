@@ -24,7 +24,3 @@ wheel = "*"
 {{cookiecutter.project_slug}} = {path = ".", editable = true}
 
 [packages]
-
-[scripts]
-cc = "radon cc --show-complexity --min B ."
-mi = "radon mi --show ."
