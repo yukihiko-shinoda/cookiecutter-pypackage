@@ -48,13 +48,13 @@ If you are proposing a feature:
 ## Get Started!
 <!-- markdownlint-enaable no-trailing-punctuation -->
 
-Ready to contribute? Here's how to set up `{{ cookiecutter.project_slug }}` for local development.
+Ready to contribute? Here's how to set up `{{ cookiecutter.project_name }}` for local development.
 
-1. Fork the `{{ cookiecutter.project_slug }}` repo on GitHub.
+1. Fork the `{{ cookiecutter.github_repository_name }}` repo on GitHub.
 2. Clone your fork locally:
 
    ```console
-   git clone git@github.com:your_name_here/{{ cookiecutter.project_slug }}.git
+   git clone git@github.com:your_name_here/{{ cookiecutter.github_repository_name }}.git
    ```
 
 3. Install your local copy into a virtualenv. Assuming you have Pipenv installed, this is how you set up your fork for local development:
@@ -126,4 +126,4 @@ git push --tags
 
 Travis will then deploy to PyPI if tests pass.
 
-[GitHub Issues]: https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/issues
+[GitHub Issues]: https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.github_repository_name }}/issues
