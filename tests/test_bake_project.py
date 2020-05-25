@@ -86,7 +86,7 @@ def test_bake_with_defaults(cookies):
         assert result.exit_code == 0
         assert result.exception is None
         check_toplevel_path_exist(
-            result, ["setup.py", "pythonboilerplate", "tox.ini", "tests"]
+            result, ["setup.py", "pythonboilerplate", "tests"]
         )
 
 
