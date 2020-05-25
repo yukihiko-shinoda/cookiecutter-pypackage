@@ -231,10 +231,10 @@ def test_bake_not_open_source(cookies):
 @pytest.mark.parametrize(
     "use_pyup, open_source_license, list_expected, list_not_expected",
     [
-        ("n", "MIT", ["[![Documentation Status](http"], ["[![Updates]("]),
-        ("n", "Not open source", [], ["[![Documentation Status](http", "[![Updates]("]),
-        ("y", "MIT", ["[![Documentation Status](http", "[![Updates]("], []),
-        ("y", "Not open source", ["[![Updates]("], ["[![Documentation Status](http"]),
+        ("n", "MIT", [], ["[![Updates]("]),
+        ("n", "Not open source", [], ["[![Updates]("]),
+        ("y", "MIT", ["[![Updates]("], []),
+        ("y", "Not open source", ["[![Updates]("], []),
     ],
 )
 def test_bake_readme(
