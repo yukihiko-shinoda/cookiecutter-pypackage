@@ -21,9 +21,6 @@ TASKS_PY = ROOT_DIR.joinpath("tasks.py")
 COVERAGE_FILE = ROOT_DIR.joinpath(".coverage")
 COVERAGE_DIR = ROOT_DIR.joinpath("htmlcov")
 COVERAGE_REPORT = COVERAGE_DIR.joinpath("index.html")
-DOCS_DIR = ROOT_DIR.joinpath("docs")
-DOCS_BUILD_DIR = DOCS_DIR.joinpath("_build")
-DOCS_INDEX = DOCS_BUILD_DIR.joinpath("index.html")
 PYTHON_DIRS = [str(d) for d in [SETUP_PY, TASKS_PY, SOURCE_DIR, TEST_DIR]]
 
 
@@ -173,23 +170,6 @@ def coverage(context, publish=False, xml=False):
 
 
 @task
-def docs(context):
-    """
-    Generate documentation
-    """
-    context.run("sphinx-build -b html {} {}".format(DOCS_DIR, DOCS_BUILD_DIR))
-    webbrowser.open(DOCS_INDEX.as_uri())
-
-
-@task
-def clean_docs(context):
-    """
-    Clean up files from documentation builds
-    """
-    context.run("rm -fr {}".format(DOCS_BUILD_DIR))
-
-
-@task
 def clean_build(context):
     """
     Clean up files from package building
@@ -221,7 +201,7 @@ def clean_tests(_context):
     shutil.rmtree(COVERAGE_DIR, ignore_errors=True)
 
 
-@task(pre=[clean_build, clean_python, clean_tests, clean_docs])
+@task(pre=[clean_build, clean_python, clean_tests])
 def clean(_context):
     """
     Runs all clean sub-tasks
