@@ -144,18 +144,6 @@ def test_bake_without_travis_pypi_setup(cookies):
         assert not (result.project / Path(".github/workflows/deploy.yml")).exists()
 
 
-def test_bake_without_author_file(cookies):
-    """
-    Author file should not be created.
-    There should be no spaces in the toc tree.
-    """
-    with bake_in_temp_dir(cookies, extra_context={"create_author_file": "n"}) as result:
-        assert "AUTHORS.rst" not in list_files(result)
-        assert "authors.rst" not in list_files(result, ["docs"])
-        assert "contributing\n   history" in read_text(result, "docs/index.rst")
-        assert "AUTHORS.rst" not in read_text(result, "MANIFEST.in")
-
-
 def list_files(result: Result, directories: List[str] = None):
     directories = [] if directories is None else directories
     joined_path = result.project
@@ -308,27 +296,6 @@ def test_not_using_pytest(cookies):
         lines = test_file_path.readlines()
         assert "import unittest" in "".join(lines)
         assert "import pytest" not in "".join(lines)
-
-
-def test_using_google_docstrings(cookies):
-    with bake_in_temp_dir(cookies) as result:
-        assert result.project.isdir()
-        # Test docs include sphinx extension
-        docs_conf_file_path = result.project.join("docs/conf.py")
-        lines = docs_conf_file_path.readlines()
-        assert "sphinx.ext.napoleon" in "".join(lines)
-
-
-def test_not_using_google_docstrings(cookies):
-    """conf.py should have string "sphinx.ext.napoleon"."""
-    with bake_in_temp_dir(
-        cookies, extra_context={"use_google_docstrings": "n"}
-    ) as result:
-        assert result.project.isdir()
-        # Test docs do not include sphinx extension
-        docs_conf_file_path = result.project.join("docs/conf.py")
-        lines = docs_conf_file_path.readlines()
-        assert "sphinx.ext.napoleon" not in "".join(lines)
 
 
 # def test_project_with_hyphen_in_module_name(cookies):

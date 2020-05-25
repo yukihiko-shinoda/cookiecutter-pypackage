@@ -12,7 +12,6 @@
   "use_pypi_deployment_with_github_actions": "y",
   "use_pyup": "n",
   "command_line_interface": ["Click", "Argparse", "No command-line interface"],
-  "create_author_file": "y",
   "open_source_license": [
       "MIT",
       "GPL-3.0-or-later",
@@ -22,6 +21,5 @@
       "Apache-2.0-short",
       "Not open source"
   ],
-  "use_google_docstrings": "y",
   "python_code_max_length_per_line": "88"
 }
