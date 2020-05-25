@@ -86,7 +86,7 @@ def test_bake_with_defaults(cookies):
         assert result.exit_code == 0
         assert result.exception is None
         check_toplevel_path_exist(
-            result, ["setup.py", "python_boilerplate", "tox.ini", "tests"]
+            result, ["setup.py", "pythonboilerplate", "tox.ini", "tests"]
         )
 
 
@@ -284,7 +284,7 @@ def test_using_pytest(cookies):
         lines = pipfile_file_path.readlines()
         assert 'pytest = "*"\n' in lines
         # Test contents of test file
-        test_file_path = result.project.join("tests/test_python_boilerplate.py")
+        test_file_path = result.project.join("tests/test_pythonboilerplate.py")
         lines = test_file_path.readlines()
         assert "import pytest" in "".join(lines)
         # Test the new pytest target
@@ -306,7 +306,7 @@ def test_not_using_pytest(cookies):
         lines = pipfile_file_path.readlines()
         assert 'pytest = "*"\n' not in lines
         # Test contents of test file
-        test_file_path = result.project.join("tests/test_python_boilerplate.py")
+        test_file_path = result.project.join("tests/test_pythonboilerplate.py")
         lines = test_file_path.readlines()
         assert "import unittest" in "".join(lines)
         assert "import pytest" not in "".join(lines)
