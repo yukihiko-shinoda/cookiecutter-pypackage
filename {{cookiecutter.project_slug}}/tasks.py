@@ -44,7 +44,11 @@ def style(context, check=False):
     """
     Format code
     """
-    for result in [isort(context, check), pipenv_setup(context, check), black(context, check)]:
+    for result in [
+        isort(context, check),
+        pipenv_setup(context, check),
+        black(context, check),
+    ]:
         if result.failed:
             raise Failure(result)
 
@@ -52,7 +56,9 @@ def style(context, check=False):
 def isort(context, check=False) -> Result:
     """Runs isort."""
     isort_options = "--recursive {}".format("--check-only --diff" if check else "")
-    return context.run("isort {} {}".format(isort_options, " ".join(PYTHON_DIRS)), warn=True)
+    return context.run(
+        "isort {} {}".format(isort_options, " ".join(PYTHON_DIRS)), warn=True
+    )
 
 
 def pipenv_setup(context, check=False) -> Result:
@@ -64,7 +70,9 @@ def pipenv_setup(context, check=False) -> Result:
 def black(context, check=False) -> Result:
     """Runs black."""
     black_options = "{}".format("--check --diff" if check else "")
-    return context.run("black {} {}".format(black_options, " ".join(PYTHON_DIRS)), warn=True)
+    return context.run(
+        "black {} {}".format(black_options, " ".join(PYTHON_DIRS)), warn=True
+    )
 
 
 @task
