@@ -16,3 +16,9 @@ line-length = {{ cookiecutter.python_code_max_length_per_line }}
 [tool.pylint.format]
 max-line-length = "{{ cookiecutter.python_code_max_length_per_line }}"
 {%- endif %}
+
+[tool.pylint.messages_control]
+# bad-continuation: @see https://github.com/PyCQA/pylint/pull/3571
+disable = ''',
+    bad-continuation,
+    '''

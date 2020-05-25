@@ -16,10 +16,12 @@ pipenv-setup = "*"
 pylint = "*"
 {% if cookiecutter.use_pytest == 'y' -%}
 pytest = "*"{% endif %}
+radon = "*"
 sphinx = "*"
 tox = "*"
 twine = "*"
 wheel = "*"
+xenon = "*"
 {{cookiecutter.project_slug}} = {path = ".", editable = true}
 
 [packages]

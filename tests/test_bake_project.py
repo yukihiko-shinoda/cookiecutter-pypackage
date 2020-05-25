@@ -8,10 +8,12 @@ import sys
 from contextlib import contextmanager
 from pathlib import Path
 from subprocess import PIPE
+from typing import List
 
 import pytest  # type: ignore
 from click.testing import CliRunner
 from cookiecutter.utils import rmtree  # type: ignore
+from pytest_cookies.plugin import Result  # type: ignore
 
 
 @contextmanager
@@ -83,12 +85,15 @@ def test_bake_with_defaults(cookies):
         assert result.project.isdir()
         assert result.exit_code == 0
         assert result.exception is None
+        check_toplevel_path_exist(
+            result, ["setup.py", "python_boilerplate", "tox.ini", "tests"]
+        )
 
-        found_toplevel_files = [f.basename for f in result.project.listdir()]
-        assert "setup.py" in found_toplevel_files
-        assert "python_boilerplate" in found_toplevel_files
-        assert "tox.ini" in found_toplevel_files
-        assert "tests" in found_toplevel_files
+
+def check_toplevel_path_exist(result: Result, list_path: List[str]):
+    found_toplevel_files = list_files(result)
+    for path in list_path:
+        assert path in found_toplevel_files
 
 
 def test_bake_and_run_tests(cookies):
@@ -147,18 +152,22 @@ def test_bake_without_author_file(cookies):
     There should be no spaces in the toc tree.
     """
     with bake_in_temp_dir(cookies, extra_context={"create_author_file": "n"}) as result:
-        found_toplevel_files = [f.basename for f in result.project.listdir()]
-        assert "AUTHORS.rst" not in found_toplevel_files
-        doc_files = [f.basename for f in result.project.join("docs").listdir()]
-        assert "authors.rst" not in doc_files
+        assert "AUTHORS.rst" not in list_files(result)
+        assert "authors.rst" not in list_files(result, ["docs"])
+        assert "contributing\n   history" in read_text(result, "docs/index.rst")
+        assert "AUTHORS.rst" not in read_text(result, "MANIFEST.in")
 
-        docs_index_path = result.project.join("docs/index.rst")
-        with open(str(docs_index_path)) as index_file:
-            assert "contributing\n   history" in index_file.read()
 
-        manifest_path = result.project.join("MANIFEST.in")
-        with open(str(manifest_path)) as manifest_file:
-            assert "AUTHORS.rst" not in manifest_file.read()
+def list_files(result: Result, directories: List[str] = None):
+    directories = [] if directories is None else directories
+    joined_path = result.project
+    for directory in directories:
+        joined_path = joined_path.join(directory)
+    return [f.basename for f in joined_path.listdir()]
+
+
+def read_text(result: Result, relative_path):
+    return Path(str(result.project.join(relative_path))).read_text()
 
 
 @pytest.mark.parametrize(

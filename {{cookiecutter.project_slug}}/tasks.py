@@ -9,7 +9,7 @@ from pathlib import Path
 import webbrowser
 
 from invoke import task  # type: ignore
-from invoke.runners import Failure  # type: ignore
+from invoke.runners import Failure, Result  # type: ignore
 
 
 ROOT_DIR = Path(__file__).parent
@@ -44,24 +44,35 @@ def style(context, check=False):
     """
     Format code
     """
-    python_dirs_string = " ".join(PYTHON_DIRS)
-    list_result = []
-    # Run isort
-    isort_options = "--recursive {}".format("--check-only --diff" if check else "")
-    list_result.append(
-        context.run("isort {} {}".format(isort_options, python_dirs_string), warn=True)
-    )
-    # Run pipenv-setup
-    isort_options = "{}".format("check --strict" if check else "sync --pipfile")
-    list_result.append(context.run("pipenv-setup {}".format(isort_options), warn=True))
-    # Run black
-    black_options = "{}".format("--check --diff" if check else "")
-    list_result.append(
-        context.run("black {} {}".format(black_options, python_dirs_string), warn=True)
-    )
-    for result in list_result:
+    for result in [
+        isort(context, check),
+        pipenv_setup(context, check),
+        black(context, check),
+    ]:
         if result.failed:
             raise Failure(result)
+
+
+def isort(context, check=False) -> Result:
+    """Runs isort."""
+    isort_options = "--recursive {}".format("--check-only --diff" if check else "")
+    return context.run(
+        "isort {} {}".format(isort_options, " ".join(PYTHON_DIRS)), warn=True
+    )
+
+
+def pipenv_setup(context, check=False) -> Result:
+    """Runs pipenv-setup."""
+    isort_options = "{}".format("check --strict" if check else "sync --pipfile")
+    return context.run("pipenv-setup {}".format(isort_options), warn=True)
+
+
+def black(context, check=False) -> Result:
+    """Runs black."""
+    black_options = "{}".format("--check --diff" if check else "")
+    return context.run(
+        "black {} {}".format(black_options, " ".join(PYTHON_DIRS)), warn=True
+    )
 
 
 @task
@@ -69,7 +80,7 @@ def lint_flake8(context):
     """
     Lint code with flake8
     """
-    context.run("flake8 {}".format(" ".join(PYTHON_DIRS)))
+    context.run("flake8 {} {}".format("--radon-show-closures", " ".join(PYTHON_DIRS)))
 
 
 @task
@@ -93,6 +104,42 @@ def lint(_context):
     """
     Run all linting
     """
+
+
+@task
+def radon_cc(context):
+    """
+    Reports code complexity.
+    """
+    context.run("radon cc {}".format(" ".join(PYTHON_DIRS)))
+
+
+@task
+def radon_mi(context):
+    """
+    Reports maintainability index.
+    """
+    context.run("radon mi {}".format(" ".join(PYTHON_DIRS)))
+
+
+@task(radon_cc, radon_mi)
+def radon(_context):
+    """
+    Reports radon.
+    """
+
+
+@task
+def xenon(context):
+    """
+    Check code complexity.
+    """
+    context.run((
+        "xenon"
+        " --max-absolute A"
+        "--max-modules A"
+        "--max-average A"
+        "{}").format(" ".join(PYTHON_DIRS)))
 
 
 @task
