@@ -11,6 +11,11 @@ line_length = {{ cookiecutter.python_code_max_length_per_line }}
 [tool.black]
 line-length = {{ cookiecutter.python_code_max_length_per_line }}
 {%- endif %}
+{%- if cookiecutter.pylint_docstring_min_length != '-1' %}
+
+[tool.pylint.basic]
+docstring-min-length = "{{ cookiecutter.pylint_docstring_min_length }}"
+{%- endif %}
 {%- if cookiecutter.python_code_max_length_per_line != '100' %}
 
 [tool.pylint.format]

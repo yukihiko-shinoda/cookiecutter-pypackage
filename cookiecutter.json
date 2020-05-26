@@ -21,5 +21,6 @@
       "Apache-2.0-short",
       "Not open source"
   ],
-  "python_code_max_length_per_line": "88"
+  "python_code_max_length_per_line": "88",
+  "pylint_docstring_min_length": "-1"
 }
