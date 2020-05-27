@@ -18,7 +18,7 @@ jobs:
       - run: python -m pipenv run mkdocs build
       - uses: peaceiris/actions-gh-pages@v3.6.1
         with:
-          personal_token: ${{ secrets.PERSONAL_TOKEN }}
+          personal_token: {{ "${{ secrets.PERSONAL_TOKEN }}" }}
           external_repository: yukihiko-shinoda/docs-cookiecutter-pypackage
           publish_branch: master
           publish_dir: ./site
