@@ -1,0 +1,24 @@
+site_name: Cookiecutter PyPackage
+site_description: Cookiecutter template for a Python package, forked from audreyr/cookiecutter-pypackage.
+nav:
+  # index.md is copied when build.
+  # @see .github/workflows/deploy-docs.yml
+  - Home: index.md
+  - tutorial.md
+  - prompts.md
+  - console_script_setup.md
+  - invoke.md
+  - travis_pypi_setup.md
+  - pypi_release_checklist.md
+  - troubleshooting.md
+  - CONTRIBUTING.md
+theme:
+  name: readthedocs
+markdown_extensions:
+  # To enable anchor
+  - toc:
+      permalink: True
+  # To define definition lists for templated values
+  - def_list
+  # To define note
+  - attr_list
