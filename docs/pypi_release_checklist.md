@@ -15,7 +15,6 @@ python setup.py register
 1\. Commit the changes:
 
 ```console
-git add HISTORY.rst
 git commit -m "Changelog for upcoming release 0.1.1."
 ```
 
