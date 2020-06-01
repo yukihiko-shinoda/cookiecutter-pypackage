@@ -27,6 +27,8 @@ def prepare_license(key_license):
 if __name__ == "__main__":
     if "{{ cookiecutter.use_pypi_deployment_with_github_actions }}" != "y":
         remove_file(".github/workflows/deploy.yml")
+    if "{{ cookiecutter.use_pytest }}" != "y":
+        remove_file("tests/conftest.py")
     if "{{ cookiecutter.use_pyup }}" == "n":
         remove_file(".pyup.yml")
     if "no" in "{{ cookiecutter.command_line_interface|lower }}":

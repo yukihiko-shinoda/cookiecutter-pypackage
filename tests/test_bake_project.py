@@ -269,10 +269,13 @@ def test_using_pytest(cookies):
         pipfile_file_path = result.project.join("Pipfile")
         lines = pipfile_file_path.readlines()
         assert 'pytest = "*"\n' in lines
+        # Test conftest.py exist
+        assert (result.project / Path("tests/conftest.py")).exists()
         # Test contents of test file
         test_file_path = result.project.join("tests/test_pythonboilerplate.py")
         lines = test_file_path.readlines()
-        assert "import pytest" in "".join(lines)
+        assert "import unittest" not in "".join(lines)
+        assert "def test_content(response):" in "".join(lines)
         # Test the new pytest target
         run_inside_dir(["python setup.py pytest"], str(result.project))
         # Test the test alias (which invokes pytest)
@@ -291,11 +294,13 @@ def test_not_using_pytest(cookies):
         pipfile_file_path = result.project.join("Pipfile")
         lines = pipfile_file_path.readlines()
         assert 'pytest = "*"\n' not in lines
+        # Test conftest.py not exist
+        assert not (result.project / Path("tests/conftest.py")).exists()
         # Test contents of test file
         test_file_path = result.project.join("tests/test_pythonboilerplate.py")
         lines = test_file_path.readlines()
         assert "import unittest" in "".join(lines)
-        assert "import pytest" not in "".join(lines)
+        assert "def test_content(response):" not in "".join(lines)
 
 
 # def test_project_with_hyphen_in_module_name(cookies):
