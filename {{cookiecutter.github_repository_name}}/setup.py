@@ -21,17 +21,20 @@ setup(
     author_email="{{ cookiecutter.email }}",
     python_requires=">=3.5",
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
 {%- if cookiecutter.open_source_license in license_classifiers %}
         "{{ license_classifiers[cookiecutter.open_source_license] }}",
 {%- endif %}
         "Natural Language :: English",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Typing :: Typed",
     ],
     description="{{ cookiecutter.project_short_description }}",  # noqa: E501 pylint: disable=line-too-long
     {%- if 'no' not in cookiecutter.command_line_interface|lower %}
