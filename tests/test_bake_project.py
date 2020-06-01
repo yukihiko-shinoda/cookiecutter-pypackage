@@ -74,7 +74,7 @@ def test_year_compute_in_license_file(cookies):
 def project_info(result):
     """Get toplevel dir, project_slug, and project dir from baked cookies"""
     project_path = str(result.project)
-    project_slug = os.path.split(project_path)[-1]
+    project_slug = os.path.split(project_path)[-1].replace("-", "")
     project_dir = os.path.join(project_path, project_slug)
     return project_path, project_slug, project_dir
 
