@@ -72,7 +72,11 @@ Commit and push to GitHub repository.
 
 2\.
 
-Activate your created repository on [Code Climate] and copy and paste badge.
+Activate your created repository on [Code Climate].
+
+If you prefer, Enable \[Pull request comments\] and \[Pull request status updates\] from \[Repo Settings\] -> \[GitHub\]
+
+Copy and paste badge from \[Repo Settings\] -> \[Badges\] to this README file.
 
 2-1\.
 
@@ -110,8 +114,6 @@ to deploy into [PyPI].
 Then, get your code on! 😎
 Add your package dependencies to your pipenv with `pipenv install`.
 
-For more details, see the [cookiecutter-pypackage tutorial].
-
 [briggySmalls/cookiecutter-pypackage]: https://github.com/briggySmalls/cookiecutter-pypackage
 [Cookiecutter]: https://github.com/audreyr/cookiecutter
 [Pipenv]: https://pipenv.pypa.io/en/latest/
@@ -129,4 +131,3 @@ For more details, see the [cookiecutter-pypackage tutorial].
 [pyup.io]: https://pyup.io/
 [PyPi]: https://pypi.python.org/pypi
 [Prompts]: docs/prompts.md
-[cookiecutter-pypackage tutorial]: https://briggysmalls.github.io/cookiecutter-pypackage/tutorial.html
