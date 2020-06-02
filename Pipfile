@@ -11,6 +11,8 @@ cookiecutter = "*"
 flake8 = "*"
 invoke = "*"
 isort = "*"
+# To enable 2 spaces indent list in mkdocs
+mdx-truly-sane-lists = "*"
 mkdocs = "*"
 mypy = "*"
 pipenv-setup = "*"
