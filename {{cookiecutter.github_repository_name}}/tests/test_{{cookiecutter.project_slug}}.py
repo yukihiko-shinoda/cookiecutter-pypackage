@@ -1,10 +1,5 @@
-#!/usr/bin/env python
 """Tests for `{{ cookiecutter.project_slug }}` package."""
-# pylint: disable=redefined-outer-name
-
-{% if cookiecutter.use_pytest == 'y' -%}
-import pytest  # type: ignore
-{%- else -%}
+{% if cookiecutter.use_pytest != 'y' -%}
 import unittest
 {%- endif %}
 {% if cookiecutter.command_line_interface | lower == 'click' -%}
@@ -16,16 +11,6 @@ from {{ cookiecutter.project_slug }} import cli
 {%- endif %}
 
 {%- if cookiecutter.use_pytest == 'y' %}
-
-
-@pytest.fixture
-def response():
-    """Sample pytest fixture.
-
-    See more at: http://doc.pytest.org/en/latest/fixture.html
-    """
-    # import requests
-    # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
 
 
 def test_content(response):

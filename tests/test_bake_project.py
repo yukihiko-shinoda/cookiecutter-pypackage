@@ -63,12 +63,11 @@ def run_inside_dir(commands, dirpath):
             run_subrocess(command)
 
 
-def test_year_compute_in_license_file(cookies):
+def test_year_compute_in_license_file(baked_in_temp_dir):
     """License file should contains year string."""
-    with bake_in_temp_dir(cookies) as result:
-        license_file_path = result.project.join("LICENSE")
-        now = datetime.datetime.now()
-        assert str(now.year) in license_file_path.read()
+    license_file_path = baked_in_temp_dir.project.join("LICENSE")
+    now = datetime.datetime.now()
+    assert str(now.year) in license_file_path.read()
 
 
 def project_info(result):
@@ -79,13 +78,14 @@ def project_info(result):
     return project_path, project_slug, project_dir
 
 
-def test_bake_with_defaults(cookies):
+def test_bake_with_defaults(baked_in_temp_dir):
     """Baked project should have specific files and directories."""
-    with bake_in_temp_dir(cookies) as result:
-        assert result.project.isdir()
-        assert result.exit_code == 0
-        assert result.exception is None
-        check_toplevel_path_exist(result, ["setup.py", "pythonboilerplate", "tests"])
+    assert baked_in_temp_dir.project.isdir()
+    assert baked_in_temp_dir.exit_code == 0
+    assert baked_in_temp_dir.exception is None
+    check_toplevel_path_exist(
+        baked_in_temp_dir, ["setup.py", "pythonboilerplate", "tests"]
+    )
 
 
 def check_toplevel_path_exist(result: Result, list_path: List[str]):
@@ -94,27 +94,30 @@ def check_toplevel_path_exist(result: Result, list_path: List[str]):
         assert path in found_toplevel_files
 
 
-def test_bake_and_run_tests(cookies):
-    with bake_in_temp_dir(cookies) as result:
-        assert result.project.isdir()
-        run_inside_dir(["python setup.py test"], str(result.project))
-        print("test_bake_and_run_tests path", str(result.project))
+def test_bake_and_run_tests(baked_in_temp_dir):
+    assert baked_in_temp_dir.project.isdir()
+    run_inside_dir(["python setup.py test"], str(baked_in_temp_dir.project))
+    print("test_bake_and_run_tests path", str(baked_in_temp_dir.project))
 
 
-def test_bake_withspecialchars_and_run_tests(cookies):
+@pytest.mark.parametrize(
+    "baked_in_temp_dir",
+    [{"full_name": 'name "quote" name'}],
+    indirect=["baked_in_temp_dir"],
+)
+def test_bake_withspecialchars_and_run_tests(baked_in_temp_dir):
     """Ensure that a `full_name` with double quotes does not break setup.py"""
-    with bake_in_temp_dir(
-        cookies, extra_context={"full_name": 'name "quote" name'}
-    ) as result:
-        assert result.project.isdir()
-        run_inside_dir(["python setup.py test"], str(result.project))
+    assert baked_in_temp_dir.project.isdir()
+    run_inside_dir(["python setup.py test"], str(baked_in_temp_dir.project))
 
 
-def test_bake_with_apostrophe_and_run_tests(cookies):
+@pytest.mark.parametrize(
+    "baked_in_temp_dir", [{"full_name": "O'connor"}], indirect=["baked_in_temp_dir"],
+)
+def test_bake_with_apostrophe_and_run_tests(baked_in_temp_dir):
     """Ensure that a `full_name` with apostrophes does not break setup.py"""
-    with bake_in_temp_dir(cookies, extra_context={"full_name": "O'connor"}) as result:
-        assert result.project.isdir()
-        run_inside_dir(["python setup.py test"], str(result.project))
+    assert baked_in_temp_dir.project.isdir()
+    run_inside_dir(["python setup.py test"], str(baked_in_temp_dir.project))
 
 
 # def test_bake_and_run_travis_pypi_setup(cookies):
@@ -137,11 +140,15 @@ def test_bake_with_apostrophe_and_run_tests(cookies):
 #         ) > min_size_of_encrypted_password
 
 
-def test_bake_without_travis_pypi_setup(cookies):
-    with bake_in_temp_dir(
-        cookies, extra_context={"use_pypi_deployment_with_github_actions": "n"}
-    ) as result:
-        assert not (result.project / Path(".github/workflows/deploy.yml")).exists()
+@pytest.mark.parametrize(
+    "baked_in_temp_dir",
+    [{"use_pypi_deployment_with_github_actions": "n"}],
+    indirect=["baked_in_temp_dir"],
+)
+def test_bake_without_travis_pypi_setup(baked_in_temp_dir):
+    assert not (
+        baked_in_temp_dir.project / Path(".github/workflows/deploy.yml")
+    ).exists()
 
 
 def list_files(result: Result, directories: List[str] = None):
@@ -157,38 +164,43 @@ def read_text(result: Result, relative_path):
 
 
 @pytest.mark.parametrize(
-    "key_license, license_trove_classifier, file_name_expected",
+    "baked_in_temp_dir, license_trove_classifier, file_name_expected",
     [
-        ("MIT", "License :: OSI Approved :: MIT License", "mit"),
         (
-            "GPL-3.0-or-later",
+            {"open_source_license": "MIT"},
+            "License :: OSI Approved :: MIT License",
+            "mit",
+        ),
+        (
+            {"open_source_license": "GPL-3.0-or-later"},
             "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
             "gpl3.0_github",
         ),
         (
-            "Apache-2.0",
+            {"open_source_license": "Apache-2.0"},
             "License :: OSI Approved :: Apache Software License",
             "apache2.0_github",
         ),
-        ("BSD-3-Clause", "License :: OSI Approved :: BSD License", "bsd3clause",),
         (
-            "GPL-3.0-or-later-short",
+            {"open_source_license": "BSD-3-Clause"},
+            "License :: OSI Approved :: BSD License",
+            "bsd3clause",
+        ),
+        (
+            {"open_source_license": "GPL-3.0-or-later-short"},
             "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
             "gpl3.0_gnu",
         ),
         (
-            "Apache-2.0-short",
+            {"open_source_license": "Apache-2.0-short"},
             "License :: OSI Approved :: Apache Software License",
             "apache2.0_apache",
         ),
     ],
+    indirect=["baked_in_temp_dir"],
 )
 def test_bake_selecting_license(
-    cookies,
-    resource_path_root,
-    key_license,
-    license_trove_classifier,
-    file_name_expected,
+    resource_path_root, baked_in_temp_dir, license_trove_classifier, file_name_expected,
 ):
     """
     Source of expected text file:
@@ -202,100 +214,118 @@ def test_bake_selecting_license(
       GitHub doesn't recognize.
     - bsd3clause.txt: Exported from GitHub
     """
-    with bake_in_temp_dir(
-        cookies, extra_context={"open_source_license": key_license}
-    ) as result:
-        assert license_trove_classifier in result.project.join("setup.py").read()
-        actual_license_file = result.project.join("LICENSE")
-        expect_license_file = (
-            resource_path_root / "license" / (file_name_expected + ".txt")
-        )
-        current_year = str(datetime.datetime.now().year)
-        actual_license_text = actual_license_file.read().replace("\r\n", "\n")
-        expect_license_text = expect_license_file.read_text().replace(
-            "2020", current_year
-        )
-        assert actual_license_text == expect_license_text
-        assert not Path(str(result.project.join("licenses"))).exists()
-
-
-def test_bake_not_open_source(cookies):
-    with bake_in_temp_dir(
-        cookies, extra_context={"open_source_license": "Not open source"}
-    ) as result:
-        found_toplevel_files = [f.basename for f in result.project.listdir()]
-        assert "setup.py" in found_toplevel_files
-        assert "LICENSE" not in found_toplevel_files
+    assert license_trove_classifier in baked_in_temp_dir.project.join("setup.py").read()
+    actual_license_file = baked_in_temp_dir.project.join("LICENSE")
+    expect_license_file = resource_path_root / "license" / (file_name_expected + ".txt")
+    current_year = str(datetime.datetime.now().year)
+    actual_license_text = actual_license_file.read().replace("\r\n", "\n")
+    expect_license_text = expect_license_file.read_text().replace("2020", current_year)
+    assert actual_license_text == expect_license_text
+    assert not Path(str(baked_in_temp_dir.project.join("licenses"))).exists()
 
 
 @pytest.mark.parametrize(
-    "use_pyup, open_source_license, list_expected, list_not_expected",
-    [
-        ("n", "MIT", [], ["[![Updates]("]),
-        ("n", "Not open source", [], ["[![Updates]("]),
-        ("y", "MIT", ["[![Updates]("], []),
-        ("y", "Not open source", ["[![Updates]("], []),
-    ],
+    "baked_in_temp_dir",
+    [{"open_source_license": "Not open source"}],
+    indirect=["baked_in_temp_dir"],
 )
-def test_bake_readme(
-    cookies, use_pyup, open_source_license, list_expected, list_not_expected
-):
+def test_bake_not_open_source(baked_in_temp_dir):
+    """Project not open source license should not have file: "LICENSE"."""
+    found_toplevel_files = [f.basename for f in baked_in_temp_dir.project.listdir()]
+    assert "setup.py" in found_toplevel_files
+    assert "LICENSE" not in found_toplevel_files
+
+
+@pytest.mark.parametrize(
+    "baked_in_temp_dir, list_expected, list_not_expected",
+    [
+        ({"use_pyup": "n", "open_source_license": "MIT"}, [], ["[![Updates]("]),
+        (
+            {"use_pyup": "n", "open_source_license": "Not open source"},
+            [],
+            ["[![Updates]("],
+        ),
+        ({"use_pyup": "y", "open_source_license": "MIT"}, ["[![Updates]("], []),
+        (
+            {"use_pyup": "y", "open_source_license": "Not open source"},
+            ["[![Updates]("],
+            [],
+        ),
+    ],
+    indirect=["baked_in_temp_dir"],
+)
+def test_bake_readme(baked_in_temp_dir, list_expected, list_not_expected):
     """README.md should have appropriate badges."""
-    with bake_in_temp_dir(
-        cookies,
-        extra_context={
-            "use_pyup": use_pyup,
-            "open_source_license": open_source_license,
-        },
-    ) as result:
-        string_readme = result.project.join("README.md").read()
-        print(string_readme)
-        for expected in list_expected:
-            assert expected in string_readme
-        for not_expected in list_not_expected:
-            assert not_expected not in string_readme
+    string_readme = baked_in_temp_dir.project.join("README.md").read()
+    print(string_readme)
+    for expected in list_expected:
+        assert expected in string_readme
+    for not_expected in list_not_expected:
+        assert not_expected not in string_readme
 
 
-def test_using_pytest(cookies):
+def test_using_pytest(baked_in_temp_dir):
     """
     Pipfile should contain pytest.
     First test python file should import pytest.
     Command "python setup.py pytest" should work.
     Command "python setup.py test" should work.
     """
-    with bake_in_temp_dir(cookies) as result:
-        assert result.project.isdir()
-        # Test Pipfile installs pytest
-        pipfile_file_path = result.project.join("Pipfile")
-        lines = pipfile_file_path.readlines()
-        assert 'pytest = "*"\n' in lines
-        # Test contents of test file
-        test_file_path = result.project.join("tests/test_pythonboilerplate.py")
-        lines = test_file_path.readlines()
-        assert "import pytest" in "".join(lines)
-        # Test the new pytest target
-        run_inside_dir(["python setup.py pytest"], str(result.project))
-        # Test the test alias (which invokes pytest)
-        run_inside_dir(["python setup.py test"], str(result.project))
+    assert baked_in_temp_dir.project.isdir()
+    # Test Pipfile installs pytest
+    assert pytest_entry_exists_in_pipfile(baked_in_temp_dir)
+    # Test conftest.py exist
+    assert conftest_exists(baked_in_temp_dir)
+    # Test contents of test file
+    check_is_pytest(get_test_file_text(baked_in_temp_dir))
+    # Test the new pytest target
+    run_inside_dir(["python setup.py pytest"], str(baked_in_temp_dir.project))
+    # Test the test alias (which invokes pytest)
+    run_inside_dir(["python setup.py test"], str(baked_in_temp_dir.project))
 
 
-def test_not_using_pytest(cookies):
+@pytest.mark.parametrize(
+    "baked_in_temp_dir", [{"use_pytest": "n"}], indirect=["baked_in_temp_dir"],
+)
+def test_not_using_pytest(baked_in_temp_dir):
     """
     Pipfile should not contain pytest.
     First test python file should import unittest.
     First test python file should not import pytest.
     """
-    with bake_in_temp_dir(cookies, extra_context={"use_pytest": "n"}) as result:
-        assert result.project.isdir()
-        # Test Pipfile doesn install pytest
-        pipfile_file_path = result.project.join("Pipfile")
-        lines = pipfile_file_path.readlines()
-        assert 'pytest = "*"\n' not in lines
-        # Test contents of test file
-        test_file_path = result.project.join("tests/test_pythonboilerplate.py")
-        lines = test_file_path.readlines()
-        assert "import unittest" in "".join(lines)
-        assert "import pytest" not in "".join(lines)
+    assert baked_in_temp_dir.project.isdir()
+    # Test Pipfile doesn install pytest
+    assert not pytest_entry_exists_in_pipfile(baked_in_temp_dir)
+    # Test conftest.py not exist
+    assert not conftest_exists(baked_in_temp_dir)
+    # Test contents of test file
+    check_is_unittest(get_test_file_text(baked_in_temp_dir))
+
+
+def check_is_pytest(test_file):
+    assert "import unittest" not in test_file
+    assert "def test_content(response):" in test_file
+
+
+def check_is_unittest(test_file):
+    assert "import unittest" in test_file
+    assert "def test_content(response):" not in test_file
+
+
+def conftest_exists(baked_in_temp_dir):
+    return (baked_in_temp_dir.project / Path("tests/conftest.py")).exists()
+
+
+def get_test_file_text(baked_in_temp_dir):
+    return Path(
+        str(baked_in_temp_dir.project.join("tests/test_pythonboilerplate.py"))
+    ).read_text()
+
+
+def pytest_entry_exists_in_pipfile(result):
+    pipfile_file_path = result.project.join("Pipfile")
+    lines = pipfile_file_path.readlines()
+    return 'pytest = "*"\n' in lines
 
 
 # def test_project_with_hyphen_in_module_name(cookies):
@@ -390,17 +420,16 @@ def check_bake_with_console_script_cli(command_line_interface, cookies):
     assert "Show this message" in help_result.output
 
 
-def test_bake_and_run_invoke_tests(cookies):
+def test_bake_and_run_invoke_tests(baked_in_temp_dir):
     """Run the unit tests of a newly-generated project"""
-    with bake_in_temp_dir(cookies) as result:
-        assert result.project.isdir()
-        run_inside_dir(
-            ["pip install pipenv", "pipenv install --dev", "pipenv run invoke test"],
-            str(result.project),
-        )
+    assert baked_in_temp_dir.project.isdir()
+    run_inside_dir(
+        ["pip install pipenv", "pipenv install --dev", "pipenv run invoke test"],
+        str(baked_in_temp_dir.project),
+    )
 
 
-def test_bake_and_run_invoke_style(cookies):
+def test_bake_and_run_invoke_style(baked_in_temp_dir):
     """Run the formatter on a newly-generated project"""
     if (
         sys.version_info.major <= 2
@@ -408,37 +437,34 @@ def test_bake_and_run_invoke_style(cookies):
         and sys.version_info.major <= 5
     ):
         return
-    with bake_in_temp_dir(cookies) as result:
-        assert result.project.isdir()
-        run_inside_dir(
-            [
-                "pip install pipenv",
-                "pipenv install --dev",
-                "pipenv run invoke style --check",
-            ],
-            str(result.project),
-        )
+    assert baked_in_temp_dir.project.isdir()
+    run_inside_dir(
+        [
+            "pip install pipenv",
+            "pipenv install --dev",
+            "pipenv run invoke style --check",
+        ],
+        str(baked_in_temp_dir.project),
+    )
 
 
-def test_bake_and_run_invoke_lint(cookies):
+def test_bake_and_run_invoke_lint(baked_in_temp_dir):
     """Run the linter on a newly-generated project"""
-    with bake_in_temp_dir(cookies) as result:
-        assert result.project.isdir()
-        run_inside_dir(
-            ["pip install pipenv", "pipenv install --dev", "pipenv run invoke lint"],
-            str(result.project),
-        )
+    assert baked_in_temp_dir.project.isdir()
+    run_inside_dir(
+        ["pip install pipenv", "pipenv install --dev", "pipenv run invoke lint"],
+        str(baked_in_temp_dir.project),
+    )
 
 
-def test_bake_and_run_invoke_coverage(cookies):
+def test_bake_and_run_invoke_coverage(baked_in_temp_dir):
     """Run the linter on a newly-generated project"""
-    with bake_in_temp_dir(cookies) as result:
-        assert result.project.isdir()
-        run_inside_dir(
-            [
-                "pip install pipenv",
-                "pipenv install --dev",
-                "pipenv run invoke coverage --xml",
-            ],
-            str(result.project),
-        )
+    assert baked_in_temp_dir.project.isdir()
+    run_inside_dir(
+        [
+            "pip install pipenv",
+            "pipenv install --dev",
+            "pipenv run invoke coverage --xml",
+        ],
+        str(baked_in_temp_dir.project),
+    )

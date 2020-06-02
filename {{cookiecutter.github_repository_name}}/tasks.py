@@ -156,7 +156,7 @@ def coverage(context, publish=False, xml=False):
     Create coverage report
     """
     context.run("coverage run --source {} -m pytest".format(SOURCE_DIR))
-    context.run("coverage report")
+    context.run("coverage report -m")
     if publish:
         # Publish the results via coveralls
         context.run("coveralls")
