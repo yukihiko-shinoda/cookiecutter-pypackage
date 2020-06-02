@@ -230,6 +230,7 @@ def test_bake_selecting_license(
     indirect=["baked_in_temp_dir"],
 )
 def test_bake_not_open_source(baked_in_temp_dir):
+    """Project not open source license should not have file: "LICENSE"."""
     found_toplevel_files = [f.basename for f in baked_in_temp_dir.project.listdir()]
     assert "setup.py" in found_toplevel_files
     assert "LICENSE" not in found_toplevel_files
@@ -238,15 +239,15 @@ def test_bake_not_open_source(baked_in_temp_dir):
 @pytest.mark.parametrize(
     "baked_in_temp_dir, list_expected, list_not_expected",
     [
-        ({"use_pyup": "n", "open_source_license": "MIT",}, [], ["[![Updates]("]),
+        ({"use_pyup": "n", "open_source_license": "MIT"}, [], ["[![Updates]("]),
         (
-            {"use_pyup": "n", "open_source_license": "Not open source",},
+            {"use_pyup": "n", "open_source_license": "Not open source"},
             [],
             ["[![Updates]("],
         ),
-        ({"use_pyup": "y", "open_source_license": "MIT",}, ["[![Updates]("], []),
+        ({"use_pyup": "y", "open_source_license": "MIT"}, ["[![Updates]("], []),
         (
-            {"use_pyup": "y", "open_source_license": "Not open source",},
+            {"use_pyup": "y", "open_source_license": "Not open source"},
             ["[![Updates]("],
             [],
         ),
@@ -298,7 +299,6 @@ def test_not_using_pytest(baked_in_temp_dir):
     # Test conftest.py not exist
     assert not conftest_exists(baked_in_temp_dir)
     # Test contents of test file
-    test_file = get_test_file_text(baked_in_temp_dir)
     check_is_unittest(get_test_file_text(baked_in_temp_dir))
 
 
