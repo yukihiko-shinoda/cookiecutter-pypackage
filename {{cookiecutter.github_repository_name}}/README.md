@@ -1,11 +1,11 @@
 # {{ cookiecutter.project_name }}
 
-[![Test](https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug | replace("_", "-") }}/workflows/Test/badge.svg)](https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug | replace("_", "-") }}/actions?query=workflow%3ATest)
+[![Test](https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.github_repository_name }}/workflows/Test/badge.svg)](https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.github_repository_name }}/actions?query=workflow%3ATest)
 {% if cookiecutter.use_pyup != 'n' -%}
-[![Updates](https://pyup.io/repos/github/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/shield.svg)](https://pyup.io/repos/github/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/)
+[![Updates](https://pyup.io/repos/github/{{ cookiecutter.github_username }}/{{ cookiecutter.github_repository_name }}/shield.svg)](https://pyup.io/repos/github/{{ cookiecutter.github_username }}/{{ cookiecutter.github_repository_name }}/)
 {% endif -%}
-[![Python versions](https://img.shields.io/pypi/pyversions/{{ cookiecutter.project_slug | replace("_", "-") }}.svg)](https://pypi.org/project/{{ cookiecutter.project_slug | replace("_", "-") }})
-[![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2F{{ cookiecutter.github_username }}%2F{{ cookiecutter.project_slug | replace("_", "-") }})](http://twitter.com/share?text={{ cookiecutter.project_name | urlencode }}&url=https://pypi.org/project/{{ cookiecutter.project_slug | replace("_", "-") }}/&hashtags=python)
+[![Python versions](https://img.shields.io/pypi/pyversions/{{ cookiecutter.project_slug }}.svg)](https://pypi.org/project/{{ cookiecutter.project_slug }})
+[![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2F{{ cookiecutter.github_username }}%2F{{ cookiecutter.github_repository_name }})](http://twitter.com/share?text={{ cookiecutter.project_name | urlencode }}&url=https://pypi.org/project/{{ cookiecutter.project_slug }}/&hashtags=python)
 
 {{ cookiecutter.project_short_description }}
 
