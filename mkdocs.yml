@@ -19,3 +19,5 @@ markdown_extensions:
   - def_list
   # To define note
   - attr_list
+  # To enable 2 spaces indent list in mkdocs
+  - mdx_truly_sane_lists
