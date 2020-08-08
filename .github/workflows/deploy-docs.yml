@@ -17,7 +17,7 @@ jobs:
       # @see https://github.com/mkdocs/mkdocs/pull/1134#issuecomment-352904668
       - run: cp -fp README.md docs/index.md
       - run: python -m pipenv run mkdocs build
-      - uses: peaceiris/actions-gh-pages@v3.6.1
+      - uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.PERSONAL_TOKEN }}
           external_repository: yukihiko-shinoda/docs-cookiecutter-pypackage
