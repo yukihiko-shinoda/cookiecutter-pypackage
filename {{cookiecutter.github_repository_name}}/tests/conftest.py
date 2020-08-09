@@ -1,6 +1,8 @@
 """Configuration of pytest"""
 import pytest  # type: ignore
 
+collect_ignore = ['setup.py']
+
 
 @pytest.fixture
 def response():
