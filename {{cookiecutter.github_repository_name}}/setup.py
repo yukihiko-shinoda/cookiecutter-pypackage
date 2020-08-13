@@ -43,6 +43,7 @@ setup(
         ],
     },
     {%- endif %}
+    exclude_package_data={"": ["__pycache__", "*.py[co]", ".pytest_cache"]},
     include_package_data=True,
     install_requires=[{%- if cookiecutter.command_line_interface|lower == 'click' %}'Click>=7.0',{%- endif %} ],
     keywords="{{ cookiecutter.project_slug }}",
@@ -52,7 +53,8 @@ setup(
     long_description=readme,
     long_description_content_type="text/markdown",
     name="{{ cookiecutter.project_slug }}",
-    packages=find_packages(include=["{{ cookiecutter.project_slug }}", "{{ cookiecutter.project_slug }}.*"]),
+    packages=find_packages(include=["{{ cookiecutter.project_slug }}", "{{ cookiecutter.project_slug }}.*", "tests", "tests.*"]),  # noqa: E501 pylint: disable=line-too-long
+    package_data={"{{ cookiecutter.project_slug }}": ["py.typed"], "tests": ["*"]},
     python_requires=">=3.5",
     test_suite="tests",
     tests_require=[{%- if cookiecutter.use_pytest == 'y' %}'pytest>=3',{%- endif %} ],
