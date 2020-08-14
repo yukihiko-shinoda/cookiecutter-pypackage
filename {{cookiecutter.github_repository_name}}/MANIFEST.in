@@ -1,9 +1,1 @@
-include LICENSE
-include README.md
-include {{ cookiecutter.project_slug }}/py.typed
-
-recursive-include tests *
-recursive-exclude * __pycache__
-recursive-exclude * *.py[co]
-
-recursive-include docs conf.py *.jpg *.png *.gif
+recursive-include docs *

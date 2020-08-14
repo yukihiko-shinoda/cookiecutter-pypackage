@@ -18,7 +18,6 @@ with open("README.md") as readme_file:
 setup(
     author="{{ cookiecutter.full_name.replace('\"', '\\\"') }}",
     author_email="{{ cookiecutter.email }}",
-    python_requires=">=3.5",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
@@ -35,6 +34,7 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Typing :: Typed",
     ],
+    dependency_links=[],
     description="{{ cookiecutter.project_short_description }}",  # noqa: E501 pylint: disable=line-too-long
     {%- if 'no' not in cookiecutter.command_line_interface|lower %}
     entry_points={
@@ -43,18 +43,19 @@ setup(
         ],
     },
     {%- endif %}
+    exclude_package_data={"": ["__pycache__", "*.py[co]", ".pytest_cache"]},
+    include_package_data=True,
     install_requires=[{%- if cookiecutter.command_line_interface|lower == 'click' %}'Click>=7.0',{%- endif %} ],
-    dependency_links=[],
+    keywords="{{ cookiecutter.project_slug }}",
 {%- if cookiecutter.open_source_license not in license_classifiers %}
     license="{{ cookiecutter.open_source_license }}",
 {%- endif %}
     long_description=readme,
     long_description_content_type="text/markdown",
-    include_package_data=True,
-    keywords="{{ cookiecutter.project_slug }}",
     name="{{ cookiecutter.project_slug }}",
-    packages=find_packages(include=["{{ cookiecutter.project_slug }}", "{{ cookiecutter.project_slug }}.*"]),
-    setup_requires=[{%- if cookiecutter.use_pytest == 'y' %}'pytest-runner',{%- endif %} ],
+    packages=find_packages(include=["{{ cookiecutter.project_slug }}", "{{ cookiecutter.project_slug }}.*", "tests", "tests.*"]),  # noqa: E501 pylint: disable=line-too-long
+    package_data={"{{ cookiecutter.project_slug }}": ["py.typed"], "tests": ["*"]},
+    python_requires=">=3.5",
     test_suite="tests",
     tests_require=[{%- if cookiecutter.use_pytest == 'y' %}'pytest>=3',{%- endif %} ],
     url="https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.github_repository_name }}",
