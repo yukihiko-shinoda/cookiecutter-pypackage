@@ -14,7 +14,7 @@ setup(
     url="https://github.com/briggySmalls/cookiecutter-pypackage",
     keywords=["cookiecutter", "template", "package"],
     python_requires=">=3.5",
-    install_requires=[],
+    install_requires=["cookiecutter"],
     dependency_links=[],
     classifiers=[
         "Development Status :: 4 - Beta",
