@@ -7,7 +7,6 @@ name = "pypi"
 bump2version = "*"
 # Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/4101
 colorama = "*"
-cookiecutter = "*"
 flake8 = "*"
 invoke = "*"
 isort = "*"
@@ -26,6 +25,7 @@ tox = "*"
 xenon = "*"
 
 [packages]
+cookiecutter = "*"
 
 [requires]
 python_version = "3"

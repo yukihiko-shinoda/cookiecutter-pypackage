@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  cookiecutter:
+    build:
+      context: .
+      target: production
+    image: futureys/cookiecutter-pypackage:latest
+    volumes:
+      - ./output:/output
