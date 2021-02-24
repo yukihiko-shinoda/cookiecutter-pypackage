@@ -15,6 +15,11 @@ from click.testing import CliRunner
 from cookiecutter.utils import rmtree  # type: ignore
 from pytest_cookies.plugin import Result  # type: ignore
 
+WARNING_FOR_PYTHON_35 = (
+    b"DEPRECATION: Python 3.5 reached the end of its life on September 13th, 2020."
+    b" Please upgrade your Python as Python 3"
+)
+
 
 @contextmanager
 def inside_dir(dirpath):
@@ -96,7 +101,7 @@ def check_toplevel_path_exist(result: Result, list_path: List[str]):
 
 def test_bake_and_run_tests(baked_in_temp_dir):
     assert baked_in_temp_dir.project.isdir()
-    run_inside_dir(["python setup.py test"], str(baked_in_temp_dir.project))
+    run_inside_dir_python_setup_py_test(baked_in_temp_dir)
     print("test_bake_and_run_tests path", str(baked_in_temp_dir.project))
 
 
@@ -108,7 +113,7 @@ def test_bake_and_run_tests(baked_in_temp_dir):
 def test_bake_withspecialchars_and_run_tests(baked_in_temp_dir):
     """Ensure that a `full_name` with double quotes does not break setup.py"""
     assert baked_in_temp_dir.project.isdir()
-    run_inside_dir(["python setup.py test"], str(baked_in_temp_dir.project))
+    run_inside_dir_python_setup_py_test(baked_in_temp_dir)
 
 
 @pytest.mark.parametrize(
@@ -117,7 +122,7 @@ def test_bake_withspecialchars_and_run_tests(baked_in_temp_dir):
 def test_bake_with_apostrophe_and_run_tests(baked_in_temp_dir):
     """Ensure that a `full_name` with apostrophes does not break setup.py"""
     assert baked_in_temp_dir.project.isdir()
-    run_inside_dir(["python setup.py test"], str(baked_in_temp_dir.project))
+    run_inside_dir_python_setup_py_test(baked_in_temp_dir)
 
 
 # def test_bake_and_run_travis_pypi_setup(cookies):
@@ -279,9 +284,25 @@ def test_using_pytest(baked_in_temp_dir):
     # Test contents of test file
     check_is_pytest(get_test_file_text(baked_in_temp_dir))
     # Test the new pytest target
-    run_inside_dir(["python setup.py pytest"], str(baked_in_temp_dir.project))
+    run_inside_dir_python_setup_py_pytest(baked_in_temp_dir)
     # Test the test alias (which invokes pytest)
-    run_inside_dir(["python setup.py test"], str(baked_in_temp_dir.project))
+    run_inside_dir_python_setup_py_test(baked_in_temp_dir)
+
+
+def run_inside_dir_python_setup_py_test(baked_in_temp_dir):
+    try:
+        run_inside_dir(["python setup.py test"], str(baked_in_temp_dir.project))
+    except subprocess.CalledProcessError as error:
+        if error.stderr.find(WARNING_FOR_PYTHON_35) == -1:
+            raise error
+
+
+def run_inside_dir_python_setup_py_pytest(baked_in_temp_dir):
+    try:
+        run_inside_dir(["python setup.py pytest"], str(baked_in_temp_dir.project))
+    except subprocess.CalledProcessError as error:
+        if error.stderr.find(WARNING_FOR_PYTHON_35) == -1:
+            raise error
 
 
 @pytest.mark.parametrize(

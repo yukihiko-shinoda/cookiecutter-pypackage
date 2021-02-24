@@ -10,7 +10,7 @@
 
 This template focus following:
 
-- Target Python version: 3.5 - 3.8
+- Target Python version: 3.5 - 3.9
 - Dependency tracking using [Pipenv]
 - Linting provided by both [pylint], [flake8], [mypy] [executed by GitHub Actions]
 - Formatting provided by [isort], [pipenv-setup], [black] [checked by GitHub Actions]
@@ -51,7 +51,7 @@ Then initialized project direcotry is created in current directory.
 ## Points to review after creating initialized project directory
 
 1\.
-Review support range if the one of your package is not Python 3.5 - 3.8
+Review support range if the one of your package is not Python 3.5 - 3.9
 
 - .github/workflows/test.yml
 - setup.py
