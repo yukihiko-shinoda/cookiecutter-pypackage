@@ -41,15 +41,6 @@ The following appear in various parts of your generated project.
 **project_short_description**
 :   A 1-sentence description of what your Python package does.
 
-**pypi_username**
-:   Your Python Package Index account username.
-
-    The [PyPI] or Python Package Index is
-    the official third-party software repository
-    for the Python programming language.
-    Python developers intend it to be a comprehensive catalog
-    of all open source Python packages.
-
 **version**
 :   The starting version number of the package.
 
