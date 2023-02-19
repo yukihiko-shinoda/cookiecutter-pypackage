@@ -1,4 +1,4 @@
-FROM python:3.9.1-slim-buster as production
+FROM python:3.11.2-slim-bullseye as production
 
 # For compatibility with Visual Studio Code
 WORKDIR /workspace
