@@ -8,8 +8,8 @@ import platform
 from pathlib import Path
 import webbrowser
 
-from invoke import task  # type: ignore
-from invoke.runners import Failure, Result  # type: ignore
+from invoke import task
+from invoke.runners import Failure, Result
 
 
 ROOT_DIR = Path(__file__).parent

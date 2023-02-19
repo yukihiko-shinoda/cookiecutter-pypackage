@@ -8,12 +8,12 @@ import sys
 from contextlib import contextmanager
 from pathlib import Path
 from subprocess import PIPE
-from typing import List
+from typing import List, Optional
 
-import pytest  # type: ignore
+import pytest
 from click.testing import CliRunner
-from cookiecutter.utils import rmtree  # type: ignore
-from pytest_cookies.plugin import Result  # type: ignore
+from cookiecutter.utils import rmtree
+from pytest_cookies.plugin import Result
 
 WARNING_FOR_PYTHON_35 = (
     b"DEPRECATION: Python 3.5 reached the end of its life on September 13th, 2020."
@@ -117,7 +117,7 @@ def test_bake_withspecialchars_and_run_tests(baked_in_temp_dir):
 
 
 @pytest.mark.parametrize(
-    "baked_in_temp_dir", [{"full_name": "O'connor"}], indirect=["baked_in_temp_dir"],
+    "baked_in_temp_dir", [{"full_name": "O'connor"}], indirect=["baked_in_temp_dir"]
 )
 def test_bake_with_apostrophe_and_run_tests(baked_in_temp_dir):
     """Ensure that a `full_name` with apostrophes does not break setup.py"""
@@ -156,7 +156,7 @@ def test_bake_without_travis_pypi_setup(baked_in_temp_dir):
     ).exists()
 
 
-def list_files(result: Result, directories: List[str] = None):
+def list_files(result: Result, directories: Optional[List[str]] = None):
     directories = [] if directories is None else directories
     joined_path = result.project
     for directory in directories:
@@ -165,7 +165,7 @@ def list_files(result: Result, directories: List[str] = None):
 
 
 def read_text(result: Result, relative_path):
-    return Path(str(result.project.join(relative_path))).read_text()
+    return Path(str(result.project.join(relative_path))).read_text("utf-8")
 
 
 @pytest.mark.parametrize(
@@ -205,7 +205,7 @@ def read_text(result: Result, relative_path):
     indirect=["baked_in_temp_dir"],
 )
 def test_bake_selecting_license(
-    resource_path_root, baked_in_temp_dir, license_trove_classifier, file_name_expected,
+    resource_path_root, baked_in_temp_dir, license_trove_classifier, file_name_expected
 ):
     """
     Source of expected text file:
@@ -306,7 +306,7 @@ def run_inside_dir_python_setup_py_pytest(baked_in_temp_dir):
 
 
 @pytest.mark.parametrize(
-    "baked_in_temp_dir", [{"use_pytest": "n"}], indirect=["baked_in_temp_dir"],
+    "baked_in_temp_dir", [{"use_pytest": "n"}], indirect=["baked_in_temp_dir"]
 )
 def test_not_using_pytest(baked_in_temp_dir):
     """
@@ -340,7 +340,7 @@ def conftest_exists(baked_in_temp_dir):
 def get_test_file_text(baked_in_temp_dir):
     return Path(
         str(baked_in_temp_dir.project.join("tests/test_pythonboilerplate.py"))
-    ).read_text()
+    ).read_text("utf-8")
 
 
 def pytest_entry_exists_in_pipfile(result):
@@ -382,7 +382,7 @@ def test_bake_with_no_console_script(cookies):
     assert "cli.py" not in found_project_files
 
     setup_path = os.path.join(project_path, "setup.py")
-    with open(setup_path, "r") as setup_file:
+    with open(setup_path, "r", encoding="utf-8") as setup_file:
         assert "entry_points" not in setup_file.read()
 
 
@@ -405,7 +405,7 @@ def check_bake_with_console_script_files(cli, cookies):
     found_project_files = os.listdir(project_dir)
     assert "cli.py" in found_project_files
     setup_path = os.path.join(project_path, "setup.py")
-    with open(setup_path, "r") as setup_file:
+    with open(setup_path, "r", encoding="utf-8") as setup_file:
         assert "entry_points" in setup_file.read()
 
 

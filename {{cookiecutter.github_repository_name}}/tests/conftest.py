@@ -1,5 +1,5 @@
 """Configuration of pytest"""
-import pytest  # type: ignore
+import pytest
 
 collect_ignore = ['setup.py']
 

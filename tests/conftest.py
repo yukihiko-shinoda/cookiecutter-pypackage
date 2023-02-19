@@ -1,6 +1,6 @@
 """Configuration for pytest"""
-import pytest  # type: ignore
-from cookiecutter.utils import rmtree  # type: ignore
+import pytest
+from cookiecutter.utils import rmtree
 
 
 @pytest.fixture

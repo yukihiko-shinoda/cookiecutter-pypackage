@@ -4,8 +4,8 @@ import platform
 import webbrowser
 from pathlib import Path
 
-from invoke import task  # type: ignore
-from invoke.runners import Failure, Result  # type: ignore
+from invoke import task
+from invoke.runners import Failure, Result
 
 ROOT_DIR = Path(__file__).parent
 DOCS_DIR = ROOT_DIR.joinpath("docs")

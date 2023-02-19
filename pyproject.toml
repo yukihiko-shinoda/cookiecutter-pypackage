@@ -47,6 +47,15 @@ force_grid_wrap = 0
 use_parentheses = true
 line_length = 88
 
+[[tool.mypy.overrides]]
+module = [
+    "cookiecutter.*",
+    "invoke.*",
+    "pytest_cookies.*",
+    "setuptools.*",
+]
+ignore_missing_imports = true
+
 [tool.pylint.basic]
 # I tried values in order started from 2,
 # I felt that docstring is unuseful until 6 while code keeps readable.
@@ -54,7 +63,7 @@ line_length = 88
 docstring-min-length = "7"
 
 [tool.pylint.messages_control]
-# bad-continuation: @see https://github.com/PyCQA/pylint/pull/3571
-disable = ''',
-    bad-continuation,
-    '''
+disable = [
+    # To support Python 3.5
+    "consider-using-f-string",
+]
