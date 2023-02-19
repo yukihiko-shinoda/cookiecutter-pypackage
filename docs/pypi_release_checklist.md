@@ -4,12 +4,6 @@
 
 1\. Register the package on PyPI:
 
-```console
-python setup.py register
-```
-
-2\. Visit PyPI to make sure it registered.
-
 ## For Every Release
 
 1\. Commit the changes:
@@ -44,7 +38,7 @@ git push --tags
 
 ```console
 pip install readme_renderer
-python setup.py check -r -s
+twine check dist/*
 ```
 
 ## About This Checklist

@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
+black = "*"
 bump2version = "*"
 # Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/4101
 colorama = "*"
@@ -14,7 +15,6 @@ isort = "*"
 mdx-truly-sane-lists = "*"
 mkdocs = "*"
 mypy = "*"
-pipenv-setup = "*"
 pylint = "*"
 pytest = "*"
 pytest-cookies = "*"

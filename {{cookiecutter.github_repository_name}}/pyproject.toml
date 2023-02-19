@@ -1,3 +1,69 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+{%- set license_classifiers = {
+    'MIT': 'License :: OSI Approved :: MIT License',
+    'GPL-3.0-or-later': 'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+    'Apache-2.0': 'License :: OSI Approved :: Apache Software License',
+    'BSD-3-Clause': 'License :: OSI Approved :: BSD License',
+    'GPL-3.0-or-later-short': 'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+    'Apache-2.0-short': 'License :: OSI Approved :: Apache Software License',
+} %}
+[project]
+name = "{{ cookiecutter.project_slug }}"
+version = "{{ cookiecutter.version }}"
+description = "{{ cookiecutter.project_short_description }}"
+readme = "README.md"
+requires-python = ">=3.5,<4.0"
+{%- if cookiecutter.open_source_license in license_classifiers %}
+license = {file = "LICENSE"}
+{%- endif %}
+keywords = "{{ cookiecutter.project_slug }}"
+authors = [
+    {name = "{{ cookiecutter.full_name.replace('\"', '\\\"') }}", email = "{{ cookiecutter.email }}"},
+]
+maintainers = [
+    {name = "{{ cookiecutter.full_name.replace('\"', '\\\"') }}", email = "{{ cookiecutter.email }}"},
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+{%- if cookiecutter.open_source_license in license_classifiers %}
+    "{{ license_classifiers[cookiecutter.open_source_license] }}",
+{%- endif %}
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Typing :: Typed",
+]
+dependencies = [{%- if cookiecutter.command_line_interface|lower == 'click' %}'Click>=7.0',{%- endif %} ]
+
+[project.optional-dependencies]
+test = []
+
+[project.urls]
+homepage = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.github_repository_name }}"
+# documentation = "https://readthedocs.org"
+repository = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.github_repository_name }}"
+# changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
+
+{%- if 'no' not in cookiecutter.command_line_interface|lower %}
+[project.entry-points."console_scripts"]
+{{ cookiecutter.project_slug }} = "{{ cookiecutter.project_slug }}.cli:main"
+{%- endif %}
+
+[tool.setuptools]
+zip-safe = false
+
 [tool.isort]
 # @see https://github.com/timothycrosley/isort/issues/694#issuecomment-581246882
 multi_line_output = 3

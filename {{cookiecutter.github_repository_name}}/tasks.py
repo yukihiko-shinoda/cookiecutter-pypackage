@@ -13,15 +13,13 @@ from invoke.runners import Failure, Result  # type: ignore
 
 
 ROOT_DIR = Path(__file__).parent
-SETUP_FILE = ROOT_DIR.joinpath("setup.py")
 TEST_DIR = ROOT_DIR.joinpath("tests")
 SOURCE_DIR = ROOT_DIR.joinpath("{{ cookiecutter.project_slug }}")
-SETUP_PY = ROOT_DIR.joinpath("setup.py")
 TASKS_PY = ROOT_DIR.joinpath("tasks.py")
 COVERAGE_FILE = ROOT_DIR.joinpath(".coverage")
 COVERAGE_DIR = ROOT_DIR.joinpath("htmlcov")
 COVERAGE_REPORT = COVERAGE_DIR.joinpath("index.html")
-PYTHON_DIRS = [str(d) for d in [SETUP_PY, TASKS_PY, SOURCE_DIR, TEST_DIR]]
+PYTHON_DIRS = [str(d) for d in [TASKS_PY, SOURCE_DIR, TEST_DIR]]
 
 
 def _delete_file(file):
@@ -42,7 +40,6 @@ def style(context, check=False):
     """
     for result in [
         isort(context, check),
-        pipenv_setup(context, check),
         black(context, check),
     ]:
         if result.failed:
@@ -55,12 +52,6 @@ def isort(context, check=False) -> Result:
     return context.run(
         "isort {} {}".format(isort_options, " ".join(PYTHON_DIRS)), warn=True
     )
-
-
-def pipenv_setup(context, check=False) -> Result:
-    """Runs pipenv-setup."""
-    isort_options = "{}".format("check --strict" if check else "sync --pipfile")
-    return context.run("pipenv-setup {}".format(isort_options), warn=True)
 
 
 def black(context, check=False) -> Result:
@@ -144,7 +135,7 @@ def test(context):
     Run tests
     """
     pty = platform.system() == "Linux"
-    context.run("python {} test".format(SETUP_FILE), pty=pty)
+    context.run("pytest", pty=pty)
 
 
 @task(help={
@@ -210,8 +201,5 @@ def clean(_context):
 
 @task(clean)
 def dist(context):
-    """
-    Build source and wheel packages
-    """
-    context.run("python setup.py sdist")
-    context.run("python setup.py bdist_wheel")
+    """Build source and wheel packages."""
+    context.run("python -m build")

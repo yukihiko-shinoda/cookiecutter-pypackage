@@ -12,9 +12,8 @@ DOCS_DIR = ROOT_DIR.joinpath("docs")
 DOCS_BUILD_DIR = DOCS_DIR.joinpath("_build")
 DOCS_INDEX = DOCS_BUILD_DIR.joinpath("index.html")
 TEST_DIR = ROOT_DIR.joinpath("tests")
-SETUP_PY = ROOT_DIR.joinpath("setup.py")
 TASKS_PY = ROOT_DIR.joinpath("tasks.py")
-PYTHON_DIRS = [str(d) for d in [SETUP_PY, TASKS_PY, TEST_DIR]]
+PYTHON_DIRS = [str(d) for d in [TASKS_PY, TEST_DIR]]
 
 
 def _run(context, command, **kwargs):
@@ -36,7 +35,6 @@ def style(context, check=False):
     """
     for result in [
         isort(context, check),
-        pipenv_setup(context, check),
         black(context, check),
     ]:
         if result.failed:
@@ -49,12 +47,6 @@ def isort(context, check=False) -> Result:
     return _run(
         context, "isort {} {}".format(isort_options, " ".join(PYTHON_DIRS)), warn=True
     )
-
-
-def pipenv_setup(context, check=False) -> Result:
-    """Runs pipenv-setup."""
-    isort_options = "{}".format("check --strict" if check else "sync --pipfile")
-    return _run(context, "pipenv-setup {}".format(isort_options), warn=True)
 
 
 def black(context, check=False) -> Result:

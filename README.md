@@ -54,7 +54,7 @@ Then initialized project direcotry is created in current directory.
 Review support range if the one of your package is not Python 3.5 - 3.11
 
 - .github/workflows/test.yml
-- setup.py
+- pyproject.toml
   - python_requires
   - classifiers
 - docs/CONTRIBUTING.md -> Get Started! -> 5. oldest Python version
