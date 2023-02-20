@@ -17,7 +17,9 @@ pylint = "*"
 {% if cookiecutter.use_pytest == 'y' -%}
 pytest = "*"{% endif %}
 radon = "*"
+types-invoke = "*"
 xenon = "*"
 {{cookiecutter.project_slug}} = {path = ".", editable = true}
 
 [packages]
+{%if cookiecutter.command_line_interface|lower == 'click' %}click = ">=7.0"{%- endif %}

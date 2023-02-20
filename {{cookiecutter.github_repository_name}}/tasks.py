@@ -3,14 +3,14 @@ Tasks for maintaining the project.
 
 Execute 'invoke --list' for guidance on using Invoke
 """
-import shutil
 import platform
-from pathlib import Path
+import shutil
 import webbrowser
+from pathlib import Path
 
 from invoke import task
-from invoke.runners import Failure, Result
-
+from invoke.exceptions import Failure
+from invoke.runners import Result
 
 ROOT_DIR = Path(__file__).parent
 TEST_DIR = ROOT_DIR.joinpath("tests")
@@ -121,12 +121,11 @@ def xenon(context):
     """
     Check code complexity.
     """
-    context.run((
-        "xenon"
-        " --max-absolute A"
-        "--max-modules A"
-        "--max-average A"
-        "{}").format(" ".join(PYTHON_DIRS)))
+    context.run(
+        ("xenon --max-absolute A --max-modules A --max-average A {}").format(
+            " ".join(PYTHON_DIRS)
+        )
+    )
 
 
 @task
@@ -138,10 +137,12 @@ def test(context):
     context.run("pytest", pty=pty)
 
 
-@task(help={
-    'publish': "Publish the result via coveralls",
-    'xml': "Export report as xml format",
-})
+@task(
+    help={
+        "publish": "Publish the result via coveralls",
+        "xml": "Export report as xml format",
+    }
+)
 def coverage(context, publish=False, xml=False):
     """
     Create coverage report

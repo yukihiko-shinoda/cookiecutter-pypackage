@@ -6,6 +6,8 @@ name = "pypi"
 [dev-packages]
 black = "*"
 bump2version = "*"
+# To test baked cli.py
+click = "*"
 # Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/4101
 colorama = "*"
 flake8 = "*"
@@ -23,9 +25,12 @@ pyyaml = "*"
 radon = "*"
 tox = "*"
 xenon = "*"
+pytest-mock = "*"
 
 [packages]
-cookiecutter = "*"
 
 [requires]
 python_version = "3"
+
+[pipenv]
+allow_prereleases = true
