@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
-black = "*"
+black = {version = "*", markers="python_version >= '3.7'"}
 bump2version = "*"
 # To test baked cli.py
 click = "*"

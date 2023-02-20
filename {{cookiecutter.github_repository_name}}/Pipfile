@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
-black = "*"
+black = {version = "*", markers="python_version >= '3.7'"}
 bump2version = "*"
 # Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/4101
 colorama = "*"

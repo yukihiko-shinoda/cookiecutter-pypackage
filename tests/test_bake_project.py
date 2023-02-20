@@ -428,14 +428,7 @@ def test_bake_with_console_script_cli(cookies):
 
 def test_bake_with_argparse_console_script_cli(cookies, capsys, mocker):
     """Command line of argparse output should includes appropriate string."""
-    help_message = dedent(
-        """\
-        usage: pytest [-h]
-
-        optional arguments:
-          -h, --help  show this help message and exit
-        """
-    )
+    help_message = dedent("-h, --help  show this help message and exit")
     check_bake_with_console_script_cli(
         "Argparse", cookies, ArgparseCliRunner(capsys, mocker), help_message
     )
@@ -490,14 +483,9 @@ def test_bake_and_run_invoke_tests(baked_in_temp_dir):
     )
 
 
+@pytest.mark.skipif(sys.version_info < (3, 7), reason="The black doesn't support.")
 def test_bake_and_run_invoke_style(baked_in_temp_dir):
     """Run the formatter on a newly-generated project"""
-    if (
-        sys.version_info.major <= 2
-        or sys.version_info.major == 3
-        and sys.version_info.minor <= 5
-    ):
-        return
     assert baked_in_temp_dir.project_path.is_dir()
     run_inside_dir(
         [

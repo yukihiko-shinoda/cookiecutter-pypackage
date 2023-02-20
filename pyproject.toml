@@ -3,7 +3,7 @@ name = "cookiecutter-pypackage"
 version = "0.2.0"
 description = "Cookiecutter template for a Python package"
 readme = "README.md"
-python_requires = ">=3.5"
+python_requires = ">=3.6"
 license = {file = "LICENSE"}
 authors = [
     {name = "Sam Briggs", email = "briggySmalls90@gmail.com"}
@@ -20,7 +20,6 @@ classifiers = [
     "License :: OSI Approved :: BSD License",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.5",
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
