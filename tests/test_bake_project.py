@@ -48,6 +48,8 @@ def bake_in_temp_dir(cookies, *args, **kwargs):
     """
     result = cookies.bake(*args, **kwargs)
     try:
+        if result.exit_code:
+            raise AssertionError(result.exception) from result.exception
         yield result
     finally:
         rmtree(str(result.project_path))
@@ -388,6 +390,8 @@ def test_bake_with_no_console_script(cookies):
     """
     context = {"command_line_interface": "No command-line interface"}
     result = cookies.bake(extra_context=context)
+    if result.exit_code:
+        raise AssertionError(result.exception) from result.exception
     project_path, _project_slug, project_dir = project_info(result)
     found_project_files = Path.iterdir(project_dir)
     assert "cli.py" not in found_project_files
@@ -412,6 +416,8 @@ def check_bake_with_console_script_files(cli, cookies):
     """
     context = {"command_line_interface": cli}
     result = cookies.bake(extra_context=context)
+    if result.exit_code:
+        raise AssertionError(result.exception) from result.exception
     project_path, _project_slug, project_dir = project_info(result)
     found_project_files = Path.iterdir(project_dir)
     assert "cli.py" in [f.name for f in found_project_files]
