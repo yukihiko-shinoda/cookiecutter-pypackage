@@ -87,6 +87,12 @@ docstring-min-length = "{{ cookiecutter.pylint_docstring_min_length }}"
 max-line-length = "{{ cookiecutter.python_code_max_length_per_line }}"
 {%- endif %}
 
+[tool.pylint.messages_control]
+disable = [
+    # To support Python 3.5
+    "consider-using-f-string",
+]
+
 [tool.pylint.options]
 # Since this rule against single responsibility principle.
 # @see https://stackoverflow.com/questions/28722314/why-does-pylint-want-2-public-methods-per-class/40258006#40258006
