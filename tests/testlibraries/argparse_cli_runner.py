@@ -50,20 +50,7 @@ class ArgparseCliRunnerCore:
             self.return_value = cli()
         except SystemExit as error:
             self.exc_info = sys.exc_info()
-            e_code = cast(Optional[Union[int, Any]], error.code)
-
-            if e_code is None:
-                e_code = 0
-
-            if e_code != 0:
-                self.exception = error
-
-            if not isinstance(e_code, int):
-                sys.stdout.write(str(e_code))
-                sys.stdout.write("\n")
-                e_code = 1
-
-            self.exit_code = e_code
+            self.set_properties(error)
         # Reason: To extract exception information.
         except Exception as error:  # pylint: disable=broad-except
             self.exception = error
@@ -84,6 +71,23 @@ class ArgparseCliRunnerCore:
             exception=self.exception,
             exc_info=self.exc_info,  # type: ignore
         )
+
+    def set_properties(self, error):
+        """Sets properties from SystemExit."""
+        e_code = cast(Optional[Union[int, Any]], error.code)
+
+        if e_code is None:
+            e_code = 0
+
+        if e_code != 0:
+            self.exception = error
+
+        if not isinstance(e_code, int):
+            sys.stdout.write(str(e_code))
+            sys.stdout.write("\n")
+            e_code = 1
+
+        self.exit_code = e_code
 
 
 class ArgparseCliRunner(CliRunner):
