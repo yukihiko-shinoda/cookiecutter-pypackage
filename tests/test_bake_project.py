@@ -14,9 +14,9 @@ from typing import List, Optional
 
 import pytest
 from click.testing import CliRunner
-from cookiecutter.utils import rmtree
 from pytest_cookies.plugin import Result
 
+from tests.conftest import process_result
 from tests.testlibraries.argparse_cli_runner import ArgparseCliRunner
 
 WARNING_FOR_PYTHON_35 = (
@@ -47,12 +47,7 @@ def bake_in_temp_dir(cookies, *args, **kwargs):
         cookie to be baked and its temporal files will be removed
     """
     result = cookies.bake(*args, **kwargs)
-    try:
-        if result.exit_code:
-            raise AssertionError(result.exception) from result.exception
-        yield result
-    finally:
-        rmtree(str(result.project_path))
+    yield from process_result(result)
 
 
 def run_subrocess(command):

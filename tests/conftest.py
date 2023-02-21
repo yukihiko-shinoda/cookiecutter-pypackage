@@ -3,6 +3,15 @@ import pytest
 from cookiecutter.utils import rmtree
 
 
+def process_result(result):
+    try:
+        if result.exit_code:
+            raise AssertionError(result.exception) from result.exception
+        yield result
+    finally:
+        rmtree(str(result.project))
+
+
 @pytest.fixture
 def baked_in_temp_dir(cookies, request):
     """
@@ -16,9 +25,4 @@ def baked_in_temp_dir(cookies, request):
     else:
         extra_context = request.param
     result = cookies.bake(extra_context=extra_context)
-    try:
-        if result.exit_code:
-            raise AssertionError(result.exception) from result.exception
-        yield result
-    finally:
-        rmtree(str(result.project))
+    yield from process_result(result)
