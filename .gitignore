@@ -103,3 +103,5 @@ cookiecutter-pypackage-env/
 # IntelliJ Idea family of suites
 .idea
 *.iml
+
+Pipfile.lock
