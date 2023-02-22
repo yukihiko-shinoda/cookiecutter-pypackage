@@ -78,7 +78,7 @@ Ready to contribute? Here's how to set up `{{ cookiecutter.project_name }}` for 
    ```console
    pipenv run inv style --check
    pipenv run pytest
-   pipenv install --python 3.5
+   pipenv install --python 3.6
    pipenv run pytest
    ```
 

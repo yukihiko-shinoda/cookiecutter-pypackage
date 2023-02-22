@@ -13,8 +13,9 @@ import click
 @click.command()
 def main():
     """Console script for {{cookiecutter.project_slug}}."""
-    click.echo("Replace this message by putting your code into "
-               "{{cookiecutter.project_slug}}.cli.main")
+    click.echo(
+        "Replace this message by putting your code into {{cookiecutter.project_slug}}.cli.main"
+    )
     click.echo("See click documentation at https://click.palletsprojects.com/")
     return 0
 {%- endif %}
@@ -22,10 +23,10 @@ def main():
 def main():
     """Console script for {{cookiecutter.project_slug}}."""
     parser = argparse.ArgumentParser()
-    parser.add_argument("_", nargs="*")
+    # parser.add_argument("_", nargs="*")
     args = parser.parse_args()
 
-    print("Arguments: " + str(args._))
+    # print("Arguments: " + str(args._))
     print("Replace this message by putting your code into "
           "{{cookiecutter.project_slug}}.cli.main")
     return 0

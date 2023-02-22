@@ -1,7 +1,7 @@
 """Configuration of pytest"""
-import pytest  # type: ignore
+import pytest
 
-collect_ignore = ['setup.py']
+collect_ignore = ["setup.py"]
 
 
 @pytest.fixture
@@ -11,4 +11,4 @@ def response():
     See more at: http://doc.pytest.org/en/latest/fixture.html
     """
     # import requests
-    # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
+    # return requests.get("https://github.com/audreyr/cookiecutter-pypackage")

@@ -4,7 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
+black = {version = "*", markers="python_version >= '3.7'"}
 bump2version = "*"
+# To test baked cli.py
+click = "*"
 # Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/4101
 colorama = "*"
 flake8 = "*"
@@ -14,18 +17,22 @@ isort = "*"
 mdx-truly-sane-lists = "*"
 mkdocs = "*"
 mypy = "*"
-pipenv-setup = "*"
 pylint = "*"
 pytest = "*"
-pytest-cookies = "*"
+# see:
+# - fix: Replace `"` with `'` in user config template by andriihomiak · Pull Request #61 · hackebrot/pytest-cookies
+#   https://github.com/hackebrot/pytest-cookies/pull/61
+# - Fix windows tests by psobolewskiPhD · Pull Request #143 · napari/cookiecutter-napari-plugin
+#   https://github.com/napari/cookiecutter-napari-plugin/pull/143
+pytest-cookies = {git = "https://github.com/hackebrot/pytest-cookies.git", editable = true, ref = "refs/pull/61/head:quotes_in_user_config"}
 pytest-resource-path = "*"
 pyyaml = "*"
 radon = "*"
 tox = "*"
 xenon = "*"
+pytest-mock = "*"
 
 [packages]
-cookiecutter = "*"
 
 [requires]
 python_version = "3"
