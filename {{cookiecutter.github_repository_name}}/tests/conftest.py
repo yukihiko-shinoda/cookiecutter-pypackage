@@ -1,4 +1,4 @@
-"""Configuration of pytest"""
+"""Configuration of pytest."""
 import pytest
 
 collect_ignore = ["setup.py"]

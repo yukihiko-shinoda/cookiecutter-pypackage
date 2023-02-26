@@ -1,20 +1,25 @@
 """Implements tests."""
+from contextlib import contextmanager
 import datetime
 import importlib
+from importlib.abc import Loader
+from importlib.machinery import ModuleSpec
 import os
+from pathlib import Path
 import shlex
 import subprocess
-import sys
-from contextlib import contextmanager
-from pathlib import Path
 from subprocess import PIPE
+import sys
 from textwrap import dedent
 from traceback import TracebackException
-from typing import List, Optional
+from types import ModuleType
+from typing import Any, Generator, List, Optional, Tuple
 
-import pytest
 from click.testing import CliRunner
-from pytest_cookies.plugin import Result
+import pytest
+from pytest import CaptureFixture
+from pytest_cookies.plugin import Cookies, Result
+from pytest_mock import MockerFixture
 
 from tests.conftest import process_result
 from tests.testlibraries.argparse_cli_runner import ArgparseCliRunner
@@ -26,9 +31,9 @@ WARNING_FOR_PYTHON_35 = (
 
 
 @contextmanager
-def inside_dir(dirpath):
-    """
-    Execute code from inside the given directory
+def inside_dir(dirpath: str) -> Generator[None, None, None]:
+    """Execute code from inside the given directory.
+
     :param dirpath: String, path of the directory the command is being run.
     """
     old_path = os.getcwd()
@@ -40,9 +45,11 @@ def inside_dir(dirpath):
 
 
 @contextmanager
-def bake_in_temp_dir(cookies, *args, **kwargs):
-    """
-    Delete the temporal directory that is created when executing the tests
+def bake_in_temp_dir(
+    cookies: Cookies, *args: Any, **kwargs: Any
+) -> Generator[Result, None, None]:
+    """Delete the temporal directory that is created when executing the tests.
+
     :param cookies: pytest_cookies.Cookies,
         cookie to be baked and its temporal files will be removed
     """
@@ -50,18 +57,18 @@ def bake_in_temp_dir(cookies, *args, **kwargs):
     yield from process_result(result)
 
 
-def run_subrocess(command):
+def run_subrocess(command: str) -> None:
     try:
         subprocess.run(shlex.split(command), check=True, stdout=PIPE, stderr=PIPE)
     except subprocess.CalledProcessError as error:
-        print(str(error.stdout).replace("\\n", "\n"))
-        print(str(error.stderr).replace("\\n", "\n"))
+        print(str(error.stdout).replace("\\t", "\t").replace("\\r", "\r").replace("\\n", "\n"))
+        print(str(error.stderr).replace("\\t", "\t").replace("\\r", "\r").replace("\\n", "\n"))
         raise
 
 
-def run_inside_dir(commands, dirpath):
-    """
-    Run a command from inside a given directory, returning the exit status
+def run_inside_dir(commands: List[str], dirpath: str) -> None:
+    """Run a command from inside a given directory, returning the exit status.
+
     :param commands: Commands that will be executed
     :param dirpath: String, path of the directory the command is being run.
     """
@@ -74,22 +81,22 @@ def run_inside_dir(commands, dirpath):
             raise
 
 
-def test_year_compute_in_license_file(baked_in_temp_dir):
+def test_year_compute_in_license_file(baked_in_temp_dir: Result) -> None:
     """License file should contains year string."""
     license_file_path = baked_in_temp_dir.project_path / "LICENSE"
     now = datetime.datetime.now()
     assert str(now.year) in license_file_path.read_text()
 
 
-def project_info(result):
-    """Get toplevel dir, project_slug, and project dir from baked cookies"""
+def project_info(result: Result) -> Tuple[Optional[Path], str, Path]:
+    """Get toplevel dir, project_slug, and project dir from baked cookies."""
     project_path = result.project_path
     project_slug = os.path.split(project_path)[-1].replace("-", "")
     project_dir = project_path / project_slug
     return project_path, project_slug, project_dir
 
 
-def test_bake_with_defaults(baked_in_temp_dir):
+def test_bake_with_defaults(baked_in_temp_dir: Result) -> None:
     """Baked project should have specific files and directories."""
     assert baked_in_temp_dir.project_path.is_dir()
     assert baked_in_temp_dir.exit_code == 0
@@ -99,13 +106,13 @@ def test_bake_with_defaults(baked_in_temp_dir):
     )
 
 
-def check_toplevel_path_exist(result: Result, list_path: List[str]):
+def check_toplevel_path_exist(result: Result, list_path: List[str]) -> None:
     found_toplevel_files = list_files(result)
     for path in list_path:
         assert path in found_toplevel_files
 
 
-def test_bake_and_run_tests(baked_in_temp_dir):
+def test_bake_and_run_tests(baked_in_temp_dir: Result) -> None:
     assert baked_in_temp_dir.project_path.is_dir()
     run_inside_dir_python_setup_py_test(baked_in_temp_dir)
     print("test_bake_and_run_tests path", str(baked_in_temp_dir.project_path))
@@ -116,8 +123,8 @@ def test_bake_and_run_tests(baked_in_temp_dir):
     [{"full_name": 'name "quote" name'}],
     indirect=["baked_in_temp_dir"],
 )
-def test_bake_withspecialchars_and_run_tests(baked_in_temp_dir):
-    """Ensure that a `full_name` with double quotes does not break setup.py"""
+def test_bake_withspecialchars_and_run_tests(baked_in_temp_dir: Result) -> None:
+    """Ensure that a `full_name` with double quotes does not break setup.py."""
     assert baked_in_temp_dir.project_path.is_dir()
     run_inside_dir_python_setup_py_test(baked_in_temp_dir)
 
@@ -125,8 +132,8 @@ def test_bake_withspecialchars_and_run_tests(baked_in_temp_dir):
 @pytest.mark.parametrize(
     "baked_in_temp_dir", [{"full_name": "O'connor"}], indirect=["baked_in_temp_dir"]
 )
-def test_bake_with_apostrophe_and_run_tests(baked_in_temp_dir):
-    """Ensure that a `full_name` with apostrophes does not break setup.py"""
+def test_bake_with_apostrophe_and_run_tests(baked_in_temp_dir: Result) -> None:
+    """Ensure that a `full_name` with apostrophes does not break setup.py."""
     assert baked_in_temp_dir.project_path.is_dir()
     run_inside_dir_python_setup_py_test(baked_in_temp_dir)
 
@@ -156,22 +163,18 @@ def test_bake_with_apostrophe_and_run_tests(baked_in_temp_dir):
     [{"use_pypi_deployment_with_github_actions": "n"}],
     indirect=["baked_in_temp_dir"],
 )
-def test_bake_without_travis_pypi_setup(baked_in_temp_dir):
+def test_bake_without_travis_pypi_setup(baked_in_temp_dir: Result) -> None:
     assert not (
         baked_in_temp_dir.project_path / Path(".github/workflows/deploy.yml")
     ).exists()
 
 
-def list_files(result: Result, directories: Optional[List[str]] = None):
+def list_files(result: Result, directories: Optional[List[str]] = None) -> List[str]:
     directories = [] if directories is None else directories
     joined_path = result.project_path
     for directory in directories:
         joined_path = str(joined_path / directory)
     return [f.name for f in joined_path.iterdir()]
-
-
-def read_text(result: Result, relative_path):
-    return (result.project_path / relative_path).read_text("utf-8")
 
 
 @pytest.mark.parametrize(
@@ -211,10 +214,13 @@ def read_text(result: Result, relative_path):
     indirect=["baked_in_temp_dir"],
 )
 def test_bake_selecting_license(
-    resource_path_root, baked_in_temp_dir, license_trove_classifier, file_name_expected
-):
-    """
-    Source of expected text file:
+    resource_path_root: Path,
+    baked_in_temp_dir: Result,
+    license_trove_classifier: str,
+    file_name_expected: str,
+) -> None:
+    """Source of expected text file:
+
     - mit.txt: Exported from GitHub
     - gpl3.0_gnu.txt:
       @see https://www.gnu.org/licenses/gpl-3.0.en.html
@@ -243,7 +249,7 @@ def test_bake_selecting_license(
     [{"open_source_license": "Not open source"}],
     indirect=["baked_in_temp_dir"],
 )
-def test_bake_not_open_source(baked_in_temp_dir):
+def test_bake_not_open_source(baked_in_temp_dir: Result) -> None:
     """Project not open source license should not have file: "LICENSE"."""
     found_toplevel_files = [f.name for f in baked_in_temp_dir.project_path.iterdir()]
     assert "setup.py" in found_toplevel_files
@@ -268,7 +274,9 @@ def test_bake_not_open_source(baked_in_temp_dir):
     ],
     indirect=["baked_in_temp_dir"],
 )
-def test_bake_readme(baked_in_temp_dir, list_expected, list_not_expected):
+def test_bake_readme(
+    baked_in_temp_dir: Result, list_expected: List[str], list_not_expected: List[str]
+) -> None:
     """README.md should have appropriate badges."""
     string_readme = (baked_in_temp_dir.project_path / "README.md").read_text()
     for expected in list_expected:
@@ -277,12 +285,11 @@ def test_bake_readme(baked_in_temp_dir, list_expected, list_not_expected):
         assert not_expected not in string_readme
 
 
-def test_using_pytest(baked_in_temp_dir):
-    """
-    Pipfile should contain pytest.
-    First test python file should import pytest.
-    Command "python setup.py pytest" should work.
-    Command "python setup.py test" should work.
+def test_using_pytest(baked_in_temp_dir: Result) -> None:
+    """Pipfile should contain pytest.
+
+    First test python file should import pytest. Command "python setup.py pytest" should
+    work. Command "python setup.py test" should work.
     """
     assert baked_in_temp_dir.project_path.is_dir()
     # Test Pipfile installs pytest
@@ -297,7 +304,7 @@ def test_using_pytest(baked_in_temp_dir):
     run_inside_dir_python_setup_py_test(baked_in_temp_dir)
 
 
-def run_inside_dir_python_setup_py_test(baked_in_temp_dir):
+def run_inside_dir_python_setup_py_test(baked_in_temp_dir: Result) -> None:
     try:
         run_inside_dir(["pytest"], str(baked_in_temp_dir.project_path))
     except subprocess.CalledProcessError as error:
@@ -305,7 +312,7 @@ def run_inside_dir_python_setup_py_test(baked_in_temp_dir):
             raise error
 
 
-def run_inside_dir_python_setup_py_pytest(baked_in_temp_dir):
+def run_inside_dir_python_setup_py_pytest(baked_in_temp_dir: Result) -> None:
     try:
         run_inside_dir(["pytest"], str(baked_in_temp_dir.project_path))
     except subprocess.CalledProcessError as error:
@@ -316,11 +323,11 @@ def run_inside_dir_python_setup_py_pytest(baked_in_temp_dir):
 @pytest.mark.parametrize(
     "baked_in_temp_dir", [{"use_pytest": "n"}], indirect=["baked_in_temp_dir"]
 )
-def test_not_using_pytest(baked_in_temp_dir):
-    """
-    Pipfile should not contain pytest.
-    First test python file should import unittest.
-    First test python file should not import pytest.
+def test_not_using_pytest(baked_in_temp_dir: Result) -> None:
+    """Pipfile should not contain pytest.
+
+    First test python file should import unittest. First test python file should not
+    import pytest.
     """
     assert baked_in_temp_dir.project_path.is_dir()
     # Test Pipfile doesn install pytest
@@ -331,27 +338,31 @@ def test_not_using_pytest(baked_in_temp_dir):
     check_is_unittest(get_test_file_text(baked_in_temp_dir))
 
 
-def check_is_pytest(test_file):
+def check_is_pytest(test_file: str) -> None:
     assert "import unittest" not in test_file
     assert "def test_content(response):" in test_file
 
 
-def check_is_unittest(test_file):
+def check_is_unittest(test_file: str) -> None:
     assert "import unittest" in test_file
     assert "def test_content(response):" not in test_file
 
 
-def conftest_exists(baked_in_temp_dir):
+def conftest_exists(baked_in_temp_dir: Result) -> bool:
+    if not isinstance(baked_in_temp_dir.project_path, Path):
+        raise ValueError(baked_in_temp_dir)
     return (baked_in_temp_dir.project_path / "tests/conftest.py").exists()
 
 
-def get_test_file_text(baked_in_temp_dir):
+def get_test_file_text(baked_in_temp_dir: Result) -> str:
+    if not isinstance(baked_in_temp_dir.project_path, Path):
+        raise ValueError(baked_in_temp_dir)
     return (
         baked_in_temp_dir.project_path / "tests/test_pythonboilerplate.py"
     ).read_text("utf-8")
 
 
-def pytest_entry_exists_in_pipfile(result):
+def pytest_entry_exists_in_pipfile(result: Result) -> bool:
     pipfile_file_path = result.project_path / "Pipfile"
     lines = pipfile_file_path.read_text().splitlines()
     return 'pytest = "*"' in lines
@@ -378,9 +389,9 @@ def pytest_entry_exists_in_pipfile(result):
 #         "missing password config in .travis.yml"
 
 
-def test_bake_with_no_console_script(cookies):
-    """
-    There should be no cli.py file.
+def test_bake_with_no_console_script(cookies: Cookies) -> None:
+    """There should be no cli.py file.
+
     setup.py should not have entry_points.
     """
     context = {"command_line_interface": "No command-line interface"}
@@ -389,24 +400,24 @@ def test_bake_with_no_console_script(cookies):
         raise AssertionError(result.exception) from result.exception
     project_path, _project_slug, project_dir = project_info(result)
     found_project_files = Path.iterdir(project_dir)
-    assert "cli.py" not in found_project_files
-
+    assert "cli.py" not in list(found_project_files)
+    assert project_path is not None
     setup_path = os.path.join(project_path, "setup.py")
     with open(setup_path, "r", encoding="utf-8") as setup_file:
         assert "entry_points" not in setup_file.read()
 
 
-def test_bake_with_console_script_files(cookies):
+def test_bake_with_console_script_files(cookies: Cookies) -> None:
     check_bake_with_console_script_files("Click", cookies)
 
 
-def test_bake_with_argparse_console_script_files(cookies):
+def test_bake_with_argparse_console_script_files(cookies: Cookies) -> None:
     check_bake_with_console_script_files("Argparse", cookies)
 
 
-def check_bake_with_console_script_files(cli, cookies):
-    """
-    There should be cli.py file.
+def check_bake_with_console_script_files(cli: str, cookies: Cookies) -> None:
+    """There should be cli.py file.
+
     setup.py should have entry_points.
     """
     context = {"command_line_interface": cli}
@@ -416,18 +427,22 @@ def check_bake_with_console_script_files(cli, cookies):
     project_path, _project_slug, project_dir = project_info(result)
     found_project_files = Path.iterdir(project_dir)
     assert "cli.py" in [f.name for f in found_project_files]
+    if not isinstance(project_path, Path):
+        raise ValueError(result)
     setup_path = os.path.join(project_path, "pyproject.toml")
     with open(setup_path, "r", encoding="utf-8") as setup_file:
         assert "[project.entry-points.console_scripts]" in setup_file.read()
 
 
-def test_bake_with_console_script_cli(cookies):
+def test_bake_with_console_script_cli(cookies: Cookies) -> None:
     check_bake_with_console_script_cli(
         "Click", cookies, CliRunner(), "Show this message"
     )
 
 
-def test_bake_with_argparse_console_script_cli(cookies, capsys, mocker):
+def test_bake_with_argparse_console_script_cli(
+    cookies: Cookies, capsys: CaptureFixture[str], mocker: MockerFixture
+) -> None:
     """Command line of argparse output should includes appropriate string."""
     help_message = dedent("-h, --help  show this help message and exit")
     check_bake_with_console_script_cli(
@@ -436,8 +451,8 @@ def test_bake_with_argparse_console_script_cli(cookies, capsys, mocker):
 
 
 def check_bake_with_console_script_cli(
-    command_line_interface, cookies, runner, help_message
-):
+    command_line_interface: str, cookies: Cookies, runner: CliRunner, help_message: str
+) -> None:
     """Command line output should includes appropriate string."""
     context = {"command_line_interface": command_line_interface}
     result = cookies.bake(extra_context=context)
@@ -446,22 +461,32 @@ def check_bake_with_console_script_cli(
     _project_path, project_slug, project_dir = project_info(result)
     module_path = os.path.join(project_dir, "cli.py")
     module_name = ".".join([project_slug, "cli"])
-    # noinspection PyUnresolvedReferences
-    spec = importlib.util.spec_from_file_location(module_name, module_path)
-    # noinspection PyUnresolvedReferences
-    cli = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(cli)
+    cli = create_module_type(module_name, module_path)
     check_noarg(runner, cli, project_slug)
     check_help(runner, cli, help_message)
 
 
-def check_noarg(runner, cli, project_slug):
+def create_module_type(module_name: str, module_path: str) -> ModuleType:
+    """Creates Module type to call it from Python code."""
+    # noinspection PyUnresolvedReferences
+    spec = importlib.util.spec_from_file_location(module_name, module_path)
+    if not isinstance(spec, ModuleSpec):
+        raise ValueError(module_name, module_path)
+    # noinspection PyUnresolvedReferences
+    module = importlib.util.module_from_spec(spec)
+    if not isinstance(spec.loader, Loader):
+        raise ValueError(spec, module)
+    spec.loader.exec_module(module)
+    return module
+
+
+def check_noarg(runner: CliRunner, cli: ModuleType, project_slug: str) -> None:
     """Command line output should includes default message."""
     noarg_result = runner.invoke(cli.main)
     assert noarg_result.exit_code == 0, (
-        noarg_result.stdout
-        + noarg_result.stderr
-        + "".join(TracebackException.from_exception(noarg_result.exception).format())
+        noarg_result.stdout + noarg_result.stderr + ""
+        if noarg_result.exception is None
+        else "".join(TracebackException.from_exception(noarg_result.exception).format())
     )
     noarg_output = " ".join(
         ["Replace this message by putting your code into", project_slug]
@@ -469,14 +494,15 @@ def check_noarg(runner, cli, project_slug):
     assert noarg_output in noarg_result.output
 
 
-def check_help(runner, cli, help_message):
+def check_help(runner: CliRunner, cli: ModuleType, help_message: str) -> None:
     help_result = runner.invoke(cli.main, ["--help"])
     assert help_result.exit_code == 0, help_result.stdout + help_result.stderr
     assert help_message in help_result.output
 
 
-def test_bake_and_run_invoke_tests(baked_in_temp_dir):
-    """Run the unit tests of a newly-generated project"""
+@pytest.mark.slow
+def test_bake_and_run_invoke_tests(baked_in_temp_dir: Result) -> None:
+    """Run the unit tests of a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
     run_inside_dir(
         ["pip install pipenv", "pipenv install --dev", "pipenv run invoke test"],
@@ -484,9 +510,10 @@ def test_bake_and_run_invoke_tests(baked_in_temp_dir):
     )
 
 
+@pytest.mark.slow
 @pytest.mark.skipif(sys.version_info < (3, 7), reason="The black doesn't support.")
-def test_bake_and_run_invoke_style(baked_in_temp_dir):
-    """Run the formatter on a newly-generated project"""
+def test_bake_and_run_invoke_style(baked_in_temp_dir: Result) -> None:
+    """Run the formatter on a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
     run_inside_dir(
         [
@@ -498,8 +525,9 @@ def test_bake_and_run_invoke_style(baked_in_temp_dir):
     )
 
 
-def test_bake_and_run_invoke_lint(baked_in_temp_dir):
-    """Run the linter on a newly-generated project"""
+@pytest.mark.slow
+def test_bake_and_run_invoke_lint(baked_in_temp_dir: Result) -> None:
+    """Run the linter on a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
     run_inside_dir(
         ["pip install pipenv", "pipenv install --dev", "pipenv run invoke lint"],
@@ -507,14 +535,29 @@ def test_bake_and_run_invoke_lint(baked_in_temp_dir):
     )
 
 
-def test_bake_and_run_invoke_coverage(baked_in_temp_dir):
-    """Run the linter on a newly-generated project"""
+@pytest.mark.slow
+def test_bake_and_run_invoke_coverage(baked_in_temp_dir: Result) -> None:
+    """Run the linter on a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
     run_inside_dir(
         [
             "pip install pipenv",
             "pipenv install --dev --verbose",
-            "pipenv run invoke coverage --xml",
+            "pipenv run invoke test.coverage --xml",
+        ],
+        str(baked_in_temp_dir.project_path),
+    )
+
+
+@pytest.mark.slow
+def test_bake_and_run_pyvelocity(baked_in_temp_dir: Result) -> None:
+    """Run the linter on a newly-generated project."""
+    assert baked_in_temp_dir.project_path.is_dir()
+    run_inside_dir(
+        [
+            "pip install pipenv",
+            "pipenv install --dev --verbose",
+            "pipenv run pyvelocity",
         ],
         str(baked_in_temp_dir.project_path),
     )

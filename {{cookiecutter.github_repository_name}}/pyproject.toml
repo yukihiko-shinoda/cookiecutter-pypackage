@@ -15,7 +15,7 @@ name = "{{ cookiecutter.project_slug }}"
 version = "{{ cookiecutter.version }}"
 description = "{{ cookiecutter.project_short_description }}"
 readme = "README.md"
-requires-python = ">=3.6,<4.0"
+requires-python = ">=3.7"
 {%- if cookiecutter.open_source_license in license_classifiers %}
 license = {file = "LICENSE"}
 {%- endif %}
@@ -36,7 +36,6 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
@@ -63,20 +62,61 @@ repository = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecut
 [tool.setuptools]
 zip-safe = false
 
+{%- if cookiecutter.python_code_max_length_per_line != '88' %}
+# @see https://black.readthedocs.io/en/stable/pyproject_toml.html#configuration-format
+[tool.black]
+line-length = {{ cookiecutter.python_code_max_length_per_line }}
+
+{%- endif %}
+[tool.docformatter]
+recursive = true
+{%- if cookiecutter.python_code_max_length_per_line != '119' %}
+wrap-descriptions = {{ cookiecutter.python_code_max_length_per_line }}
+wrap-summaries = {{ cookiecutter.python_code_max_length_per_line }}
+
+{%- endif %}
 [tool.isort]
-# @see https://github.com/timothycrosley/isort/issues/694#issuecomment-581246882
+# see:
+# - Using Black with other tools - Black 23.1.0 documentation
+#   https://black.readthedocs.io/en/stable/guides/using_black_with_other_tools.html#custom-configuration
 multi_line_output = 3
 include_trailing_comma = true
 force_grid_wrap = 0
 use_parentheses = true
+ensure_newline_before_comments = true
 line_length = {{ cookiecutter.python_code_max_length_per_line }}
-{%- if cookiecutter.python_code_max_length_per_line != '88' %}
-
-# @see https://black.readthedocs.io/en/stable/pyproject_toml.html#configuration-format
-[tool.black]
-line-length = {{ cookiecutter.python_code_max_length_per_line }}
-{%- endif %}
 {%- if cookiecutter.pylint_docstring_min_length != '-1' %}
+# For compatibility with PyLint and Hacking, Google also supports, 
+# Black doesn't have any opinions
+# see:
+# - https://pycqa.github.io/isort/docs/configuration/profiles.html
+# - https://qiita.com/kaityo256/items/5b0b55d105ef2366cb0c
+# - https://www.xn--ebkc7kqd.com/entry/hacking-isort
+force_sort_within_sections = true
+lexicographical = true
+# Google supports, Black doesn't have any opinions
+# see: https://pycqa.github.io/isort/docs/configuration/profiles.html
+order_by_type = false
+
+[tool.mypy]
+strict = true
+
+[tool.pydocstyle]
+# To add Google convention
+# see:
+# - Error Codes — pydocstyle 6.1.1 documentation
+#   http://www.pydocstyle.org/en/stable/error_codes.html#default-conventions
+add_select = ["D212", "D214", "D410", "D411", "D415", "D416", "D417"]
+# D400: First line may ends with ":" for expression.
+# D402: First line may ends with function signature for expression.
+# D415: First line may ends with ":" for expression.
+# D101: Docstring may be missed in public class since docstring-min-length is set.
+# D102: Docstring may be missed in public method since docstring-min-length is set.
+# D103: Docstring may be missed in public function since docstring-min-length is set.
+# D105: Docstring may be missed in magic method since docstring-min-length is set.
+# D105: Docstring may be missed in public nested class since docstring-min-length is set.
+# D107: Docstring may be missed in __init__ method since docstring-min-length is set.
+add_ignore = ["D400", "D401", "D402", "D415", "D101", "D102", "D103", "D105", "D106", "D107"]
 
 [tool.pylint.basic]
 docstring-min-length = "{{ cookiecutter.pylint_docstring_min_length }}"
@@ -84,16 +124,15 @@ docstring-min-length = "{{ cookiecutter.pylint_docstring_min_length }}"
 {%- if cookiecutter.python_code_max_length_per_line != '100' %}
 
 [tool.pylint.format]
-max-line-length = "{{ cookiecutter.python_code_max_length_per_line }}"
+max-line-length = {{ cookiecutter.python_code_max_length_per_line }}
 {%- endif %}
-
-[tool.pylint.messages_control]
-disable = [
-    # To support Python 3.5
-    "consider-using-f-string",
-]
 
 [tool.pylint.options]
 # Since this rule against single responsibility principle.
 # @see https://stackoverflow.com/questions/28722314/why-does-pylint-want-2-public-methods-per-class/40258006#40258006
 min-public-methods = "1"
+
+[tool.pytest.ini_options]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
