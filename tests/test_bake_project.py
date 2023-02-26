@@ -61,8 +61,8 @@ def run_subrocess(command: str) -> None:
     try:
         subprocess.run(shlex.split(command), check=True, stdout=PIPE, stderr=PIPE)
     except subprocess.CalledProcessError as error:
-        print(str(error.stdout).replace("\\t", "\t").replace("\\r", "\r").replace("\\n", "\n"))
-        print(str(error.stderr).replace("\\t", "\t").replace("\\r", "\r").replace("\\n", "\n"))
+        print(str(error.stdout).encode("ascii", "ignore").decode("unicode_escape"))
+        print(str(error.stderr).encode("ascii", "ignore").decode("unicode_escape"))
         raise
 
 
