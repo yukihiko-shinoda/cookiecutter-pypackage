@@ -4,6 +4,8 @@ import shutil
 
 PROJECT_DIRECTORY = os.path.realpath(os.path.curdir)
 LICENSE_DIRECTORY = os.path.join(PROJECT_DIRECTORY, "licenses")
+PYOROJECTTOML_TEMPLATE = os.path.join(PROJECT_DIRECTORY, "pyproject.dist.toml")
+PYOROJECTTOML = os.path.join(PROJECT_DIRECTORY, "pyproject.toml")
 
 
 def remove_file(filepath: str) -> None:
@@ -31,7 +33,7 @@ def prepare_license(key_license: str) -> None:
 if __name__ == "__main__":
     # Reason: Detected Cookiecutter code as Literal.
     # pylint: disable=line-too-long,comparison-of-constants
-    if "{{ cookiecutter.use_pypi_deployment_with_github_actions }}" != "y":  # type: ignore[comparison-overlap]
+    if "{{ cookiecutter.use_pypi_deployment_with_github_actions }}" != "y":  # type: ignore[comparison-overlap]  # noqa: E501
         remove_file(".github/workflows/deploy.yml")
     if "{{ cookiecutter.use_pytest }}" != "y":  # type: ignore[comparison-overlap]
         remove_file("tests/conftest.py")
@@ -40,6 +42,7 @@ if __name__ == "__main__":
     if "no" in "{{ cookiecutter.command_line_interface|lower }}":
         cli_file = os.path.join("{{ cookiecutter.project_slug }}", "cli.py")
         remove_file(cli_file)
-    if "Not open source" != "{{ cookiecutter.open_source_license }}":  # type: ignore[comparison-overlap]
+    if "Not open source" != "{{ cookiecutter.open_source_license }}":  # type: ignore[comparison-overlap]  # noqa: E501
         prepare_license("{{ cookiecutter.open_source_license }}")
     shutil.rmtree(LICENSE_DIRECTORY)
+    os.rename(PYOROJECTTOML_TEMPLATE, PYOROJECTTOML)

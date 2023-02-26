@@ -6,9 +6,9 @@ from importlib.abc import Loader
 from importlib.machinery import ModuleSpec
 import os
 from pathlib import Path
-import shlex
-import subprocess
-from subprocess import PIPE
+
+# Reason: Accept risk of using subprocess.
+from subprocess import CalledProcessError  # nosec B404
 import sys
 from textwrap import dedent
 from traceback import TracebackException
@@ -23,6 +23,7 @@ from pytest_mock import MockerFixture
 
 from tests.conftest import process_result
 from tests.testlibraries.argparse_cli_runner import ArgparseCliRunner
+from tests.testlibraries.subprocess import run_subrocess
 
 WARNING_FOR_PYTHON_35 = (
     b"DEPRECATION: Python 3.5 reached the end of its life on September 13th, 2020."
@@ -57,15 +58,6 @@ def bake_in_temp_dir(
     yield from process_result(result)
 
 
-def run_subrocess(command: str) -> None:
-    try:
-        subprocess.run(shlex.split(command), check=True, stdout=PIPE, stderr=PIPE)
-    except subprocess.CalledProcessError as error:
-        print(str(error.stdout).encode("ascii", "ignore").decode("unicode_escape"))
-        print(str(error.stderr).encode("ascii", "ignore").decode("unicode_escape"))
-        raise
-
-
 def run_inside_dir(commands: List[str], dirpath: str) -> None:
     """Run a command from inside a given directory, returning the exit status.
 
@@ -76,7 +68,7 @@ def run_inside_dir(commands: List[str], dirpath: str) -> None:
         try:
             for command in commands:
                 run_subrocess(command)
-        except subprocess.CalledProcessError:
+        except CalledProcessError:
             print((Path(dirpath) / "pyproject.toml").read_text())
             raise
 
@@ -307,17 +299,17 @@ def test_using_pytest(baked_in_temp_dir: Result) -> None:
 def run_inside_dir_python_setup_py_test(baked_in_temp_dir: Result) -> None:
     try:
         run_inside_dir(["pytest"], str(baked_in_temp_dir.project_path))
-    except subprocess.CalledProcessError as error:
+    except CalledProcessError as error:
         if error.stderr.find(WARNING_FOR_PYTHON_35) == -1:
-            raise error
+            raise
 
 
 def run_inside_dir_python_setup_py_pytest(baked_in_temp_dir: Result) -> None:
     try:
         run_inside_dir(["pytest"], str(baked_in_temp_dir.project_path))
-    except subprocess.CalledProcessError as error:
+    except CalledProcessError as error:
         if error.stderr.find(WARNING_FOR_PYTHON_35) == -1:
-            raise error
+            raise
 
 
 @pytest.mark.parametrize(
