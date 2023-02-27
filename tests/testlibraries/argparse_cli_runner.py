@@ -1,9 +1,25 @@
 """CLI Runner for argparse."""
-import sys
 from argparse import ArgumentParser, Namespace
-from typing import Any, Optional, Union, cast
+import sys
+from types import TracebackType
+from typing import (
+    Any,
+    Callable,
+    cast,
+    Dict,
+    IO,
+    List,
+    Mapping,
+    Optional,
+    Sequence,
+    Tuple,
+    Type,
+    Union,
+)
 
 from click.testing import CliRunner, Result
+from pytest import CaptureFixture
+from pytest_mock import MockerFixture
 
 
 class PartialMockArgumentParser:
@@ -11,20 +27,12 @@ class PartialMockArgumentParser:
 
     def __init__(self) -> None:
         self.argument_parser = ArgumentParser()
-        self.args = None
+        self.args: Sequence[str] = []
 
-    @property
-    def args(self):
-        return self._args
-
-    @args.setter
-    def args(self, value):
-        self._args = [] if value is None else value
-
-    def parse_args(self):
-        if "--help" in self._args:
-            return self.argument_parser.parse_args(self._args)
-        args = {arg: [] for arg in self._args}
+    def parse_args(self) -> Namespace:
+        if "--help" in self.args:
+            return self.argument_parser.parse_args(self.args)
+        args: Dict[str, List[Any]] = {arg: [] for arg in self.args}
         return Namespace(**args)
 
 
@@ -34,17 +42,31 @@ class ArgparseCliRunnerCore:
     This class is designed to recreate every time when invoke.
     """
 
-    def __init__(self, mocker, args, partial_mock) -> None:
-        self.exc_info = None
+    def __init__(
+        self,
+        mocker: MockerFixture,
+        args: Union[str, Sequence[str], None],
+        partial_mock: PartialMockArgumentParser,
+    ) -> None:
+        self.exc_info: Optional[
+            Union[
+                Tuple[Type[BaseException], BaseException, TracebackType],
+                Tuple[None, None, None],
+            ]
+        ] = None
         self.return_value = None
-        self.exception = None
+        self.exception: Optional[BaseException] = None
         self.exit_code = 0
         mock = mocker.MagicMock()
-        partial_mock.args = args
+        partial_mock.args = (
+            [] if args is None else [args] if isinstance(args, str) else args
+        )
         mock.return_value = partial_mock
         mocker.patch("argparse.ArgumentParser", mock)
 
-    def invoke(self, cli, capsys, runner):
+    def invoke(
+        self, cli: Callable[[], None], capsys: CaptureFixture[str], runner: CliRunner
+    ) -> Result:
         """Invokes command."""
         try:
             self.return_value = cli()
@@ -69,10 +91,11 @@ class ArgparseCliRunnerCore:
             return_value=self.return_value,
             exit_code=self.exit_code,
             exception=self.exception,
+            # Reason: Class: click.testing.CliRunner is doing so.
             exc_info=self.exc_info,  # type: ignore
         )
 
-    def set_properties(self, error):
+    def set_properties(self, error: SystemExit) -> None:
         """Sets properties from SystemExit."""
         e_code = cast(Optional[Union[int, Any]], error.code)
 
@@ -93,7 +116,7 @@ class ArgparseCliRunnerCore:
 class ArgparseCliRunner(CliRunner):
     """CLI Runner for argparse."""
 
-    def __init__(self, capsys, mocker) -> None:
+    def __init__(self, capsys: CaptureFixture[str], mocker: MockerFixture) -> None:
         self.capsys = capsys
         self.mocker = mocker
         self.partial_mock = PartialMockArgumentParser()
@@ -103,14 +126,14 @@ class ArgparseCliRunner(CliRunner):
     # pylint: disable=too-many-arguments,redefined-builtin
     def invoke(
         self,
-        cli,
-        args=None,
-        input=None,
-        env=None,
-        catch_exceptions=True,
-        color=False,
-        **extra
-    ):
+        cli: Callable[[], None],
+        args: Union[str, Sequence[str], None] = None,
+        input: Optional[Union[str, bytes, IO[Any]]] = None,
+        env: Optional[Mapping[str, Optional[str]]] = None,
+        catch_exceptions: bool = True,
+        color: bool = False,
+        **extra: Any,
+    ) -> Result:
         argparse_cli_runner_core = ArgparseCliRunnerCore(
             self.mocker, args, self.partial_mock
         )

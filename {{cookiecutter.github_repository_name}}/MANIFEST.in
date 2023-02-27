@@ -1,1 +1,2 @@
+include {{cookiecutter.project_slug}}/py.typed
 recursive-include docs *

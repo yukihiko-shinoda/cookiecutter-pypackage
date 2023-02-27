@@ -1,15 +1,19 @@
+"""Post hook of generating project."""
 import os
 import shutil
 
 PROJECT_DIRECTORY = os.path.realpath(os.path.curdir)
 LICENSE_DIRECTORY = os.path.join(PROJECT_DIRECTORY, "licenses")
+PYOROJECTTOML_TEMPLATE = os.path.join(PROJECT_DIRECTORY, "pyproject.dist.toml")
+PYOROJECTTOML = os.path.join(PROJECT_DIRECTORY, "pyproject.toml")
 
 
-def remove_file(filepath):
+def remove_file(filepath: str) -> None:
     os.remove(os.path.join(PROJECT_DIRECTORY, filepath))
 
 
-def prepare_license(key_license):
+def prepare_license(key_license: str) -> None:
+    """Prepares license file."""
     license_file = {
         "MIT": "mit.txt",
         "GPL-3.0-or-later": "gpl3.0_github.txt",
@@ -18,6 +22,8 @@ def prepare_license(key_license):
         "GPL-3.0-or-later-short": "gpl3.0_gnu.txt",
         "Apache-2.0-short": "apache2.0_apache.txt",
     }.get(key_license)
+    if not license_file:
+        raise ValueError(key_license)
     shutil.copy(
         os.path.join(LICENSE_DIRECTORY, license_file),
         os.path.join(PROJECT_DIRECTORY, "LICENSE"),
@@ -25,15 +31,18 @@ def prepare_license(key_license):
 
 
 if __name__ == "__main__":
-    if "{{ cookiecutter.use_pypi_deployment_with_github_actions }}" != "y":
+    # Reason: Detected Cookiecutter code as Literal.
+    # pylint: disable=line-too-long,comparison-of-constants
+    if "{{ cookiecutter.use_pypi_deployment_with_github_actions }}" != "y":  # type: ignore[comparison-overlap]  # noqa: E501
         remove_file(".github/workflows/deploy.yml")
-    if "{{ cookiecutter.use_pytest }}" != "y":
+    if "{{ cookiecutter.use_pytest }}" != "y":  # type: ignore[comparison-overlap]
         remove_file("tests/conftest.py")
-    if "{{ cookiecutter.use_pyup }}" == "n":
+    if "{{ cookiecutter.use_pyup }}" == "n":  # type: ignore[comparison-overlap]
         remove_file(".pyup.yml")
     if "no" in "{{ cookiecutter.command_line_interface|lower }}":
         cli_file = os.path.join("{{ cookiecutter.project_slug }}", "cli.py")
         remove_file(cli_file)
-    if "Not open source" != "{{ cookiecutter.open_source_license }}":
+    if "Not open source" != "{{ cookiecutter.open_source_license }}":  # type: ignore[comparison-overlap]  # noqa: E501
         prepare_license("{{ cookiecutter.open_source_license }}")
     shutil.rmtree(LICENSE_DIRECTORY)
+    os.rename(PYOROJECTTOML_TEMPLATE, PYOROJECTTOML)
