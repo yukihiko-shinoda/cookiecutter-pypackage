@@ -41,6 +41,8 @@ pylint = "*"
 pytest = "*"{% endif %}
 pyvelocity = {version = "*", markers="python_version >= '3.9'"}
 radon = "*"
+ruff = {version = "*", markers="python_version >= '3.7'"}
+semgrep = {version = "*", markers="python_version >= '3.6'"}
 tomli = {version = "*", markers="python_version >= '3.6'"}
 types-invoke = "*"
 xenon = "*"
