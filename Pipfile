@@ -22,11 +22,13 @@ colorama = "*"
 #   · Issue #5595 · pypa/pipenv
 #   https://github.com/pypa/pipenv/issues/5595
 coverage = ">=3.5.4"
-dlint = "*"
+# The dlint less than 0.14.0 limits max version of flake8.
+dlint = ">=0.14.0"
 docformatter = {extras = ["tomli"], version = "*"}
 dodgy = "*"
 # Since Pipenv can't lock for too much combinations to attempt lock:
 # pip._vendor.resolvelib.resolvers.ResolutionTooDeep: 2000000
+# The hacking depends flake8 ~=4.0.1 .
 flake8 = {version = "==4.0.1", markers="python_version >= '3.6'"}
 # To use flake8 --radon-show-closures
 flake8-polyfill = "*"
@@ -47,11 +49,13 @@ pytest = "*"
 #   https://github.com/hackebrot/pytest-cookies/pull/61
 # - Fix windows tests by psobolewskiPhD · Pull Request #143 · napari/cookiecutter-napari-plugin
 #   https://github.com/napari/cookiecutter-napari-plugin/pull/143
-pytest-cookies = {git = "https://github.com/hackebrot/pytest-cookies.git", editable = true, ref = "refs/pull/61/head:quotes_in_user_config"}
+pytest-cookies = ">=0.7.0"
 pytest-resource-path = "*"
 pyvelocity = {version = "*", markers="python_version >= '3.9'"}
 pyyaml = "*"
 radon = "*"
+ruff = {version = "*", markers="python_version >= '3.7'"}
+semgrep = {version = "*", markers="python_version >= '3.6'"}
 tomli = {version = "*", markers="python_version >= '3.6'"}
 tox = "*"
 types-invoke = "*"

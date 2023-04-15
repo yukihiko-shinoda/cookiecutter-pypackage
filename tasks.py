@@ -22,7 +22,8 @@ DOCS_INDEX = DOCS_BUILD_DIR.joinpath("index.html")
 
 def _run(context: Context, command: str, **kwargs: Any) -> Result:
     return cast(
-        Result, context.run(command, pty=platform.system() != "Windows", **kwargs)
+        Result,
+        context.run(command, pty=platform.system() != "Windows", **kwargs),
     )
 
 

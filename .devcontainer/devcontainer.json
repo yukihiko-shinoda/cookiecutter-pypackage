@@ -37,12 +37,31 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"GitHub.copilot",
 				"ms-python.python",
+				"ms-python.flake8",
+				"charliermarsh.ruff",
 				"bungcip.better-toml",
 				"streetsidesoftware.code-spell-checker"
 			]
+		},
+		"settings": {
+			"python.formatting.provider": "black",
+			"python.linting.enabled": true,
+			"python.linting.lintOnSave": true,
+			"python.linting.banditEnabled": true,
+			"python.linting.flake8Enabled": true,
+			"python.linting.mypyEnabled": true,
+			"python.linting.pydocstyleEnabled": true,
+			// VS Code displays Pylint warning: import-error that not reported in Pylint by executing CLI.
+			// "python.linting.pylintEnabled": true,
+			// This setting forcibly generate __pycache__.
+			// "python.testing.pytestEnabled": true,
+			"[python]": {
+				"editor.formatOnSave": true
+			}
 		}
-	}
+}
 
 	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "devcontainer"
