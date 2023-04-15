@@ -1,16 +1,20 @@
 """To run command in subprocess."""
+from logging import getLogger
 import shlex
 
 # Reason: Accept risk of using subprocess.
-from subprocess import CalledProcessError, PIPE, run  # nosec B404
+from subprocess import CalledProcessError, run  # nosec B404
 
 
 def run_subrocess(command: str) -> None:
     """To prevent to stop pytest process itself if raise some kind of interrupt."""
     try:
         # Reason: Accept risk of using subprocess.
-        run(shlex.split(command), check=True, stdout=PIPE, stderr=PIPE)  # nosec B603
+        run(shlex.split(command), check=True, capture_output=True)  # nosec B603
     except CalledProcessError as error:
-        print(str(error.stdout).encode("ascii", "ignore").decode("unicode_escape"))
-        print(str(error.stderr).encode("ascii", "ignore").decode("unicode_escape"))
+        logger = getLogger(__name__)
+        stdout = str(error.stdout).encode("ascii", "ignore").decode("unicode_escape")
+        logger.exception(stdout)
+        stderr = str(error.stderr).encode("ascii", "ignore").decode("unicode_escape")
+        logger.exception(stderr)
         raise

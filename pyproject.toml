@@ -47,6 +47,18 @@ include = ["hooks", "hooks.*"]
 [tool.black]
 line-length = 88
 
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    # Assume `if TYPE_CHECKING: ... else: ...` block is covered · Issue #831 · nedbat/coveragepy
+    #   https://github.com/nedbat/coveragepy/issues/831#issuecomment-517778185
+    "if TYPE_CHECKING:",
+    # Pylint will detect instead:
+    # - abstract-method / W0223 - Pylint 2.17.0-dev0 documentation
+    #   https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/abstract-method.html
+    "raise NotImplementedError",
+]
+
 [tool.docformatter]
 recursive = true
 wrap-descriptions = 88
@@ -128,3 +140,72 @@ min-public-methods = "1"
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
 ]
+# To avoid to run test for {{cookiecutter.github_repository_name}}/tests .
+testpaths = ["tests"]
+log_cli = true
+# log_cli_level = "DEBUG"
+log_format = "%(asctime)s %(process)d %(levelname)s %(name)s:%(filename)s:%(lineno)d %(message)s"
+
+[tool.ruff]
+line-length = 88
+select = [
+    "F",  # Pyflakes
+    "E",  # pycodestyle
+    "W",  # pycodestyle
+    "C90",  # mccabe
+    # "I",  # isort
+    "N",  # pep8-naming
+    # "D",  # pydocstyle
+    "UP",  # pyupgrade
+    "YTT",  # flake8-2020
+    "ANN",  # flake8-annotations
+    "S",  # flake8-bandit
+    "BLE",  # flake8-blind-except
+    "FBT",  # flake8-boolean-trap
+    "B",  # flake8-bugbear
+    "A",  # flake8-builtins
+    "COM",  # flake8-commas
+    "C4",  # flake8-comprehensions
+    "DTZ",  # flake8-datetimez
+    "T10",  # flake8-debugger
+    "DJ",  # flake8-django
+    "EM",  # flake8-errmsg
+    "EXE",  # flake8-executable
+    "ISC",  # flake8-implicit-str-concat
+    "ICN",  # flake8-import-conventions
+    "G",  # flake8-logging-format
+    "INP",  # flake8-no-pep420
+    "PIE",  # flake8-pie
+    "T20",  # flake8-print
+    "PYI",  # flake8-pyi
+    "PT",  # flake8-pytest-style
+    "Q",  # flake8-quotes
+    "RSE",  # flake8-raise
+    "RET",  # flake8-return
+    "SLF",  # flake8-self
+    "SIM",  # flake8-simplify
+    "TID",  # flake8-tidy-imports
+    "TCH",  # flake8-type-checking
+    "ARG",  # flake8-unused-arguments
+    "PTH",  # flake8-use-pathlib
+    "ERA",  # eradicate
+    "PD",  # pandas-vet
+    "PGH",  # pygrep-hooks
+    "PL",  # Pylint
+    "TRY",  # tryceratops
+    "NPY",  # NumPy-specific rules
+    "RUF",  # Ruff-specific rules
+]
+ignore = [
+    "UP032",  # [*] Use f-string instead of `format` call
+    "ANN101",  # Missing type annotation for `self` in method
+    "ANN401",  # Dynamically typed expressions (typing.Any) are disallowed, These warnings are disabled by default
+]
+fixable = [
+    "PT001",  # Use `@pytest.fixture()` over `@pytest.fixture`
+    "COM812",  # Trailing comma missing
+    "SIM108",  # Use ternary operator `extra_context = {} if extra_context is None else request.param` instead of `if`-`else`-block
+    "PT006",  # Wrong name(s) type in `@pytest.mark.parametrize`, expected `tuple`
+    "UP015",  # Unnecessary open mode parameters
+]
+target-version = "py37"

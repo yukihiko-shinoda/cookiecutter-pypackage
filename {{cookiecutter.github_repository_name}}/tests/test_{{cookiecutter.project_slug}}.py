@@ -1,7 +1,10 @@
 """Tests for `{{ cookiecutter.project_slug }}` package."""
-{% if cookiecutter.use_pytest != 'y' -%}
+{% if cookiecutter.use_pytest == 'y' -%}
+from typing import Any
+{%- else %}
 import unittest
 {%- endif %}
+
 {% if cookiecutter.command_line_interface | lower == 'click' -%}
 from click.testing import CliRunner
 {%- endif %}
@@ -13,15 +16,15 @@ from {{ cookiecutter.project_slug }} import cli
 {%- if cookiecutter.use_pytest == 'y' %}
 
 
-def test_content(response):
+def test_content(response: dict[Any, Any] | None) -> None:
     """Sample pytest test function with the pytest fixture as an argument."""
-    # from bs4 import BeautifulSoup
-    # assert 'GitHub' in BeautifulSoup(response.content).title.string
+    # from bs4 import BeautifulSoup  # noqa: ERA001
+    # assert 'GitHub' in BeautifulSoup(response.content).title.string  # noqa: ERA001
     del response
 {%- if cookiecutter.command_line_interface|lower == 'click' %}
 
 
-def test_command_line_interface():
+def test_command_line_interface() -> None:
     """Test the CLI."""
     runner = CliRunner()
     result = runner.invoke(cli.main)
