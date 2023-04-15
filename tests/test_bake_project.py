@@ -566,6 +566,10 @@ def test_bake_and_run_invoke_coverage(baked_in_temp_dir: Result) -> None:
 
 
 @pytest.mark.slow()
+@pytest.mark.skipif(
+    sys.version_info < (3, 9),
+    reason="The pyvelocity currently supports only Python 3.9 or more.",
+)
 def test_bake_and_run_pyvelocity(baked_in_temp_dir: Result) -> None:
     """Run the linter on a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()

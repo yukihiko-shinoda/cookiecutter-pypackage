@@ -1,4 +1,6 @@
 """Tests for `{{ cookiecutter.project_slug }}` package."""
+
+from __future__ import annotations
 {% if cookiecutter.use_pytest == 'y' -%}
 from typing import Any
 {%- else %}
