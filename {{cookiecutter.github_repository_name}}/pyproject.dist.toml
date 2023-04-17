@@ -88,11 +88,13 @@ exclude_lines = [
 
 [tool.docformatter]
 recursive = true
-{% if cookiecutter.python_code_max_length_per_line != '119' -%}
+{% if cookiecutter.python_code_max_length_per_line != '79' -%}
 wrap-descriptions = {{ cookiecutter.python_code_max_length_per_line }}
-wrap-summaries = {{ cookiecutter.python_code_max_length_per_line }}
-
 {% endif -%}
+{% if cookiecutter.python_code_max_length_per_line != '72' -%}
+wrap-summaries = {{ cookiecutter.python_code_max_length_per_line }}
+{% endif -%}
+
 [tool.isort]
 # see:
 # - Using Black with other tools - Black 23.1.0 documentation
