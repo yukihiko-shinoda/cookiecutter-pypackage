@@ -50,6 +50,10 @@
 			"python.linting.enabled": true,
 			"python.linting.lintOnSave": true,
 			"python.linting.banditEnabled": true,
+			"python.linting.banditArgs": [
+				"--configfile",
+				"pyproject.toml"
+			],
 			"python.linting.flake8Enabled": true,
 			"python.linting.mypyEnabled": true,
 			"python.linting.pydocstyleEnabled": true,
@@ -61,7 +65,7 @@
 				"editor.formatOnSave": true
 			}
 		}
-}
+	}
 
 	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "devcontainer"
