@@ -210,6 +210,14 @@ ignore = [
     "ANN101",  # Missing type annotation for `self` in method
     "ANN401",  # Dynamically typed expressions (typing.Any) are disallowed, These warnings are disabled by default
 ]
+fixable = [
+    "COM812",  # Trailing comma missing
+    "PT001",  # Use `@pytest.fixture()` over `@pytest.fixture`
+    "PT006",  # Wrong name(s) type in `@pytest.mark.parametrize`, expected `tuple`
+    "SIM108",  # Use ternary operator `extra_context = {} if extra_context is None else request.param` instead of `if`-`else`-block
+    "UP015",  # Unnecessary open mode parameters
+    "UP037",  # Remove quotes from type annotation
+]
 target-version = "py37"
 
 [tool.ruff.per-file-ignores]
