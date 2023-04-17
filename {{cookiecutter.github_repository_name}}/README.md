@@ -1,6 +1,7 @@
 # {{ cookiecutter.project_name }}
 
 [![Test](https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.github_repository_name }}/workflows/Test/badge.svg)](https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.github_repository_name }}/actions?query=workflow%3ATest)
+[![CodeQL](https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.github_repository_name }}/workflows/CodeQL/badge.svg)](https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.github_repository_name }}/actions?query=workflow%3ACodeQL)
 [![Code Climate technical debt](https://img.shields.io/codeclimate/tech-debt/{{ cookiecutter.github_username }}/{{ cookiecutter.github_repository_name }})](https://codeclimate.com/github/{{ cookiecutter.github_username }}/{{ cookiecutter.github_repository_name }})
 {% if cookiecutter.use_pyup != 'n' -%}
 [![Updates](https://pyup.io/repos/github/{{ cookiecutter.github_username }}/{{ cookiecutter.github_repository_name }}/shield.svg)](https://pyup.io/repos/github/{{ cookiecutter.github_username }}/{{ cookiecutter.github_repository_name }}/)
@@ -10,7 +11,17 @@
 
 {{ cookiecutter.project_short_description }}
 
-## Features
+## Advantage
+
+* TODO
+
+## Quickstart
+
+* TODO
+
+<!-- markdownlint-disable no-trailing-punctuation -->
+## How do I...
+<!-- markdownlint-enable no-trailing-punctuation -->
 
 * TODO
 
