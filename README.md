@@ -10,12 +10,12 @@
 
 This template focus following:
 
-- Target Python version: 3.7 - 3.11
+- Target Python version: 3.7 - 3.12
 - Dependency tracking using [Pipenv]
 - Linting provided by both [pylint], [flake8], [mypy] [executed by GitHub Actions]
 - Formatting provided by [isort], [pipenv-setup], [black] [checked by GitHub Actions]
-- Analizing complexity and maintainability provided by [radon], [xenon] [checked by GitHub Actions]
-- All development tasks (lint, format, analize, test, etc) excluding deployment wrapped up in a python CLI by [invoke]
+- Analyzing complexity and maintainability provided by [radon], [xenon] [checked by GitHub Actions]
+- All development tasks (lint, format, analyze, test, etc) excluding deployment wrapped up in a python CLI by [invoke]
 - Omit documentation workflows
   since this project targets early stages of development.
   In the early stages of development it is better to focus on providing
@@ -61,7 +61,7 @@ Review support range if the one of your package is not Python 3.7 - 3.11
 
 2\.
 
-Pin wheel version in Pipfle and execute `pipenv lock`
+Pin wheel version in Pipfile and execute `pipenv lock`
 if you prefer stability of deployment task.
 
 ## Remaining task after creating initialized project directory
@@ -126,7 +126,6 @@ Add your package dependencies to your pipenv with `pipenv install`.
 [radon]: https://radon.readthedocs.io/en/latest/
 [xenon]: https://pypi.org/project/xenon/
 [invoke]: http://www.pyinvoke.org/
-[Read the Docs]: https://readthedocs.io/
 [Code Climate]: https://codeclimate.com/
 [pyup.io]: https://pyup.io/
 [PyPi]: https://pypi.python.org/pypi

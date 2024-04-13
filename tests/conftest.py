@@ -1,4 +1,5 @@
 """Configuration for pytest."""
+
 from typing import Generator
 
 from cookiecutter.utils import rmtree
@@ -26,8 +27,8 @@ def baked_in_temp_dir(
 ) -> Generator[Result, None, None]:
     """Delete the temporal directory that is created when executing the tests.
 
-    :param cookies: pytest_cookies.Cookies,
-        cookie to be baked and its temporal files will be removed
+    :param cookies: pytest_cookies.Cookies, cookie to be baked and its temporal files
+        will be removed
     """
     extra_context = getattr(request, "param", None)
     extra_context = {} if extra_context is None else request.param
