@@ -1,4 +1,5 @@
 """Development tasks for the cookiecutter template project."""
+
 from pathlib import Path
 import platform
 from typing import Any, cast

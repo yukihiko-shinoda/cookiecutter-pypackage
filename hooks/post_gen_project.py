@@ -1,4 +1,5 @@
 """Post hook of generating project."""
+
 import os
 from pathlib import Path
 import shutil
@@ -34,16 +35,16 @@ def prepare_license(key_license: str) -> None:
 if __name__ == "__main__":
     # Reason: Detected Cookiecutter code as Literal.
     # pylint: disable=line-too-long,comparison-of-constants
-    if "{{ cookiecutter.use_pypi_deployment_with_github_actions }}" != "y":  # type: ignore[comparison-overlap]  # noqa: E501,PLR0133
+    if "{{ cookiecutter.use_pypi_deployment_with_github_actions }}" != "y":  # type: ignore[comparison-overlap]  # noqa: PLR0133,E501,RUF100
         remove_file(Path(".github/workflows/deploy.yml"))
-    if "{{ cookiecutter.use_pytest }}" != "y":  # type: ignore[comparison-overlap]  # noqa: E501,PLR0133
+    if "{{ cookiecutter.use_pytest }}" != "y":  # type: ignore[comparison-overlap]  # noqa: PLR0133,E501,RUF100
         remove_file(Path("tests/conftest.py"))
-    if "{{ cookiecutter.use_pyup }}" == "n":  # type: ignore[comparison-overlap]  # noqa: E501,PLR0133
+    if "{{ cookiecutter.use_pyup }}" == "n":  # type: ignore[comparison-overlap]  # noqa: PLR0133,E501,RUF100
         remove_file(Path(".pyup.yml"))
     if "no" in "{{ cookiecutter.command_line_interface|lower }}":  # noqa: PLR0133
         cli_file = Path("{{ cookiecutter.project_slug }}") / "cli.py"
         remove_file(Path(cli_file))
-    if "Not open source" != "{{ cookiecutter.open_source_license }}":  # type: ignore[comparison-overlap]  # noqa: E501,PLR0133
+    if "Not open source" != "{{ cookiecutter.open_source_license }}":  # type: ignore[comparison-overlap]  # noqa: PLR0133,E501,RUF100
         prepare_license("{{ cookiecutter.open_source_license }}")
     shutil.rmtree(LICENSE_DIRECTORY)
     PYOROJECTTOML_TEMPLATE.rename(PYOROJECTTOML)

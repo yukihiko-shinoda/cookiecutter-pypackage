@@ -1,4 +1,5 @@
 """Pre hook of generating project."""
+
 import re
 import sys
 

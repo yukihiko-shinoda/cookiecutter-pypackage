@@ -41,6 +41,7 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Typing :: Typed",
 ]
 dependencies = [{%- if cookiecutter.command_line_interface|lower == 'click' %}"click>=7.0"{%- endif %}]
@@ -63,10 +64,7 @@ repository = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecut
 zip-safe = false
 
 [tool.bandit.assert_used]
-skips = [
-    "*_test.py",
-    "*/test_*.py",
-]
+skips = ["tests/*"]
 
 {% if cookiecutter.python_code_max_length_per_line != '88' -%}
 # @see https://black.readthedocs.io/en/stable/pyproject_toml.html#configuration-format
@@ -159,6 +157,9 @@ markers = [
 
 [tool.ruff]
 line-length = {{ cookiecutter.python_code_max_length_per_line }}
+target-version = "py37"
+
+[tool.ruff.lint]
 select = [
     "F",  # Pyflakes
     "E",  # pycodestyle
@@ -220,7 +221,6 @@ fixable = [
     "UP015",  # Unnecessary open mode parameters
     "UP037",  # Remove quotes from type annotation
 ]
-target-version = "py37"
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101"]

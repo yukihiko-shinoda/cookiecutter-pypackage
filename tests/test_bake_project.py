@@ -1,4 +1,5 @@
 """Implements tests."""
+
 from contextlib import contextmanager
 import datetime
 import importlib
@@ -53,8 +54,8 @@ def bake_in_temp_dir(
 ) -> Generator[Result, None, None]:
     """Delete the temporal directory that is created when executing the tests.
 
-    :param cookies: pytest_cookies.Cookies,
-        cookie to be baked and its temporal files will be removed
+    :param cookies: pytest_cookies.Cookies, cookie to be baked and its temporal files
+        will be removed
     """
     result = cookies.bake(*args, **kwargs)
     yield from process_result(result)
@@ -138,16 +139,15 @@ def test_bake_with_apostrophe_and_run_tests(baked_in_temp_dir: Result) -> None:
 
 
 # def test_bake_and_run_travis_pypi_setup(cookies):
-#     # given:  # noqa: ERA001
+#     # given:
 #     with bake_in_temp_dir(cookies) as result:
 #         project_path = str(result.project)  # noqa: ERA001
-#  # noqa: ERA001
-#         # when:  # noqa: ERA001
+#         # when:
 #         travis_setup_cmd = ('python travis_pypi_setup.py'
 #                             ' --repo audreyr/cookiecutter-pypackage'  # noqa: ERA001
 #                             ' --password invalidpass')
 #         run_inside_dir(travis_setup_cmd, project_path)  # noqa: ERA001
-#         # then:  # noqa: ERA001
+#         # then:
 #         result_travis_config = yaml.load(  # noqa: ERA001,RUF100
 #             result.project.join(".travis.yml").open()  # noqa: ERA001
 #         )  # noqa: ERA001,RUF100
@@ -378,14 +378,12 @@ def pytest_entry_exists_in_pipfile(result: Result) -> bool:
 #     )  # noqa: ERA001,RUF100
 #     assert result.project_path is not None  # noqa: ERA001
 #     project_path = str(result.project_path)  # noqa: ERA001
-#  # noqa: ERA001
-#     # when:  # noqa: ERA001
+#     # when:
 #     travis_setup_cmd = ('python travis_pypi_setup.py'
 #                         ' --repo audreyr/cookiecutter-pypackage'  # noqa: ERA001
 #                         ' --password invalidpass')
 #     run_inside_dir(travis_setup_cmd, project_path)  # noqa: ERA001
-#  # noqa: ERA001
-#     # then:  # noqa: ERA001
+#     # then:
 #     result_travis_config = yaml.load(  # noqa: ERA001,RUF100
 #         open(os.path.join(project_path, ".travis.yml"))  # noqa: ERA001
 #     )  # noqa: ERA001,RUF100
@@ -405,7 +403,7 @@ def test_bake_with_no_console_script(cookies: Cookies) -> None:
         raise AssertionError(result.exception) from result.exception
     project_path, _project_slug, project_dir = project_info(result)
     found_project_files = Path.iterdir(project_dir)
-    assert "cli.py" not in list(found_project_files)
+    assert "cli.py" not in [path.name for path in found_project_files]
     assert project_path is not None
     setup_path = Path(project_path) / "setup.py"
     with setup_path.open(encoding="utf-8") as setup_file:

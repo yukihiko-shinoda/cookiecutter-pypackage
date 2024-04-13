@@ -1,4 +1,5 @@
 """CLI Runner for argparse."""
+
 from argparse import ArgumentParser, Namespace
 import sys
 from typing import (
@@ -138,7 +139,7 @@ class ArgparseCliRunner(CliRunner):
         self,
         cli: Callable[[], None],
         args: Union[str, Sequence[str], None] = None,
-        input: Optional[Union[str, bytes, IO[Any]]] = None,  # noqa; A002,ARG002
+        input: Optional[Union[str, bytes, IO[Any]]] = None,  # noqa: A002,ARG002
         env: Optional[Mapping[str, Optional[str]]] = None,  # noqa: ARG002
         catch_exceptions: bool = True,  # noqa: ARG002,FBT001,FBT002
         color: bool = False,  # noqa: ARG002,FBT001,FBT002

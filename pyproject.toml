@@ -26,6 +26,7 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Topic :: Software Development",
@@ -45,10 +46,7 @@ repository = "https://github.com/briggySmalls/cookiecutter-pypackage"
 include = ["hooks", "hooks.*"]
 
 [tool.bandit.assert_used]
-skips = [
-    "*_test.py",
-    "*/test_*.py",
-]
+skips = ["tests/*"]
 
 [tool.black]
 line-length = 88
@@ -150,10 +148,13 @@ markers = [
 testpaths = ["tests"]
 log_cli = true
 # log_cli_level = "DEBUG"
-log_format = "%(asctime)s %(process)d %(levelname)s %(name)s:%(filename)s:%(lineno)d %(message)s"
+# log_format = "%(asctime)s %(process)d %(levelname)s %(name)s:%(filename)s:%(lineno)d %(message)s"
 
 [tool.ruff]
 line-length = 88
+target-version = "py37"
+
+[tool.ruff.lint]
 select = [
     "F",  # Pyflakes
     "E",  # pycodestyle
@@ -215,7 +216,6 @@ fixable = [
     "UP015",  # Unnecessary open mode parameters
     "UP037",  # Remove quotes from type annotation
 ]
-target-version = "py37"
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101"]
