@@ -37,9 +37,17 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      - run: python -m pip install --ignore-requires-python uv
       - run: uv sync
-      - run: uv run invoke test.all
+      # To prevent following error:
+      # PermissionError: [WinError 5] Access is denied: 'C:\\Users\\runneradmin\\AppData\\Local\\Temp\\pytest-of-runneradmin\\pytest-0\\test_bake_and_run_invoke_tests0\\cookies\\bake00\\python-boilerplate\\.venv\\Lib\\site-packages\\charset_normalizer\\md.cp313-win_amd64.pyd'
+      # - hardlinking dependencies causes issues when trying to delete a `.venv` via python on Windows · Issue #7918 · astral-sh/uv
+      #   https://github.com/astral-sh/uv/issues/7918#issuecomment-2394457660
+      - if: runner.os == 'Windows'
+        run: uv run invoke test.all
+        shell: pwsh
+      - if: runner.os == 'Linux'
+        run: uv run invoke test.all
   check_style:
     runs-on: ubuntu-latest
     steps:

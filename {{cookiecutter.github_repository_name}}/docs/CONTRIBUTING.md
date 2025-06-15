@@ -57,10 +57,10 @@ Ready to contribute? Here's how to set up `{{ cookiecutter.project_name }}` for 
    git clone git@github.com:your_name_here/{{ cookiecutter.github_repository_name }}.git
    ```
 
-3. Install your local copy into a virtualenv. Assuming you have Pipenv installed, this is how you set up your fork for local development:
+3. Install your local copy into a virtualenv. Assuming you have uv installed, this is how you set up your fork for local development:
 
    ```console
-   pipenv install --dev
+   uv sync
    ```
 
 4. Create a branch for local development:
@@ -72,14 +72,14 @@ Ready to contribute? Here's how to set up `{{ cookiecutter.project_name }}` for 
    Now you can make your changes locally.
 
 5. When you're done making changes,
-   check that your changes pass isort, flake8, black,
+   check that your changes pass Ruff, docformatter,
    and the tests, including testing oldest Python version:
 
    ```console
-   pipenv run inv style --check
-   pipenv run pytest
-   pipenv install --python 3.7
-   pipenv run pytest
+   uv run inv style --check
+   uv run pytest
+   uv install --python 3.7
+   uv run pytest
    ```
 
 6. Commit your changes and push your branch to GitHub:
@@ -107,9 +107,9 @@ To run a subset of tests:
 
 ```console
 {% if cookiecutter.use_pytest == 'y' -%}
-pipenv run pytest tests.test_{{ cookiecutter.project_slug }}
+uv run pytest tests.test_{{ cookiecutter.project_slug }}
 {% else %}
-pipenv run python -m unittest tests.test_{{ cookiecutter.project_slug }}
+uv run python -m unittest tests.test_{{ cookiecutter.project_slug }}
 {%- endif %}
 ```
 

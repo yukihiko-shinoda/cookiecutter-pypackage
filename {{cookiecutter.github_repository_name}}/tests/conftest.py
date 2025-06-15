@@ -16,5 +16,5 @@ def response() -> dict[Any, Any] | None:
     See more at: http://doc.pytest.org/en/latest/fixture.html
     """
     # import requests  # noqa: ERA001
-    # return requests.get("https://github.com/audreyr/cookiecutter-pypackage")  # noqa: E501,ERA001
+    # return requests.get("https://github.com/audreyr/cookiecutter-pypackage")  # noqa: ERA001
     return None

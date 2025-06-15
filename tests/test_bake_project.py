@@ -91,7 +91,7 @@ def run_inside_dir(commands: list[str], dirpath: str) -> None:
                 run_subprocess(command)
         except CalledProcessError:
             getLogger(__name__).exception(
-                (Path(dirpath) / "pyproject.toml").read_text(),
+                (Path(dirpath) / "pyproject.toml").read_text(encoding="utf-8"),
             )
             raise
 
@@ -250,10 +250,9 @@ def test_bake_selecting_license(
       GitHub doesn't recognize.
     - bsd3clause.txt: Exported from GitHub
     """
-    assert (
-        license_trove_classifier
-        in (baked_in_temp_dir.project_path / "pyproject.toml").read_text()
-    )
+    assert license_trove_classifier in (
+        baked_in_temp_dir.project_path / "pyproject.toml"
+    ).read_text(encoding="utf-8")
     actual_license_file = baked_in_temp_dir.project_path / "LICENSE"
     expect_license_file = resource_path_root / "license" / (file_name_expected + ".txt")
     current_timezone = datetime.datetime.now(tz=datetime.timezone.utc).astimezone()
@@ -277,34 +276,18 @@ def test_bake_not_open_source(baked_in_temp_dir: Result) -> None:
 
 
 @pytest.mark.parametrize(
-    ("baked_in_temp_dir", "list_expected", "list_not_expected"),
+    ("baked_in_temp_dir", "list_expected"),
     [
-        ({"use_pyup": "n", "open_source_license": "MIT"}, [], ["[![Updates]("]),
-        (
-            {"use_pyup": "n", "open_source_license": "Not open source"},
-            [],
-            ["[![Updates]("],
-        ),
-        ({"use_pyup": "y", "open_source_license": "MIT"}, ["[![Updates]("], []),
-        (
-            {"use_pyup": "y", "open_source_license": "Not open source"},
-            ["[![Updates]("],
-            [],
-        ),
+        ({"open_source_license": "MIT"}, ["[![Dependabot]("]),
+        ({"open_source_license": "Not open source"}, ["[![Dependabot]("]),
     ],
     indirect=["baked_in_temp_dir"],
 )
-def test_bake_readme(
-    baked_in_temp_dir: Result,
-    list_expected: list[str],
-    list_not_expected: list[str],
-) -> None:
+def test_bake_readme(baked_in_temp_dir: Result, list_expected: list[str]) -> None:
     """README.md should have appropriate badges."""
     string_readme = (baked_in_temp_dir.project_path / "README.md").read_text()
     for expected in list_expected:
         assert expected in string_readme
-    for not_expected in list_not_expected:
-        assert not_expected not in string_readme
 
 
 def test_using_pytest(baked_in_temp_dir: Result) -> None:
@@ -315,7 +298,7 @@ def test_using_pytest(baked_in_temp_dir: Result) -> None:
     """
     assert baked_in_temp_dir.project_path.is_dir()
     # Test Pipfile installs pytest
-    assert pytest_entry_exists_in_pipfile(baked_in_temp_dir)
+    assert pytest_entry_exists_in_pyproject_toml(baked_in_temp_dir)
     # Test conftest.py exist
     assert conftest_exists(baked_in_temp_dir)
     # Test contents of test file
@@ -355,7 +338,7 @@ def test_not_using_pytest(baked_in_temp_dir: Result) -> None:
     """
     assert baked_in_temp_dir.project_path.is_dir()
     # Test Pipfile doesn install pytest
-    assert not pytest_entry_exists_in_pipfile(baked_in_temp_dir)
+    assert not pytest_entry_exists_in_pyproject_toml(baked_in_temp_dir)
     # Test conftest.py not exist
     assert not conftest_exists(baked_in_temp_dir)
     # Test contents of test file
@@ -386,10 +369,10 @@ def get_test_file_text(baked_in_temp_dir: Result) -> str:
     ).read_text("utf-8")
 
 
-def pytest_entry_exists_in_pipfile(result: Result) -> bool:
-    pipfile_file_path = result.project_path / "Pipfile"
-    lines = pipfile_file_path.read_text().splitlines()
-    return 'pytest = "*"' in lines
+def pytest_entry_exists_in_pyproject_toml(result: Result) -> bool:
+    pipfile_file_path = result.project_path / "pyproject.toml"
+    lines = pipfile_file_path.read_text(encoding="utf-8").splitlines()
+    return '    "pytest",' in lines
 
 
 # def test_project_with_hyphen_in_module_name(cookies):
@@ -533,67 +516,92 @@ def check_help(runner: CliRunner, cli: ModuleType, help_message: str) -> None:
 
 
 @pytest.mark.slow
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason=(
+        "Currently, there are no way to avoid PermissionError: [WinError 5] when remove md.cp313-win_amd64.pyd in teardown step of pytest:"
+        "- hardlinking dependencies causes issues when trying to delete a `.venv` via python on Windows · Issue #7918 · astral-sh/uv"
+        "  https://github.com/astral-sh/uv/issues/7918"
+    ),
+)
 def test_bake_and_run_invoke_tests(baked_in_temp_dir: Result) -> None:
     """Run the unit tests of a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
     run_inside_dir(
-        ["pip install pipenv", "pipenv install --dev", "pipenv run invoke test"],
+        [pip_install_uv(), "uv sync", "uv run invoke test"],
         str(baked_in_temp_dir.project_path),
     )
 
 
 @pytest.mark.slow
 @pytest.mark.skipif(sys.version_info < (3, 7), reason="The black doesn't support.")
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason=(
+        "Currently, there are no way to avoid PermissionError: [WinError 5] when remove md.cp313-win_amd64.pyd in teardown step of pytest:"
+        "- hardlinking dependencies causes issues when trying to delete a `.venv` via python on Windows · Issue #7918 · astral-sh/uv"
+        "  https://github.com/astral-sh/uv/issues/7918"
+    ),
+)
 def test_bake_and_run_invoke_style(baked_in_temp_dir: Result) -> None:
     """Run the formatter on a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
     run_inside_dir(
-        [
-            "pip install pipenv",
-            "pipenv install --dev",
-            "pipenv run invoke style --check",
-        ],
-        str(baked_in_temp_dir.project_path),
-    )
-
-
-@pytest.mark.slow
-def test_bake_and_run_invoke_lint(baked_in_temp_dir: Result) -> None:
-    """Run the linter on a newly-generated project."""
-    assert baked_in_temp_dir.project_path.is_dir()
-    run_inside_dir(
-        ["pip install pipenv", "pipenv install --dev", "pipenv run invoke lint"],
-        str(baked_in_temp_dir.project_path),
-    )
-
-
-@pytest.mark.slow
-def test_bake_and_run_invoke_coverage(baked_in_temp_dir: Result) -> None:
-    """Run the linter on a newly-generated project."""
-    assert baked_in_temp_dir.project_path.is_dir()
-    run_inside_dir(
-        [
-            "pip install pipenv",
-            "pipenv install --dev --verbose",
-            "pipenv run invoke test.coverage --xml",
-        ],
+        [pip_install_uv(), "uv sync", "uv run invoke style --check"],
         str(baked_in_temp_dir.project_path),
     )
 
 
 @pytest.mark.slow
 @pytest.mark.skipif(
-    sys.version_info < (3, 9),
-    reason="The pyvelocity currently supports only Python 3.9 or more.",
+    sys.platform == "win32",
+    reason=(
+        "Currently, there are no way to avoid PermissionError: [WinError 5] when remove md.cp313-win_amd64.pyd in teardown step of pytest:"
+        "- hardlinking dependencies causes issues when trying to delete a `.venv` via python on Windows · Issue #7918 · astral-sh/uv"
+        "  https://github.com/astral-sh/uv/issues/7918"
+    ),
 )
+def test_bake_and_run_invoke_lint(baked_in_temp_dir: Result) -> None:
+    """Run the linter on a newly-generated project."""
+    assert baked_in_temp_dir.project_path.is_dir()
+    run_inside_dir(
+        [pip_install_uv(), "uv sync", "uv run invoke lint"],
+        str(baked_in_temp_dir.project_path),
+    )
+
+
+@pytest.mark.slow
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason=(
+        "Currently, there are no way to avoid PermissionError: [WinError 5] when remove md.cp313-win_amd64.pyd in teardown step of pytest:"
+        "- hardlinking dependencies causes issues when trying to delete a `.venv` via python on Windows · Issue #7918 · astral-sh/uv"
+        "  https://github.com/astral-sh/uv/issues/7918"
+    ),
+)
+def test_bake_and_run_invoke_coverage(baked_in_temp_dir: Result) -> None:
+    """Run the linter on a newly-generated project."""
+    assert baked_in_temp_dir.project_path.is_dir()
+    run_inside_dir(
+        [pip_install_uv(), "uv sync", "uv run invoke test.coverage --xml"],
+        str(baked_in_temp_dir.project_path),
+    )
+
+
+@pytest.mark.slow
+@pytest.mark.skip(reason="The pyvelocity requires to update.")
 def test_bake_and_run_pyvelocity(baked_in_temp_dir: Result) -> None:
     """Run the linter on a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
     run_inside_dir(
-        [
-            "pip install pipenv",
-            "pipenv install --dev --verbose",
-            "pipenv run pyvelocity",
-        ],
+        [pip_install_uv(), "uv sync", "uv run pyvelocity"],
         str(baked_in_temp_dir.project_path),
+    )
+
+
+def pip_install_uv() -> str:
+    return (
+        "pip install --ignore-requires-python uv"
+        if sys.version_info < (3, 8)
+        else "pip install uv"
     )
