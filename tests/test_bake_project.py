@@ -250,10 +250,9 @@ def test_bake_selecting_license(
       GitHub doesn't recognize.
     - bsd3clause.txt: Exported from GitHub
     """
-    assert (
-        license_trove_classifier
-        in (baked_in_temp_dir.project_path / "pyproject.toml").read_text()
-    )
+    assert license_trove_classifier in (
+        baked_in_temp_dir.project_path / "pyproject.toml"
+    ).read_text(encoding="utf-8")
     actual_license_file = baked_in_temp_dir.project_path / "LICENSE"
     expect_license_file = resource_path_root / "license" / (file_name_expected + ".txt")
     current_timezone = datetime.datetime.now(tz=datetime.timezone.utc).astimezone()
@@ -372,7 +371,7 @@ def get_test_file_text(baked_in_temp_dir: Result) -> str:
 
 def pytest_entry_exists_in_pyproject_toml(result: Result) -> bool:
     pipfile_file_path = result.project_path / "pyproject.toml"
-    lines = pipfile_file_path.read_text().splitlines()
+    lines = pipfile_file_path.read_text(encoding="utf-8").splitlines()
     return '    "pytest",' in lines
 
 
@@ -517,6 +516,14 @@ def check_help(runner: CliRunner, cli: ModuleType, help_message: str) -> None:
 
 
 @pytest.mark.slow
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason=(
+        "Currently, there are no way to avoid PermissionError: [WinError 5] when remove md.cp313-win_amd64.pyd in teardown step of pytest:"
+        "- hardlinking dependencies causes issues when trying to delete a `.venv` via python on Windows · Issue #7918 · astral-sh/uv"
+        "  https://github.com/astral-sh/uv/issues/7918"
+    ),
+)
 def test_bake_and_run_invoke_tests(baked_in_temp_dir: Result) -> None:
     """Run the unit tests of a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
@@ -528,6 +535,14 @@ def test_bake_and_run_invoke_tests(baked_in_temp_dir: Result) -> None:
 
 @pytest.mark.slow
 @pytest.mark.skipif(sys.version_info < (3, 7), reason="The black doesn't support.")
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason=(
+        "Currently, there are no way to avoid PermissionError: [WinError 5] when remove md.cp313-win_amd64.pyd in teardown step of pytest:"
+        "- hardlinking dependencies causes issues when trying to delete a `.venv` via python on Windows · Issue #7918 · astral-sh/uv"
+        "  https://github.com/astral-sh/uv/issues/7918"
+    ),
+)
 def test_bake_and_run_invoke_style(baked_in_temp_dir: Result) -> None:
     """Run the formatter on a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
@@ -538,6 +553,14 @@ def test_bake_and_run_invoke_style(baked_in_temp_dir: Result) -> None:
 
 
 @pytest.mark.slow
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason=(
+        "Currently, there are no way to avoid PermissionError: [WinError 5] when remove md.cp313-win_amd64.pyd in teardown step of pytest:"
+        "- hardlinking dependencies causes issues when trying to delete a `.venv` via python on Windows · Issue #7918 · astral-sh/uv"
+        "  https://github.com/astral-sh/uv/issues/7918"
+    ),
+)
 def test_bake_and_run_invoke_lint(baked_in_temp_dir: Result) -> None:
     """Run the linter on a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
@@ -548,6 +571,14 @@ def test_bake_and_run_invoke_lint(baked_in_temp_dir: Result) -> None:
 
 
 @pytest.mark.slow
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason=(
+        "Currently, there are no way to avoid PermissionError: [WinError 5] when remove md.cp313-win_amd64.pyd in teardown step of pytest:"
+        "- hardlinking dependencies causes issues when trying to delete a `.venv` via python on Windows · Issue #7918 · astral-sh/uv"
+        "  https://github.com/astral-sh/uv/issues/7918"
+    ),
+)
 def test_bake_and_run_invoke_coverage(baked_in_temp_dir: Result) -> None:
     """Run the linter on a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
