@@ -521,7 +521,7 @@ def test_bake_and_run_invoke_tests(baked_in_temp_dir: Result) -> None:
     """Run the unit tests of a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
     run_inside_dir(
-        ["pip install uv", "uv sync", "uv run invoke test"],
+        [pip_install_uv(), "uv sync", "uv run invoke test"],
         str(baked_in_temp_dir.project_path),
     )
 
@@ -532,7 +532,7 @@ def test_bake_and_run_invoke_style(baked_in_temp_dir: Result) -> None:
     """Run the formatter on a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
     run_inside_dir(
-        ["pip install uv", "uv sync", "uv run invoke style --check"],
+        [pip_install_uv(), "uv sync", "uv run invoke style --check"],
         str(baked_in_temp_dir.project_path),
     )
 
@@ -542,7 +542,7 @@ def test_bake_and_run_invoke_lint(baked_in_temp_dir: Result) -> None:
     """Run the linter on a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
     run_inside_dir(
-        ["pip install uv", "uv sync", "uv run invoke lint"],
+        [pip_install_uv(), "uv sync", "uv run invoke lint"],
         str(baked_in_temp_dir.project_path),
     )
 
@@ -552,7 +552,7 @@ def test_bake_and_run_invoke_coverage(baked_in_temp_dir: Result) -> None:
     """Run the linter on a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
     run_inside_dir(
-        ["pip install uv", "uv sync", "uv run invoke test.coverage --xml"],
+        [pip_install_uv(), "uv sync", "uv run invoke test.coverage --xml"],
         str(baked_in_temp_dir.project_path),
     )
 
@@ -563,6 +563,14 @@ def test_bake_and_run_pyvelocity(baked_in_temp_dir: Result) -> None:
     """Run the linter on a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
     run_inside_dir(
-        ["pip install uv", "uv sync", "uv run pyvelocity"],
+        [pip_install_uv(), "uv sync", "uv run pyvelocity"],
         str(baked_in_temp_dir.project_path),
+    )
+
+
+def pip_install_uv() -> str:
+    return (
+        "pip install --ignore-requires-python uv"
+        if sys.version_info < (3, 8)
+        else "pip install uv"
     )
