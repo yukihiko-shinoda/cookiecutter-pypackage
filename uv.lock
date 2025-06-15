@@ -733,7 +733,6 @@ dev = [
 
 [package.metadata]
 requires-dist = [{ name = "cookiecutter" }]
-provides-extras = ["test"]
 
 [package.metadata.requires-dev]
 dev = [

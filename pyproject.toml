@@ -105,9 +105,6 @@ dependencies = [
     "cookiecutter",
 ]
 
-[project.optional-dependencies]
-test = []
-
 [project.urls]
 homepage = "https://github.com/briggySmalls/cookiecutter-pypackage"
 # documentation = "https://readthedocs.org"
@@ -126,11 +123,6 @@ tag = true
 filename = "pyproject.toml"
 search = 'version = "{current_version}"'
 replace = 'version = "{new_version}"'
-
-[[tool.bumpversion.files]]
-filename = "invokelint/__init__.py"
-search = '__version__ = "{current_version}"'
-replace = '__version__ = "{new_version}"'
 
 [tool.coverage.report]
 exclude_also = [
@@ -199,7 +191,8 @@ max-line-length = 88
 
 [tool.pylint.options]
 # Since this rule against single responsibility principle.
-# @see https://stackoverflow.com/questions/28722314/why-does-pylint-want-2-public-methods-per-class/40258006#40258006
+# - python - Why does Pylint want two public methods per class? - Stack Overflow
+#   https://stackoverflow.com/a/40258006/12721873
 min-public-methods = "1"
 
 [tool.pytest.ini_options]
@@ -245,15 +238,10 @@ ignore = [
     # Reason: `Line too long` is checked by flake8-bugbear.
     "E501",    # Line too long ({width} > {limit})
 ]
-fixable = [
-    "COM812",  # Trailing comma missing
-    "I",       # isort
-    "PT001",   # Use `@pytest.fixture()` over `@pytest.fixture`
-    "PT006",   # Wrong name(s) type in `@pytest.mark.parametrize`, expected `tuple`
-    "SIM108",  # Use ternary operator `extra_context = {} if extra_context is None else request.param` instead of `if`-`else`-block
-    "UP015",   # Unnecessary open mode parameters
-    "UP032",   # Use f-string instead of `format` call
-    "UP037",   # Remove quotes from type annotation
+unfixable = [
+    # When fix `return a and b != ""` as `return a and b`, mypy will report warning:
+    #   error: Incompatible return value type (got "Union[Literal[False], str]", expected "bool")  [return-value]
+    "PLC1901",
 ]
 
 [tool.ruff.lint.isort]
