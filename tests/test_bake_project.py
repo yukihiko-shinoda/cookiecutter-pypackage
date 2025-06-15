@@ -1,30 +1,38 @@
 """Implements tests."""
 
-from contextlib import contextmanager
+from __future__ import annotations
+
 import datetime
 import importlib
+import os
+import sys
+from contextlib import contextmanager
 from importlib.abc import Loader
 from importlib.machinery import ModuleSpec
 from logging import getLogger
-import os
 from pathlib import Path
 
 # Reason: Accept risk of using subprocess.
 from subprocess import CalledProcessError  # nosec B404
-import sys
 from textwrap import dedent
 from traceback import TracebackException
-from types import ModuleType
-from typing import Any, Generator, List, Optional, Tuple
+from typing import TYPE_CHECKING
+from typing import Any
+from typing import Generator
 
-from click.testing import CliRunner
 import pytest
-from pytest_cookies.plugin import Cookies, Result
-from pytest_mock import MockerFixture
+from click.testing import CliRunner
 
 from tests.conftest import process_result
 from tests.testlibraries.argparse_cli_runner import ArgparseCliRunner
-from tests.testlibraries.subprocess import run_subrocess
+from tests.testlibraries.subprocess import run_subprocess
+
+if TYPE_CHECKING:
+    from types import ModuleType
+
+    from pytest_cookies.plugin import Cookies
+    from pytest_cookies.plugin import Result
+    from pytest_mock import MockerFixture
 
 WARNING_FOR_PYTHON_35 = (
     b"DEPRECATION: Python 3.5 reached the end of its life on September 13th, 2020."
@@ -36,7 +44,8 @@ WARNING_FOR_PYTHON_35 = (
 def inside_dir(dirpath: str) -> Generator[None, None, None]:
     """Execute code from inside the given directory.
 
-    :param dirpath: String, path of the directory the command is being run.
+    Args:
+        dirpath: String, path of the directory the command is being run.
     """
     old_path = Path.cwd()
     try:
@@ -49,30 +58,41 @@ def inside_dir(dirpath: str) -> Generator[None, None, None]:
 @contextmanager
 def bake_in_temp_dir(
     cookies: Cookies,
-    *args: Any,
-    **kwargs: Any,
+    # Reason: The args can't be annotated with a specific type,
+    # as it can take any positional argument.
+    *args: Any,  # noqa: ANN401
+    # Reason: The kwargs can't be annotated with a specific type,
+    # as it can take any positional argument.
+    **kwargs: Any,  # noqa: ANN401
 ) -> Generator[Result, None, None]:
     """Delete the temporal directory that is created when executing the tests.
 
-    :param cookies: pytest_cookies.Cookies, cookie to be baked and its temporal files
-        will be removed
+    Args:
+        cookies:
+            pytest_cookies.Cookies, cookie to be baked
+            and its temporal files will be removed
+        args: Positional arguments to be passed to the bake method of cookies
+        kwargs: Keyword arguments to be passed to the bake method of cookies
     """
     result = cookies.bake(*args, **kwargs)
     yield from process_result(result)
 
 
-def run_inside_dir(commands: List[str], dirpath: str) -> None:
+def run_inside_dir(commands: list[str], dirpath: str) -> None:
     """Run a command from inside a given directory, returning the exit status.
 
-    :param commands: Commands that will be executed
-    :param dirpath: String, path of the directory the command is being run.
+    Args:
+        commands: Commands that will be executed
+        dirpath: String, path of the directory the command is being run.
     """
     with inside_dir(dirpath):
         try:
             for command in commands:
-                run_subrocess(command)
+                run_subprocess(command)
         except CalledProcessError:
-            getLogger(__name__).error((Path(dirpath) / "pyproject.toml").read_text())
+            getLogger(__name__).exception(
+                (Path(dirpath) / "pyproject.toml").read_text(),
+            )
             raise
 
 
@@ -83,7 +103,7 @@ def test_year_compute_in_license_file(baked_in_temp_dir: Result) -> None:
     assert str(now.year) in license_file_path.read_text()
 
 
-def project_info(result: Result) -> Tuple[Optional[Path], str, Path]:
+def project_info(result: Result) -> tuple[Path | None, str, Path]:
     """Get toplevel dir, project_slug, and project dir from baked cookies."""
     project_path = result.project_path
     project_slug = os.path.split(project_path)[-1].replace("-", "")
@@ -102,7 +122,7 @@ def test_bake_with_defaults(baked_in_temp_dir: Result) -> None:
     )
 
 
-def check_toplevel_path_exist(result: Result, list_path: List[str]) -> None:
+def check_toplevel_path_exist(result: Result, list_path: list[str]) -> None:
     found_toplevel_files = list_files(result)
     for path in list_path:
         assert path in found_toplevel_files
@@ -168,7 +188,7 @@ def test_bake_without_travis_pypi_setup(baked_in_temp_dir: Result) -> None:
     ).exists()
 
 
-def list_files(result: Result, directories: Optional[List[str]] = None) -> List[str]:
+def list_files(result: Result, directories: list[str] | None = None) -> list[str]:
     directories = [] if directories is None else directories
     joined_path = result.project_path
     for directory in directories:
@@ -276,8 +296,8 @@ def test_bake_not_open_source(baked_in_temp_dir: Result) -> None:
 )
 def test_bake_readme(
     baked_in_temp_dir: Result,
-    list_expected: List[str],
-    list_not_expected: List[str],
+    list_expected: list[str],
+    list_not_expected: list[str],
 ) -> None:
     """README.md should have appropriate badges."""
     string_readme = (baked_in_temp_dir.project_path / "README.md").read_text()
@@ -474,7 +494,7 @@ def check_bake_with_console_script_cli(
         raise AssertionError(result.exception) from result.exception
     _project_path, project_slug, project_dir = project_info(result)
     module_path = Path(project_dir) / "cli.py"
-    module_name = ".".join([project_slug, "cli"])
+    module_name = f"{project_slug}.cli"
     cli = create_module_type(module_name, module_path)
     check_noarg(runner, cli, project_slug)
     check_help(runner, cli, help_message)
@@ -502,9 +522,7 @@ def check_noarg(runner: CliRunner, cli: ModuleType, project_slug: str) -> None:
         if noarg_result.exception is None
         else "".join(TracebackException.from_exception(noarg_result.exception).format())
     )
-    noarg_output = " ".join(
-        ["Replace this message by putting your code into", project_slug],
-    )
+    noarg_output = f"Replace this message by putting your code into {project_slug}"
     assert noarg_output in noarg_result.output
 
 
@@ -514,7 +532,7 @@ def check_help(runner: CliRunner, cli: ModuleType, help_message: str) -> None:
     assert help_message in help_result.output
 
 
-@pytest.mark.slow()
+@pytest.mark.slow
 def test_bake_and_run_invoke_tests(baked_in_temp_dir: Result) -> None:
     """Run the unit tests of a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
@@ -524,7 +542,7 @@ def test_bake_and_run_invoke_tests(baked_in_temp_dir: Result) -> None:
     )
 
 
-@pytest.mark.slow()
+@pytest.mark.slow
 @pytest.mark.skipif(sys.version_info < (3, 7), reason="The black doesn't support.")
 def test_bake_and_run_invoke_style(baked_in_temp_dir: Result) -> None:
     """Run the formatter on a newly-generated project."""
@@ -539,7 +557,7 @@ def test_bake_and_run_invoke_style(baked_in_temp_dir: Result) -> None:
     )
 
 
-@pytest.mark.slow()
+@pytest.mark.slow
 def test_bake_and_run_invoke_lint(baked_in_temp_dir: Result) -> None:
     """Run the linter on a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
@@ -549,7 +567,7 @@ def test_bake_and_run_invoke_lint(baked_in_temp_dir: Result) -> None:
     )
 
 
-@pytest.mark.slow()
+@pytest.mark.slow
 def test_bake_and_run_invoke_coverage(baked_in_temp_dir: Result) -> None:
     """Run the linter on a newly-generated project."""
     assert baked_in_temp_dir.project_path.is_dir()
@@ -563,7 +581,7 @@ def test_bake_and_run_invoke_coverage(baked_in_temp_dir: Result) -> None:
     )
 
 
-@pytest.mark.slow()
+@pytest.mark.slow
 @pytest.mark.skipif(
     sys.version_info < (3, 9),
     reason="The pyvelocity currently supports only Python 3.9 or more.",

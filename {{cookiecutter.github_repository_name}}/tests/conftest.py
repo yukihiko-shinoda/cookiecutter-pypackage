@@ -1,13 +1,15 @@
 """Configuration of pytest."""
 
 from __future__ import annotations
+
 from typing import Any
 
 import pytest
 
 collect_ignore = ["setup.py"]
 
-@pytest.fixture()
+
+@pytest.fixture
 def response() -> dict[Any, Any] | None:
     """Sample pytest fixture.
 
