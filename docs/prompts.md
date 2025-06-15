@@ -56,13 +56,6 @@ The following package configuration options set up different features for your p
 **use_pypi_deployment_with_github_actions**
 :   Whether use PyPI deployment with GitHub Actions.
 
-**use_pyup**
-:   Whether use [pyup.io] to keep Python dependencies secure, up-to-date, and compliant.
-
-    [pyup.io] is a service that helps you to keep your requirements files up to date.
-    It sends you automated pull requests
-    whenever there's a new release for one of your dependencies.
-
 **command_line_interface**
 :   Whether to create a console script and witch package use for.
 
@@ -87,4 +80,3 @@ This value will be set configure files for each linter and formater.
     and writing README.md than providing comprehensive documentation.
 
 [PyPI]: https://pypi.python.org/pypi
-[pyup.io]: https://pyup.io/

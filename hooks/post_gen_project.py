@@ -39,8 +39,6 @@ if __name__ == "__main__":
         remove_file(Path(".github/workflows/deploy.yml"))
     if "{{ cookiecutter.use_pytest }}" != "y":  # type: ignore[comparison-overlap]  # noqa: PLR0133,E501,RUF100
         remove_file(Path("tests/conftest.py"))
-    if "{{ cookiecutter.use_pyup }}" == "n":  # type: ignore[comparison-overlap]  # noqa: PLR0133,E501,RUF100
-        remove_file(Path(".pyup.yml"))
     if "no" in "{{ cookiecutter.command_line_interface|lower }}":  # noqa: PLR0133
         cli_file = Path("{{ cookiecutter.project_slug }}") / "cli.py"
         remove_file(Path(cli_file))

@@ -11,9 +11,9 @@
 This template focus following:
 
 - Target Python version: 3.7 - 3.12
-- Dependency tracking using [Pipenv]
+- Dependency tracking using [uv]
 - Linting provided by both [pylint], [flake8], [mypy] [executed by GitHub Actions]
-- Formatting provided by [isort], [pipenv-setup], [black] [checked by GitHub Actions]
+- Formatting provided by [Ruff] [docformetter] [checked by GitHub Actions]
 - Analyzing complexity and maintainability provided by [radon], [xenon] [checked by GitHub Actions]
 - All development tasks (lint, format, analyze, test, etc) excluding deployment wrapped up in a python CLI by [invoke]
 - Omit documentation workflows
@@ -61,7 +61,7 @@ Review support range if the one of your package is not Python 3.7 - 3.11
 
 2\.
 
-Pin wheel version in Pipfile and execute `pipenv lock`
+Pin wheel version in `pyproject.toml` and execute `uv lock`
 if you prefer stability of deployment task.
 
 ## Remaining task after creating initialized project directory
@@ -89,37 +89,22 @@ as name "CC_TEST_REPORTER_ID".
 
 3\.
 
-Activate your created repository on [pyup.io].
-
-Create a new account at [pyup.io] or log into your existing account.
-
-Click on the green `Add Repo` button in the top left corner
-and select repository you created in Step 1.
-A popup will ask you whether you want to pin your dependencies.
-Click on `Pin` to add the repo.
-
-Once your repo is set up correctly,
-the pyup.io badge will show your current update status.
-
-4\.
-
 Issue API token at [PyPI] and register into secret of your GitHub repository
 as name `pypi_password`
 
-5\.
+4\.
 
 Create tag `v[0-9]+.[0-9]+.[0-9]+` and push to GitHub repository
 to deploy into [PyPI].
 
 Then, get your code on! 😎
-Add your package dependencies to your pipenv with `pipenv install`.
+Add your package dependencies to your `pyproject.toml` with `uv install`.
 
 [briggySmalls/cookiecutter-pypackage]: https://github.com/briggySmalls/cookiecutter-pypackage
 [Cookiecutter]: https://github.com/audreyr/cookiecutter
-[Pipenv]: https://pipenv.pypa.io/en/latest/
-[isort]: https://pypi.org/project/isort/
-[pipenv-setup]: https://pypi.org/project/pipenv-setup/
-[black]: https://pypi.org/project/black/
+[uv]: https://pypi.org/project/uv/
+[Ruff]: https://pypi.org/project/ruff/
+[docformetter]: https://pypi.org/project/docformatter/
 [pylint]: https://www.pylint.org/
 [flake8]: https://pypi.org/project/flake8/
 [mypy]: http://mypy-lang.org/
@@ -127,6 +112,5 @@ Add your package dependencies to your pipenv with `pipenv install`.
 [xenon]: https://pypi.org/project/xenon/
 [invoke]: http://www.pyinvoke.org/
 [Code Climate]: https://codeclimate.com/
-[pyup.io]: https://pyup.io/
 [PyPi]: https://pypi.python.org/pypi
 [Prompts]: docs/prompts.md
