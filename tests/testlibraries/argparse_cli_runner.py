@@ -1,29 +1,26 @@
 """CLI Runner for argparse."""
 
-from argparse import ArgumentParser, Namespace
-import sys
-from typing import (
-    Any,
-    Callable,
-    cast,
-    Dict,
-    IO,
-    List,
-    Mapping,
-    Optional,
-    Sequence,
-    Tuple,
-    Type,
-    TYPE_CHECKING,
-    Union,
-)
+from __future__ import annotations
 
-from click.testing import CliRunner, Result
-import pytest
-from pytest_mock import MockerFixture
+import sys
+from argparse import ArgumentParser
+from argparse import Namespace
+from typing import IO
+from typing import TYPE_CHECKING
+from typing import Any
+from typing import Callable
+from typing import Mapping
+from typing import Sequence
+from typing import cast
+
+from click.testing import CliRunner
+from click.testing import Result
 
 if TYPE_CHECKING:
     from types import TracebackType
+
+    import pytest
+    from pytest_mock import MockerFixture
 
 
 class PartialMockArgumentParser:
@@ -36,7 +33,7 @@ class PartialMockArgumentParser:
     def parse_args(self) -> Namespace:
         if "--help" in self.args:
             return self.argument_parser.parse_args(self.args)
-        args: Dict[str, List[Any]] = {arg: [] for arg in self.args}
+        args: dict[str, list[Any]] = {arg: [] for arg in self.args}
         return Namespace(**args)
 
 
@@ -49,17 +46,16 @@ class ArgparseCliRunnerCore:
     def __init__(
         self,
         mocker: MockerFixture,
-        args: Union[str, Sequence[str], None],
+        args: str | Sequence[str] | None,
         partial_mock: PartialMockArgumentParser,
     ) -> None:
-        self.exc_info: Optional[
-            Union[
-                Tuple[Type[BaseException], BaseException, "TracebackType"],
-                Tuple[None, None, None],
-            ]
-        ] = None
-        self.return_value = None
-        self.exception: Optional[BaseException] = None
+        self.exc_info: (
+            tuple[type[BaseException], BaseException, TracebackType]
+            | tuple[None, None, None]
+            | None
+        ) = None
+        self.return_value: int | None = None
+        self.exception: BaseException | None = None
         self.exit_code = 0
         mock = mocker.MagicMock()
         partial_mock.args = (
@@ -70,7 +66,7 @@ class ArgparseCliRunnerCore:
 
     def invoke(
         self,
-        cli: Callable[[], None],
+        cli: Callable[[], int],
         capsys: pytest.CaptureFixture[str],
         runner: CliRunner,
     ) -> Result:
@@ -104,7 +100,7 @@ class ArgparseCliRunnerCore:
 
     def set_properties(self, error: SystemExit) -> None:
         """Sets properties from SystemExit."""
-        e_code = cast(Optional[Union[int, Any]], error.code)
+        e_code = cast("int | Any | None", error.code)
 
         if e_code is None:
             e_code = 0
@@ -134,16 +130,18 @@ class ArgparseCliRunner(CliRunner):
         super().__init__()
 
     # Reason: Inherit design of parent class.
-    # pylint: disable=too-many-arguments,redefined-builtin
+    # pylint: disable-next=too-many-arguments,too-many-positional-arguments
     def invoke(  # noqa: PLR0913
         self,
-        cli: Callable[[], None],
-        args: Union[str, Sequence[str], None] = None,
-        input: Optional[Union[str, bytes, IO[Any]]] = None,  # noqa: A002,ARG002
-        env: Optional[Mapping[str, Optional[str]]] = None,  # noqa: ARG002
-        catch_exceptions: bool = True,  # noqa: ARG002,FBT001,FBT002
+        cli: Callable[[], int],
+        args: str | Sequence[str] | None = None,
+        # Reason: Inherit design of parent class.
+        # pylint: disable-next=redefined-builtin
+        input: str | bytes | IO[Any] | None = None,  # noqa: A002,ARG002
+        env: Mapping[str, str | None] | None = None,  # noqa: ARG002
+        catch_exceptions: bool | None = True,  # noqa: ARG002,FBT002
         color: bool = False,  # noqa: ARG002,FBT001,FBT002
-        **extra: Any,  # noqa: ARG002
+        **extra: Any,  # noqa: ARG002,ANN401
     ) -> Result:
         argparse_cli_runner_core = ArgparseCliRunnerCore(
             self.mocker,

@@ -6,8 +6,8 @@
 	// Update the 'dockerComposeFile' list if you have more compose files or use different names.
 	// The .devcontainer/docker-compose.yml file contains any overrides you need/want to make.
 	"dockerComposeFile": [
-		"../docker-compose.yml",
-		"docker-compose.yml"
+		"../compose.yml",
+		"compose.yml"
 	],
 
 	// The 'service' property is the name of the service for the container that VS Code should
@@ -36,40 +36,50 @@
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
+			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
 				"GitHub.copilot",
+				"streetsidesoftware.code-spell-checker",
+				"tamasfe.even-better-toml",
+				"charliermarsh.ruff",
 				"ms-python.python",
 				"ms-python.flake8",
-				"charliermarsh.ruff",
-				"bungcip.better-toml",
-				"streetsidesoftware.code-spell-checker"
-			]
-		},
-		"settings": {
-			"python.formatting.provider": "black",
-			"python.linting.enabled": true,
-			"python.linting.lintOnSave": true,
-			"python.linting.banditEnabled": true,
-			"python.linting.banditArgs": [
-				"--configfile",
-				"pyproject.toml"
+				"ms-python.mypy-type-checker",
+				"ms-python.pylint",
+				"pycqa.bandit-pycqa",
+				"emeraldwalk.RunOnSave"
 			],
-			"python.linting.flake8Enabled": true,
-			"python.linting.mypyEnabled": true,
-			"python.linting.pydocstyleEnabled": true,
-			// VS Code displays Pylint warning: import-error that not reported in Pylint by executing CLI.
-			// "python.linting.pylintEnabled": true,
-			// This setting forcibly generate __pycache__.
-			// "python.testing.pytestEnabled": true,
-			"[python]": {
-				"editor.formatOnSave": true
-			},
-			"cSpell.customDictionaries": {
-				"project-words": {
-				  "name": "project-words",
-				  "path": "${workspaceRoot}/project-words.txt",
-				  "description": "Words used in this project",
-				  "addWords": true
+			// Set *default* container specific settings.json values on container create.
+			"settings": {
+				// This setting forcibly generate __pycache__.
+				// "python.testing.pytestEnabled": true,
+				"[python]": {
+					"editor.defaultFormatter": "charliermarsh.ruff",
+					"editor.codeActionsOnSave": {
+						"source.fixAll": "explicit",
+						"source.organizeImports": "explicit"
+					},
+					"editor.formatOnSave": true
+				},
+				"bandit.args": [
+					"--configfile",
+					"pyproject.toml"
+				],
+				"cSpell.customDictionaries": {
+					"project-words": {
+					"name": "project-words",
+					"path": "${workspaceRoot}/project-words.txt",
+					"description": "Words used in this project",
+					"addWords": true
+					}
+				},
+				"emeraldwalk.runonsave": {
+					"commands": [
+						{
+							"match": ".*\\.py",
+							"cmd": "uv run docformatter --in-place ${file}"
+						}
+					]
 				}
 			}
 		}

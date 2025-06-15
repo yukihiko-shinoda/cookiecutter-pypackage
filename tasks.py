@@ -1,12 +1,20 @@
 """Development tasks for the cookiecutter template project."""
 
-from pathlib import Path
 import platform
-from typing import Any, cast
 import webbrowser
+from pathlib import Path
+from typing import Any
+from typing import cast
 
-from invoke import Collection, Context, Result, task
-from invokelint import _clean, dist, lint, style, test
+from invoke import Collection
+from invoke import Context
+from invoke import Result
+from invoke import task
+from invokelint import _clean
+from invokelint import dist
+from invokelint import lint
+from invokelint import style
+from invokelint import test
 
 ns = Collection()
 ns.add_collection(_clean, name="clean")
@@ -21,9 +29,11 @@ DOCS_BUILD_DIR = DOCS_DIR.joinpath("_build")
 DOCS_INDEX = DOCS_BUILD_DIR.joinpath("index.html")
 
 
-def _run(context: Context, command: str, **kwargs: Any) -> Result:
+# Reason: The kwargs can't be annotated with a specific type,
+# as it can take any keyword argument.
+def _run(context: Context, command: str, **kwargs: Any) -> Result:  # noqa: ANN401
     return cast(
-        Result,
+        "Result",
         context.run(command, pty=platform.system() != "Windows", **kwargs),
     )
 

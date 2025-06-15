@@ -2,9 +2,10 @@
 
 from typing import Generator
 
-from cookiecutter.utils import rmtree
 import pytest
-from pytest_cookies.plugin import Cookies, Result
+from cookiecutter.utils import rmtree
+from pytest_cookies.plugin import Cookies
+from pytest_cookies.plugin import Result
 
 
 def _process_result(result: Result) -> Generator[Result, None, None]:
@@ -20,15 +21,21 @@ def process_result(result: Result) -> Generator[Result, None, None]:
         rmtree(str(result.project))
 
 
-@pytest.fixture()
+@pytest.fixture
 def baked_in_temp_dir(
     cookies: Cookies,
     request: pytest.FixtureRequest,
 ) -> Generator[Result, None, None]:
     """Delete the temporal directory that is created when executing the tests.
 
-    :param cookies: pytest_cookies.Cookies, cookie to be baked and its temporal files
-        will be removed
+    Args:
+        cookies:
+            pytest_cookies.Cookies, cookie to be baked
+            and its temporal files will be removed
+        request:
+            pytest.FixtureRequest, request for the fixture
+            to get extra context for baking the cookie
+    Yields: Result of the baking process
     """
     extra_context = getattr(request, "param", None)
     extra_context = {} if extra_context is None else request.param

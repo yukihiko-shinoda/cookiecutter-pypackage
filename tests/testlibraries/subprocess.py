@@ -1,14 +1,18 @@
 """To run command in subprocess."""
 
-from logging import getLogger
+import os
 import shlex
+from logging import getLogger
 
 # Reason: Accept risk of using subprocess.
-from subprocess import CalledProcessError, run  # nosec B404
+from subprocess import CalledProcessError  # nosec B404
+from subprocess import run  # nosec B404
 
 
-def run_subrocess(command: str) -> None:
+def run_subprocess(command: str) -> None:
     """To prevent to stop pytest process itself if raise some kind of interrupt."""
+    # To force pipenv to ignore that environment and create  its own instead
+    os.environ["PIPENV_IGNORE_VIRTUALENVS"] = "1"
     split_command = shlex.split(command)
     try:
         # Reason: Accept risk of using subprocess.

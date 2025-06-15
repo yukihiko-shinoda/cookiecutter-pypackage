@@ -1,8 +1,8 @@
 """Post hook of generating project."""
 
 import os
-from pathlib import Path
 import shutil
+from pathlib import Path
 
 PROJECT_DIRECTORY = Path(os.path.realpath(os.path.curdir))
 LICENSE_DIRECTORY = PROJECT_DIRECTORY / "licenses"
