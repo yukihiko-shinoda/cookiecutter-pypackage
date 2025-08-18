@@ -165,8 +165,9 @@ wrap-summaries = {{ cookiecutter.python_code_max_length_per_line }}
 # This setting follows the Black documentation in case when we use flake8-bugbear:
 # - Using Black with other tools - Black 25.1.0 documentation
 #   https://black.readthedocs.io/en/stable/guides/using_black_with_other_tools.html#bugbear
+# Set max_line_length to account for B950's 10% allowance to maintain consistency with pyvelocity
 {% set python_code_max_length_per_line = cookiecutter.python_code_max_length_per_line | int -%}
-max_line_length = {{ python_code_max_length_per_line * 11 // 10 }}
+max_line_length = {{ python_code_max_length_per_line * 10 // 11 }}
 extend_ignore = [
   # For compatibility with Black:
   # - Using Black with other tools - Black 25.1.0 documentation
