@@ -17,7 +17,7 @@ def run_subprocess(command: str) -> None:
     except CalledProcessError as error:
         logger = getLogger(__name__)
         stdout = error.stdout.decode("utf-8", errors="replace") if error.stdout else ""
-        logger.error("STDOUT:\n%s", stdout)
+        logger.exception("STDOUT:\n%s", stdout)
         stderr = error.stderr.decode("utf-8", errors="replace") if error.stderr else ""
-        logger.error("STDERR:\n%s", stderr)
+        logger.exception("STDERR:\n%s", stderr)
         raise
