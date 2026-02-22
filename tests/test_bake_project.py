@@ -118,7 +118,7 @@ def test_bake_with_defaults(baked_in_temp_dir: Result) -> None:
     assert baked_in_temp_dir.exception is None
     check_toplevel_path_exist(
         baked_in_temp_dir,
-        ["setup.py", "pythonboilerplate", "tests"],
+        ["pythonboilerplate", "tests"],
     )
 
 
@@ -271,7 +271,6 @@ def test_bake_selecting_license(
 def test_bake_not_open_source(baked_in_temp_dir: Result) -> None:
     """Project not open source license should not have file: "LICENSE"."""
     found_toplevel_files = [f.name for f in baked_in_temp_dir.project_path.iterdir()]
-    assert "setup.py" in found_toplevel_files
     assert "LICENSE" not in found_toplevel_files
 
 
@@ -408,9 +407,6 @@ def test_bake_with_no_console_script(cookies: Cookies) -> None:
     found_project_files = Path.iterdir(project_dir)
     assert "cli.py" not in [path.name for path in found_project_files]
     assert project_path is not None
-    setup_path = Path(project_path) / "setup.py"
-    with setup_path.open(encoding="utf-8") as setup_file:
-        assert "entry_points" not in setup_file.read()
 
 
 def test_bake_with_console_script_files(cookies: Cookies) -> None:
