@@ -1,6 +1,5 @@
 [dependency-groups]
 dev = [
-    "autoflake",
     "bandit",
     "bump-my-version",
     # To test baked cli.py
@@ -59,9 +58,11 @@ dev = [
     # - Radon can't run when use pytest log fornat: `$()d` · Issue #251 · rubik/radon
     #   https://github.com/rubik/radon/issues/251
     "radon<6.0.0",
-    "ruff",
+    # To prevent following error:
+    #   ruff failed
+    #   Cause: error parsing glob '/workspace/test_\{\{cookiecutter.project_slug}}.py': unopened alternate group; missing '{' (maybe escape '}' with '[}]'?)
+    "ruff==0.14.1",
     "semgrep; python_version>='3.9' or platform_system=='Linux'",
-    "tox",
     "types-invoke",
     "types-setuptools",
     "xenon",
