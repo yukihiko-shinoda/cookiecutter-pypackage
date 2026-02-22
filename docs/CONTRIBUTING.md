@@ -146,7 +146,7 @@ Before you submit a pull request, check that it meets these guidelines:
    and add the feature to the list in README.md.
 
 3. The pull request should work for
-   Python 3.7, 3.8, 3.9, 3.10, 3.11, and 3.12.
+   Python 3.7, 3.8, 3.9, 3.10, 3.11, 3.12 and 3.13.
    Check [Actions · yukihiko-shinoda/cookiecutter-pypackage](https://github.com/yukihiko-shinoda/cookiecutter-pypackage/actions)
    and make sure that the tests pass for all supported Python versions.
 

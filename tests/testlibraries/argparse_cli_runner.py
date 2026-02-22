@@ -139,7 +139,7 @@ class ArgparseCliRunner(CliRunner):
         # pylint: disable-next=redefined-builtin
         input: str | bytes | IO[Any] | None = None,  # noqa: A002,ARG002
         env: Mapping[str, str | None] | None = None,  # noqa: ARG002
-        catch_exceptions: bool | None = True,  # noqa: ARG002,FBT002
+        catch_exceptions: bool | None = True,  # noqa: ARG002,FBT001,FBT002
         color: bool = False,  # noqa: ARG002,FBT001,FBT002
         **extra: Any,  # noqa: ARG002,ANN401
     ) -> Result:

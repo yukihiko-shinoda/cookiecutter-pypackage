@@ -1,8 +1,8 @@
 services:
   cookiecutter:
-    build:
-      context: .
-      target: production
+    build: .
     image: futureys/cookiecutter-pypackage:latest
     volumes:
+      - .:/workspace:cached
+      - /workspace/.venv
       - ./output:/output

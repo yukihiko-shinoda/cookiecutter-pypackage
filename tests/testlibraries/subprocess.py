@@ -16,8 +16,8 @@ def run_subprocess(command: str) -> None:
         run(split_command, check=True, capture_output=True)  # nosec B603 # noqa: S603
     except CalledProcessError as error:
         logger = getLogger(__name__)
-        stdout = str(error.stdout).encode("ascii", "ignore").decode("unicode_escape")
-        logger.exception(stdout)
-        stderr = str(error.stderr).encode("ascii", "ignore").decode("unicode_escape")
-        logger.exception(stderr)
+        stdout = error.stdout.decode("utf-8", errors="replace") if error.stdout else ""
+        logger.exception("STDOUT:\n%s", stdout)
+        stderr = error.stderr.decode("utf-8", errors="replace") if error.stderr else ""
+        logger.exception("STDERR:\n%s", stderr)
         raise
