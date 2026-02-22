@@ -1,6 +1,8 @@
 # Cookiecutter PyPackage
 
 [![Test](https://github.com/yukihiko-shinoda/cookiecutter-pypackage/workflows/Test/badge.svg)](https://github.com/yukihiko-shinoda/cookiecutter-pypackage/actions?query=workflow%3ATest)
+[![Maintainability](https://qlty.sh/gh/yukihiko-shinoda/projects/cookiecutter-pypackage/maintainability.svg)](https://qlty.sh/gh/yukihiko-shinoda/projects/cookiecutter-pypackage)
+[![Code Coverage](https://qlty.sh/gh/yukihiko-shinoda/projects/cookiecutter-pypackage/coverage.svg)](https://qlty.sh/gh/yukihiko-shinoda/projects/cookiecutter-pypackage)
 
 [Cookiecutter] template for a Python package, forked from [briggySmalls/cookiecutter-pypackage].
 
@@ -10,7 +12,7 @@
 
 This template focus following:
 
-- Target Python version: 3.7 - 3.12
+- Target Python version: 3.7 - 3.13
 - Dependency tracking using [uv]
 - Linting provided by both [pylint], [flake8], [mypy] [executed by GitHub Actions]
 - Formatting provided by [Ruff] [docformetter] [checked by GitHub Actions]
@@ -51,7 +53,7 @@ Then initialized project direcotry is created in current directory.
 ## Points to review after creating initialized project directory
 
 1\.
-Review support range if the one of your package is not Python 3.7 - 3.11
+Review support range if the one of your package is not Python 3.7 - 3.13
 
 - .github/workflows/test.yml
 - pyproject.toml
@@ -72,7 +74,7 @@ Commit and push to GitHub repository.
 
 2\.
 
-Activate your created repository on [Code Climate].
+Activate your created repository on [Qlty].
 
 If you prefer, Enable \[Pull request comments\] and \[Pull request status updates\] from \[Repo Settings\] -> \[GitHub\]
 
@@ -111,6 +113,6 @@ Add your package dependencies to your `pyproject.toml` with `uv install`.
 [radon]: https://radon.readthedocs.io/en/latest/
 [xenon]: https://pypi.org/project/xenon/
 [invoke]: http://www.pyinvoke.org/
-[Code Climate]: https://codeclimate.com/
+[Qlty]: https://qlty.sh/
 [PyPi]: https://pypi.python.org/pypi
 [Prompts]: docs/prompts.md
