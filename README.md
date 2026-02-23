@@ -76,18 +76,17 @@ Commit and push to GitHub repository.
 
 Activate your created repository on [Qlty].
 
-If you prefer, Enable \[Pull request comments\] and \[Pull request status updates\] from \[Repo Settings\] -> \[GitHub\]
-
-Copy and paste badge from \[Repo Settings\] -> \[Badges\] to this README file.
-
 2-1\.
 
-Copy "TEST REPORTER ID" from \[Test Coverages\]
+Login to [Qlty] and click \[Projects\] tab -> \[Add Project\] -> \[Select more repositories\].
 
 2-2\.
 
-register copied TEST REPORTER ID into secret in your pushed GitHub repository
-as name "CC_TEST_REPORTER_ID".
+Click \[Select repositories\] then search your created repository and click it, and lick \[Save\] button.
+
+2-3\.
+
+Open Qlty again and click \[Projects\] tab -> Click \[Add project\] -> Click \[Add\] button on the right of your created repository.
 
 3\.
 
