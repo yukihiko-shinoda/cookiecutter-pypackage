@@ -181,6 +181,12 @@ module = [
 ]
 ignore_missing_imports = true
 
+[tool.pylint]
+disable = [
+    # We check line length by flake8-bugbear B950.
+    "line-too-long",
+]
+
 [tool.pylint.basic]
 # 2020-05-25 Yukihiko Shinoda
 # I tried values in order started from 2,

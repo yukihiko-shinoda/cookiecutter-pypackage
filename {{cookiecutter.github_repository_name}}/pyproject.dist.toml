@@ -190,6 +190,11 @@ exclude = [
 [tool.mypy]
 strict = true
 
+[tool.pylint]
+disable = [
+    # We check line length by flake8-bugbear B950.
+    "line-too-long",
+]
 {% if cookiecutter.pylint_docstring_min_length != '-1' -%}
 [tool.pylint.basic]
 docstring-min-length = "{{ cookiecutter.pylint_docstring_min_length }}"
