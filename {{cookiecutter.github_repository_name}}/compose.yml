@@ -1,0 +1,8 @@
+services:
+  {{cookiecutter.github_repository_name}}:
+    build: .
+    image: {{cookiecutter.docker_hub_username}}/{{cookiecutter.github_repository_name}}:development
+    volumes:
+      - .:/workspace:cached
+      - /workspace/.venv
+      - ./output:/output

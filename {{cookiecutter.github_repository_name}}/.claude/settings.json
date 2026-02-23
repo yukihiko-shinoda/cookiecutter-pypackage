@@ -14,11 +14,15 @@
   },
   "permissions": {
     "allow": [
+      "Bash(uv run invoke clean*)",
+      "Bash(uv run invoke dist*)",
       "Bash(uv run invoke lint*)",
-      "Bash(uv run pytest*)",
+      "Bash(uv run invoke path*)",
+      "Bash(uv run invoke style*)",
       "Bash(uv run invoke test*)",
-      "Edit(tests/**)",
-      "Edit({{cookiecutter.github_repository_name}}/**)"
+      "Bash(uv run pytest*)",
+      "Edit({{cookiecutter.project_slug}}/**)",
+      "Edit(tests/**)"
     ],
     "deny": [
       "Bash(git commit*)",
