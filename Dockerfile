@@ -3,7 +3,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y git/stable \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 COPY pyproject.toml /workspace/
-RUN uv sync --python 3.13 \
+RUN uv sync \
  && uv cache clean
 COPY . /workspace/
 ENTRYPOINT [ "uv", "run", "--no-sync", "cookiecutter", "./", "--output-dir", "/output" ]
