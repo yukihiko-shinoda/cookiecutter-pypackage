@@ -12,7 +12,7 @@
 
 This template focus following:
 
-- Target Python version: 3.7 - 3.13
+- Target Python version: 3.7 - 3.14
 - Dependency tracking using [uv]
 - Linting provided by both [pylint], [flake8], [mypy] [executed by GitHub Actions]
 - Formatting provided by [Ruff] [docformetter] [checked by GitHub Actions]
@@ -53,7 +53,7 @@ Then initialized project direcotry is created in current directory.
 ## Points to review after creating initialized project directory
 
 1\.
-Review support range if the one of your package is not Python 3.7 - 3.13
+Review support range if the one of your package is not Python 3.7 - 3.14
 
 - .github/workflows/test.yml
 - pyproject.toml
