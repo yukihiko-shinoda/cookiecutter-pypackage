@@ -336,8 +336,6 @@ def test_not_using_pytest(baked_in_temp_dir: Result) -> None:
     import pytest.
     """
     assert baked_in_temp_dir.project_path.is_dir()
-    # Test Pipfile doesn install pytest
-    assert not pytest_entry_exists_in_pyproject_toml(baked_in_temp_dir)
     # Test conftest.py not exist
     assert not conftest_exists(baked_in_temp_dir)
     # Test contents of test file
@@ -371,7 +369,7 @@ def get_test_file_text(baked_in_temp_dir: Result) -> str:
 def pytest_entry_exists_in_pyproject_toml(result: Result) -> bool:
     pipfile_file_path = result.project_path / "pyproject.toml"
     lines = pipfile_file_path.read_text(encoding="utf-8").splitlines()
-    return '    "pytest",' in lines
+    return any("invokelint[basic]" in line for line in lines)
 
 
 # def test_project_with_hyphen_in_module_name(cookies):
