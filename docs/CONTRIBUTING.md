@@ -52,7 +52,7 @@ If you are proposing a new feature:
 
 Ready to contribute?
 Here's how to set up `cookiecutter-pypackage` for local development.
-Please note this documentation assumes you already have [virtualenv] and [Git] installed and ready to go.
+Please note this documentation assumes you already have [uv] and [Git] installed and ready to go.
 
 1\. Fork the `cookiecutter-pypackage` repo on GitHub.
 
@@ -63,19 +63,16 @@ cd path_for_the_repo
 git clone git@github.com:YOUR_NAME/cookiecutter-pypackage.git
 ```
 
-3\. Assuming you have virtualenv installed
-   (If you have Python3.5 this should already be there),
-   you can create a new environment for your local development by typing:
+3\. Set up your development environment.
+
+   The recommended way is to use [docker-compose-python-development](https://github.com/yukihiko-shinoda/docker-compose-python-development),
+   which provides a pre-configured Docker-based environment for Python projects.
+   Follow the setup instructions in that repository, then clone this repo into its workspace.
+
+   Alternatively, install dependencies directly with `uv`:
 
 ```console
-virtualenv cookiecutter-pypackage-env
-source cookiecutter-pypackage-env/bin/activate
-```
-
-   This should change the shell to look something like:
-
-```console
-(cookiecutter-pypackage-env) $
+uv sync
 ```
 
 4\. Create a branch for local development:
@@ -197,5 +194,5 @@ git stash list
 congratulations!
 
 [cookiecutter]: https://github.com/audreyr/cookiecutter-pypackage
-[virtualenv]: https://virtualenv.pypa.io/en/stable/installation
+[uv]: https://docs.astral.sh/uv/getting-started/installation/
 [Git]: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git

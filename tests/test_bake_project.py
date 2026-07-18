@@ -188,6 +188,28 @@ def test_bake_without_travis_pypi_setup(baked_in_temp_dir: Result) -> None:
     ).exists()
 
 
+def test_bake_without_devcontainer(baked_in_temp_dir: Result) -> None:
+    """Devcontainer settings should be omitted by default."""
+    project_path = baked_in_temp_dir.project_path
+    assert not (project_path / "Dockerfile").exists()
+    assert not (project_path / "compose.yml").exists()
+    assert not (project_path / ".devcontainer").exists()
+
+
+@pytest.mark.parametrize(
+    "baked_in_temp_dir",
+    [{"use_devcontainer": "y"}],
+    indirect=["baked_in_temp_dir"],
+)
+def test_bake_with_devcontainer(baked_in_temp_dir: Result) -> None:
+    """Devcontainer settings should exist when opted in."""
+    project_path = baked_in_temp_dir.project_path
+    assert (project_path / "Dockerfile").exists()
+    assert (project_path / "compose.yml").exists()
+    assert (project_path / ".devcontainer" / "devcontainer.json").exists()
+    assert (project_path / ".devcontainer" / "compose.yml").exists()
+
+
 def list_files(result: Result, directories: list[str] | None = None) -> list[str]:
     directories = [] if directories is None else directories
     joined_path = result.project_path

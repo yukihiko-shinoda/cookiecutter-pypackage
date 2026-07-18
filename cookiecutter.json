@@ -11,6 +11,7 @@
   "version": "0.1.0",
   "use_pytest": "y",
   "use_pypi_deployment_with_github_actions": "y",
+  "use_devcontainer": "n",
   "command_line_interface": ["Click", "Argparse", "No command-line interface"],
   "open_source_license": [
       "MIT",
