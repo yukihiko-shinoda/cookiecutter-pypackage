@@ -1,8 +1,0 @@
-services:
-  cookiecutter:
-    build: .
-    image: futureys/cookiecutter-pypackage:latest
-    volumes:
-      - .:/workspace:cached
-      - /workspace/.venv
-      - ./output:/output

@@ -57,7 +57,13 @@ Ready to contribute? Here's how to set up `{{ cookiecutter.project_name }}` for 
    git clone git@github.com:your_name_here/{{ cookiecutter.github_repository_name }}.git
    ```
 
-3. Install your local copy into a virtualenv. Assuming you have uv installed, this is how you set up your fork for local development:
+3. Set up your development environment.
+
+   The recommended way is to use [docker-compose-python-development](https://github.com/yukihiko-shinoda/docker-compose-python-development),
+   which provides a pre-configured Docker-based environment for Python projects.
+   Follow the setup instructions in that repository, then clone this repo into its workspace.
+
+   Alternatively, install dependencies directly with `uv`:
 
    ```console
    uv sync

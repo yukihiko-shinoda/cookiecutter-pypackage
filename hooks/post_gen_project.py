@@ -14,6 +14,10 @@ def remove_file(filepath: Path) -> None:
     (PROJECT_DIRECTORY / filepath).unlink()
 
 
+def remove_directory(directory: Path) -> None:
+    shutil.rmtree(PROJECT_DIRECTORY / directory)
+
+
 def prepare_license(key_license: str) -> None:
     """Prepares license file."""
     license_file = {
@@ -39,6 +43,10 @@ if __name__ == "__main__":
         remove_file(Path(".github/workflows/deploy.yml"))
     if "{{ cookiecutter.use_pytest }}" != "y":  # type: ignore[comparison-overlap]  # noqa: PLR0133,E501,RUF100
         remove_file(Path("tests/conftest.py"))
+    if "{{ cookiecutter.use_devcontainer }}" != "y":  # type: ignore[comparison-overlap]  # noqa: PLR0133,E501,RUF100
+        remove_file(Path("Dockerfile"))
+        remove_file(Path("compose.yml"))
+        remove_directory(Path(".devcontainer"))
     if "no" in "{{ cookiecutter.command_line_interface|lower }}":  # noqa: PLR0133
         cli_file = Path("{{ cookiecutter.project_slug }}") / "cli.py"
         remove_file(Path(cli_file))
