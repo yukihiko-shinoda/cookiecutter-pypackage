@@ -2,6 +2,7 @@
   "full_name": "Yukihiko Shinoda",
   "email": "yukihiko.shinoda@example.com",
   "github_username": "yukihiko-shinoda",
+  "use_devcontainer": "n",
   "docker_hub_username": "yukihiko-shinoda",
   "development_image_name": "{{ cookiecutter.docker_hub_username }}/claude-code-python-development:latest",
   "project_name": "Python Boilerplate",
@@ -11,7 +12,6 @@
   "version": "0.1.0",
   "use_pytest": "y",
   "use_pypi_deployment_with_github_actions": "y",
-  "use_devcontainer": "n",
   "command_line_interface": ["Click", "Argparse", "No command-line interface"],
   "open_source_license": [
       "MIT",
