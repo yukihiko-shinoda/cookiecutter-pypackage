@@ -1,3 +1,4 @@
+# Copyright (C) 2026 Yukihiko Shinoda
 """To run command in subprocess."""
 
 import shlex

@@ -1,3 +1,4 @@
+# Copyright (c) 2013-2026 Audrey Roy Greenfeld, Yukihiko Shinoda and individual contributors.
 """Development tasks for the cookiecutter template project."""
 
 import platform

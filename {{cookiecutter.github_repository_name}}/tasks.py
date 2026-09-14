@@ -1,3 +1,4 @@
+# Copyright (c) {% now 'local', '%Y' %} {{ cookiecutter.full_name }}
 """Tasks for maintaining the project.
 
 Execute 'invoke --list' for guidance on using Invoke

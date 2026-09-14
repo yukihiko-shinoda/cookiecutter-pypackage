@@ -1,3 +1,4 @@
+# Copyright (c) 2013-2026 Audrey Roy Greenfeld, Yukihiko Shinoda and individual contributors.
 """Implements tests."""
 
 from __future__ import annotations

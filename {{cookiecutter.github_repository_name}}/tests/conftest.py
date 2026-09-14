@@ -1,3 +1,4 @@
+# Copyright (c) {% now 'local', '%Y' %} {{ cookiecutter.full_name }}
 """Configuration of pytest."""
 
 from __future__ import annotations
