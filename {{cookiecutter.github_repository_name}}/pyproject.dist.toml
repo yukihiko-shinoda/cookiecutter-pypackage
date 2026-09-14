@@ -18,7 +18,7 @@ dev = [
     'Apache-2.0-short': 'License :: OSI Approved :: Apache Software License',
 } -%}
 [project]
-name = "{{ cookiecutter.project_slug }}"
+name = "{{ cookiecutter.pypi_distribution_name }}"
 version = "{{ cookiecutter.version }}"
 description = "{{ cookiecutter.project_short_description }}"
 readme = "README.md"
@@ -26,7 +26,7 @@ requires-python = ">=3.7"
 {%- if cookiecutter.open_source_license in license_classifiers %}
 license = {file = "LICENSE"}
 {%- endif %}
-keywords = ["{{ cookiecutter.project_slug }}"]
+keywords = ["{{ cookiecutter.pypi_distribution_name }}"]
 authors = [
     {name = "{{ cookiecutter.full_name.replace('\"', '\\\"') }}", email = "{{ cookiecutter.email }}"},
 ]
@@ -67,7 +67,7 @@ repository = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecut
 
 {% if 'no' not in cookiecutter.command_line_interface|lower -%}
 [project.entry-points.console_scripts]
-{{ cookiecutter.project_slug }} = "{{ cookiecutter.project_slug }}.cli:main"
+{{ cookiecutter.pypi_distribution_name }} = "{{ cookiecutter.project_slug }}.cli:main"
 
 {% endif -%}
 [tool.bandit.assert_used]

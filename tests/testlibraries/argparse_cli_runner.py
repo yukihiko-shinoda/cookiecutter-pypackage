@@ -1,3 +1,4 @@
+# Copyright (C) 2026 Yukihiko Shinoda
 """CLI Runner for argparse."""
 
 from __future__ import annotations
@@ -131,7 +132,7 @@ class ArgparseCliRunner(CliRunner):
 
     # Reason: Inherit design of parent class.
     # pylint: disable-next=too-many-arguments,too-many-positional-arguments
-    def invoke(  # noqa: PLR0913
+    def invoke(  # noqa: PLR0913,PLR0917
         self,
         cli: Callable[[], int],
         args: str | Sequence[str] | None = None,

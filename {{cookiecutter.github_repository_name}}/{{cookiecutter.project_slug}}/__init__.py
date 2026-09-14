@@ -1,3 +1,4 @@
+# Copyright (c) {% now 'local', '%Y' %} {{ cookiecutter.full_name }}
 """Top-level package for {{ cookiecutter.project_name }}."""
 
 __author__ = """{{ cookiecutter.full_name }}"""

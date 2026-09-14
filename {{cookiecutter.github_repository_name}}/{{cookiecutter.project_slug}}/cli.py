@@ -1,3 +1,4 @@
+# Copyright (c) {% now 'local', '%Y' %} {{ cookiecutter.full_name }}
 """Console script for {{cookiecutter.project_slug}}."""
 
 {% if cookiecutter.command_line_interface|lower == 'argparse' -%}

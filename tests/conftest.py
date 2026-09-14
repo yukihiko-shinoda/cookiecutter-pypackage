@@ -1,3 +1,4 @@
+# Copyright (C) 2026 Yukihiko Shinoda
 """Configuration for pytest."""
 
 from typing import Generator

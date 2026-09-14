@@ -1,3 +1,4 @@
+# Copyright (c) 2013-2026 Audrey Roy Greenfeld, Yukihiko Shinoda and individual contributors.
 """Implements tests."""
 
 from __future__ import annotations
@@ -529,6 +530,34 @@ def check_help(runner: CliRunner, cli: ModuleType, help_message: str) -> None:
     help_result = runner.invoke(cli.main, ["--help"])
     assert help_result.exit_code == 0, help_result.stdout + help_result.stderr
     assert help_message in help_result.output
+
+
+def test_bake_with_hyphenated_pypi_distribution_name(cookies: Cookies) -> None:
+    """PyPI distribution name and console script name should allow a hyphen.
+
+    The import name (project_slug) must stay hyphen-free per PEP 8, while the PyPI
+    distribution name is free to follow PEP 503, which allows a hyphen.
+    """
+    context = {"pypi_distribution_name": "python-boilerplate"}
+    result = cookies.bake(extra_context=context)
+    if result.exit_code:
+        raise AssertionError(result.exception) from result.exception
+    project_path, project_slug, _project_dir = project_info(result)
+    if not isinstance(project_path, Path):
+        raise TypeError(result)
+    pyproject_toml = (project_path / "pyproject.toml").read_text(encoding="utf-8")
+    assert 'name = "python-boilerplate"' in pyproject_toml
+    assert 'keywords = ["python-boilerplate"]' in pyproject_toml
+    assert f'python-boilerplate = "{project_slug}.cli:main"' in pyproject_toml
+    readme = (project_path / "README.md").read_text(encoding="utf-8")
+    assert "pypi.org/project/python-boilerplate/" in readme
+
+
+def test_bake_with_invalid_pypi_distribution_name(cookies: Cookies) -> None:
+    """Should abort generation when the PyPI distribution name is invalid."""
+    context = {"pypi_distribution_name": "invalid name!"}
+    result = cookies.bake(extra_context=context)
+    assert result.exit_code != 0
 
 
 @pytest.mark.slow

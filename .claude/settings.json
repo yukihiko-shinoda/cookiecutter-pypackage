@@ -25,5 +25,9 @@
       "Bash(git push*)",
       "Bash(rm*)"
     ]
+  },
+  "sandbox": {
+    "enabled": true,
+    "enableWeakerNestedSandbox": true
   }
 }

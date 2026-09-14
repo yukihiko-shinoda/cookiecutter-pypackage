@@ -1,3 +1,4 @@
+# Copyright (c) {% now 'local', '%Y' %} {{ cookiecutter.full_name }}
 """Tests for `{{ cookiecutter.project_slug }}` package."""
 
 from __future__ import annotations
